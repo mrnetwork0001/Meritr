@@ -26,11 +26,26 @@ ARTIFACTS_DIR = ROOT / "artifacts" / "contracts"
 #: The Attestcoin native query verifier precompile. 0xFD2 == 4050.
 ATTESTCOIN_PRECOMPILE = "0x0000000000000000000000000000000000000FD2"
 
+#: Chain ids verified live against the public RPC endpoints.
+CREDITCOIN_MAINNET = 102030
+CREDITCOIN_TESTNET = 102031
+CREDITCOIN_DEVNET = 102032
+CREDITCOIN_CHAIN_IDS = (CREDITCOIN_MAINNET, CREDITCOIN_TESTNET, CREDITCOIN_DEVNET)
+
+#: Meritr's primary target.
+DEFAULT_NETWORK = "creditcoinMainnet"
+
 DEFAULT_RPC = {
+    "creditcoinMainnet": "https://mainnet3.creditcoin.network",
     "creditcoinTestnet": "https://rpc.cc3-testnet.creditcoin.network",
     "creditcoinDevnet": "https://rpc.cc3-devnet.creditcoin.network",
     "localhost": "http://127.0.0.1:8545",
     "hardhat": "http://127.0.0.1:8545",
+}
+
+EXPLORERS = {
+    CREDITCOIN_MAINNET: "https://creditcoin.blockscout.com",
+    CREDITCOIN_TESTNET: "https://creditcoin-testnet.blockscout.com",
 }
 
 
@@ -58,6 +73,14 @@ class Config:
     def has_signer(self) -> bool:
         return bool(self.private_key)
 
+    @property
+    def is_mainnet(self) -> bool:
+        return self.chain_id == CREDITCOIN_MAINNET
+
+    @property
+    def explorer(self) -> str | None:
+        return EXPLORERS.get(self.chain_id)
+
 
 def _load_book(network: str) -> dict:
     path = DEPLOYMENTS_DIR / f"{network}.json"
@@ -72,14 +95,14 @@ def _load_book(network: str) -> dict:
 
 
 def load(network: str | None = None) -> Config:
-    """Load agent config for ``network`` (default: ``$MERITR_NETWORK`` or creditcoinTestnet)."""
-    network = network or os.getenv("MERITR_NETWORK", "creditcoinTestnet")
+    """Load agent config for ``network`` (default: ``$MERITR_NETWORK`` or Creditcoin mainnet)."""
+    network = network or os.getenv("MERITR_NETWORK", DEFAULT_NETWORK)
     book = _load_book(network)
     contracts = book["contracts"]
 
     rpc = (
         os.getenv("MERITR_RPC_URL")
-        or os.getenv("CREDITCOIN_TESTNET_RPC")
+        or os.getenv(f"CREDITCOIN_{network.replace('creditcoin', '').upper()}_RPC")
         or DEFAULT_RPC.get(network)
     )
     if not rpc:

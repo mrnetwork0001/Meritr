@@ -50,7 +50,7 @@ def header(title: str) -> None:
 def main() -> int:
     print("=" * 78)
     print("  MERITR — Autonomous DeAI Debt Restructuring & Credit Risk Memory OS")
-    print("  Creditcoin EVM (chain 102031) + Attestcoin Protocol (precompile 0xFD2)")
+    print("  Creditcoin EVM mainnet (chain 102030) + Attestcoin Protocol (precompile 0xFD2)")
     print("=" * 78)
 
     # ---------------------------------------------------------------- toolchain
@@ -110,7 +110,7 @@ def main() -> int:
             WARN,
             "Deployment address book",
             "none found",
-            "npx hardhat run scripts/deploy.js --network creditcoinTestnet",
+            "npx hardhat run scripts/deploy.js --network creditcoinMainnet",
         )
     for b in books:
         try:
@@ -141,7 +141,9 @@ def main() -> int:
     # -------------------------------------------------------------- live checks
     header("Live connection")
 
-    network = os.getenv("MERITR_NETWORK", "creditcoinTestnet")
+    from agents import config as _cfg_mod
+
+    network = os.getenv("MERITR_NETWORK", _cfg_mod.DEFAULT_NETWORK)
     try:
         from agents import config as agent_config
         from agents.chain import ChainClient

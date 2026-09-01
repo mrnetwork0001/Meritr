@@ -73,9 +73,9 @@ class ChainClient:
         Native precompiles report empty bytecode, so on a real Creditcoin chain this is inferred
         from the chain id rather than from ``eth_getCode``.
         """
-        from .config import ATTESTCOIN_PRECOMPILE
+        from .config import ATTESTCOIN_PRECOMPILE, CREDITCOIN_CHAIN_IDS
 
-        if self.cfg.chain_id in (102030, 102031, 102032):
+        if self.cfg.chain_id in CREDITCOIN_CHAIN_IDS:
             return True
         return self.w3.eth.get_code(Web3.to_checksum_address(ATTESTCOIN_PRECOMPILE)) != b""
 
