@@ -1,7 +1,8 @@
 /**
  * Meritr — one-command deployment.
  *
- *   npx hardhat run scripts/deploy.js --network creditcoinTestnet
+ *   npx hardhat run scripts/deploy.js --network creditcoinMainnet   # chain 102030
+ *   npx hardhat run scripts/deploy.js --network creditcoinTestnet   # chain 102031
  *
  * Deploys all four subsystems, wires their roles, and registers the source-chain event schemas
  * that teach MeritrAttestor how to read Aave V3 logs on Ethereum and Base. The resulting
@@ -12,13 +13,17 @@
 const fs = require("fs");
 const path = require("path");
 const { ethers, network } = require("hardhat");
-const { CHAINS, AAVE_V3_EVENTS, DEPLOYMENTS } = require("./sourceSchemas");
+const { AAVE_V3_EVENTS, deploymentsFor } = require("./sourceSchemas");
 
 const PRECOMPILE = "0x0000000000000000000000000000000000000FD2";
 const ONE_USD_E8 = 100_000_000n;
 
-/** Chain ids where the Attestcoin native query verifier exists as a runtime precompile. */
+/**
+ * Chain ids where the Attestcoin native query verifier exists as a runtime precompile.
+ * Verified live against the public RPCs: 102030 mainnet, 102031 testnet, 102032 devnet.
+ */
 const CREDITCOIN_CHAIN_IDS = new Set([102030n, 102031n, 102032n]);
+const MAINNET_CHAIN_ID = 102030n;
 
 function log(msg) {
   console.log(msg);
@@ -52,8 +57,26 @@ async function main() {
   }
   if (balance === 0n) {
     throw new Error(
-      "Deployer has zero balance. Fund it from the Creditcoin testnet faucet before deploying."
+      "Deployer has zero balance. Fund the account before deploying."
     );
+  }
+
+  // --- Mainnet gate ---------------------------------------------------------
+  // Meritr is configured for mainnet, but a lending protocol holding real deposits is not
+  // something a script should be able to deploy by accident, or on the strength of a default.
+  // Both guards below are one environment variable to clear - they exist to make the step
+  // deliberate, not to obstruct it.
+  const isMainnet = net.chainId === MAINNET_CHAIN_ID;
+  if (isMainnet) {
+    log("");
+    log("  ** CREDITCOIN MAINNET **");
+    log("  These contracts custody real deposits and have not been audited.");
+    if (process.env.MERITR_CONFIRM_MAINNET !== "yes") {
+      throw new Error(
+        "Refusing to deploy to Creditcoin mainnet without explicit confirmation.\n" +
+          "Re-run with MERITR_CONFIRM_MAINNET=yes once you intend this."
+      );
+    }
   }
   log("=".repeat(78));
 
@@ -83,6 +106,15 @@ async function main() {
   let collateralDecimals = Number(process.env.MERITR_COLLATERAL_DECIMALS || 18);
 
   if (!assetAddress || !collateralAddress) {
+    // MockERC20 has an open `mint`. On a testnet that is a convenience; on mainnet it is a
+    // token anyone can print, so the vault must be pointed at real assets instead.
+    if (isMainnet && process.env.MERITR_ALLOW_MOCK_TOKENS !== "yes") {
+      throw new Error(
+        "Refusing to deploy freely-mintable demo tokens to mainnet.\n" +
+          "Set MERITR_ASSET / MERITR_COLLATERAL (plus their *_DECIMALS) to real token " +
+          "addresses, or set MERITR_ALLOW_MOCK_TOKENS=yes if you genuinely want demo tokens."
+      );
+    }
     const ERC20 = await ethers.getContractFactory("MockERC20");
     const asset = await ERC20.deploy("Meritr USD", "mUSD", 6);
     await asset.waitForDeployment();
@@ -127,8 +159,12 @@ async function main() {
 
   // --- Source-chain registry ------------------------------------------------
   log("\n[registry] source chains, assets and event schemas");
+  // Mainnet Creditcoin reads mainnet source history; testnet reads testnet. Registering
+  // Sepolia pools on mainnet would score borrowers on activity that costs nothing to fake.
+  const catalogue = deploymentsFor(net.chainId);
+  log(`      catalogue: ${isMainnet ? "mainnet" : "testnet"} source chains`);
   const registered = [];
-  for (const dep of DEPLOYMENTS) {
+  for (const dep of catalogue) {
     const c = dep.chain;
     await (
       await attestor.configureSourceChain(
@@ -193,7 +229,9 @@ async function main() {
   log(`  Asset (mUSD)    ${assetAddress}`);
   log(`  Collateral      ${collateralAddress}`);
   log(`\n  Address book -> deployments/${network.name}.json`);
-  if (net.chainId === 102031n) {
+  if (net.chainId === MAINNET_CHAIN_ID) {
+    log(`  Explorer     -> https://creditcoin.blockscout.com/address/${vaultAddress}`);
+  } else if (net.chainId === 102031n) {
     log(`  Explorer     -> https://creditcoin-testnet.blockscout.com/address/${vaultAddress}`);
   }
   log("\n  Next:");
