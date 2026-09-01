@@ -1,0 +1,221 @@
+"""
+Meritr chain client — a thin, typed wrapper over web3.py for the Creditcoin EVM network.
+
+Keeps every RPC detail (ABI loading, gas, nonce, receipt handling, POA middleware) in one place
+so ``underwriter.py`` reads as risk logic rather than plumbing.
+"""
+
+from __future__ import annotations
+
+import logging
+from typing import Iterator
+
+from web3 import Web3
+from web3.exceptions import ContractLogicError
+
+from .config import Config, load_abi
+from .risk import Position
+
+log = logging.getLogger("meritr.chain")
+
+
+class ChainClient:
+    """Read/write access to the deployed Meritr contracts."""
+
+    def __init__(self, cfg: Config):
+        self.cfg = cfg
+        self.w3 = Web3(Web3.HTTPProvider(cfg.rpc_url, request_kwargs={"timeout": 30}))
+
+        # Substrate-backed EVM chains (Creditcoin included) use a compact extraData field that
+        # trips web3's default block validation. The POA middleware relaxes it.
+        try:
+            from web3.middleware import ExtraDataToPOAMiddleware
+
+            self.w3.middleware_onion.inject(ExtraDataToPOAMiddleware, layer=0)
+        except ImportError:  # web3 v6 name
+            try:
+                from web3.middleware import geth_poa_middleware
+
+                self.w3.middleware_onion.inject(geth_poa_middleware, layer=0)
+            except ImportError:
+                log.debug("No POA middleware available; continuing without it.")
+
+        self.vault = self.w3.eth.contract(
+            address=Web3.to_checksum_address(cfg.vault), abi=load_abi("MeritrVault")
+        )
+        self.attestor = self.w3.eth.contract(
+            address=Web3.to_checksum_address(cfg.attestor), abi=load_abi("MeritrAttestor")
+        )
+        self.passport = self.w3.eth.contract(
+            address=Web3.to_checksum_address(cfg.passport), abi=load_abi("MeritrPassport")
+        )
+
+        self.account = None
+        if cfg.private_key:
+            self.account = self.w3.eth.account.from_key(cfg.private_key)
+
+    # ------------------------------------------------------------------
+    # Connectivity
+    # ------------------------------------------------------------------
+
+    def connected(self) -> bool:
+        try:
+            return self.w3.is_connected()
+        except Exception:
+            return False
+
+    def block_number(self) -> int:
+        return self.w3.eth.block_number
+
+    def precompile_present(self) -> bool:
+        """Whether an Attestcoin verifier is callable at ``0xFD2`` on this network.
+
+        Native precompiles report empty bytecode, so on a real Creditcoin chain this is inferred
+        from the chain id rather than from ``eth_getCode``.
+        """
+        from .config import ATTESTCOIN_PRECOMPILE
+
+        if self.cfg.chain_id in (102030, 102031, 102032):
+            return True
+        return self.w3.eth.get_code(Web3.to_checksum_address(ATTESTCOIN_PRECOMPILE)) != b""
+
+    # ------------------------------------------------------------------
+    # Reads
+    # ------------------------------------------------------------------
+
+    def discover_borrowers(self, from_block: int = 0) -> list[str]:
+        """Every address that has ever opened a loan, newest first.
+
+        Sourced from ``LoanOpened`` logs so the agent needs no off-chain index or database to
+        rebuild its entire working set after a restart.
+        """
+        try:
+            logs = self.vault.events.LoanOpened().get_logs(from_block=from_block)
+        except TypeError:  # web3 v6 keyword
+            logs = self.vault.events.LoanOpened().get_logs(fromBlock=from_block)
+        except Exception as exc:
+            log.warning("Could not scan LoanOpened logs (%s); falling back to empty set.", exc)
+            return []
+
+        seen: dict[str, None] = {}
+        for entry in reversed(logs):
+            seen.setdefault(entry["args"]["borrower"], None)
+        return list(seen)
+
+    def position(self, borrower: str) -> Position:
+        view = self.vault.functions.positionOf(Web3.to_checksum_address(borrower)).call()
+        return Position.from_chain(Web3.to_checksum_address(borrower), view)
+
+    def facts(self, borrower: str):
+        return self.attestor.functions.factsOf(Web3.to_checksum_address(borrower)).call()
+
+    def score_breakdown(self, borrower: str):
+        return self.attestor.functions.scoreOf(Web3.to_checksum_address(borrower)).call()
+
+    def vault_stats(self) -> dict:
+        return {
+            "totalAssets": self.vault.functions.totalAssets().call(),
+            "totalIdle": self.vault.functions.totalIdle().call(),
+            "totalPrincipal": self.vault.functions.totalPrincipal().call(),
+            "totalInterestOwed": self.vault.functions.totalInterestOwed().call(),
+            "reserveBalance": self.vault.functions.reserveBalance().call(),
+            "pendingReserveInterest": self.vault.functions.pendingReserveInterest().call(),
+            "utilizationBps": self.vault.functions.utilizationBps().call(),
+            "assetPriceE8": self.vault.functions.assetPriceE8().call(),
+            "collateralPriceE8": self.vault.functions.collateralPriceE8().call(),
+        }
+
+    # ------------------------------------------------------------------
+    # Writes
+    # ------------------------------------------------------------------
+
+    def simulate_restructure(self, borrower: str) -> tuple[int, int, int] | None:
+        """Dry-run a restructuring. Returns ``(hf_before, hf_after, debt_retired)`` or ``None``.
+
+        Always run before broadcasting: it turns a would-be reverted transaction — and its
+        wasted gas — into a log line, and it gives the agent the projected health factor to
+        record alongside its decision.
+        """
+        if not self.account:
+            return None
+        try:
+            return self.vault.functions.restructure(
+                Web3.to_checksum_address(borrower)
+            ).call({"from": self.account.address})
+        except ContractLogicError as exc:
+            log.info("Restructure would revert for %s: %s", borrower, exc)
+            return None
+        except Exception as exc:
+            log.warning("Restructure simulation failed for %s: %s", borrower, exc)
+            return None
+
+    def send_restructure(self, borrower: str) -> str | None:
+        """Broadcast a restructuring and wait for its receipt. Returns the tx hash."""
+        if not self.account:
+            log.error("No RISK_AGENT_PRIVATE_KEY configured; cannot broadcast.")
+            return None
+
+        fn = self.vault.functions.restructure(Web3.to_checksum_address(borrower))
+        return self._send(fn)
+
+    def send_flag_stress(self, borrower: str) -> str | None:
+        return self._send(self.vault.functions.flagStress(Web3.to_checksum_address(borrower)))
+
+    def send_refresh_passport(self, holder: str) -> str | None:
+        return self._send(self.passport.functions.refresh(Web3.to_checksum_address(holder)))
+
+    def _send(self, fn) -> str | None:
+        if not self.account:
+            return None
+        try:
+            gas = int(fn.estimate_gas({"from": self.account.address}) * 1.25)
+        except Exception as exc:
+            log.warning("Gas estimation failed (%s); skipping to avoid a guaranteed revert.", exc)
+            return None
+
+        tx = fn.build_transaction(
+            {
+                "from": self.account.address,
+                "nonce": self.w3.eth.get_transaction_count(self.account.address),
+                "gas": gas,
+                "gasPrice": self.w3.eth.gas_price,
+                "chainId": self.cfg.chain_id,
+            }
+        )
+        signed = self.account.sign_transaction(tx)
+        raw = getattr(signed, "raw_transaction", None) or signed.rawTransaction
+        tx_hash = self.w3.eth.send_raw_transaction(raw)
+        receipt = self.w3.eth.wait_for_transaction_receipt(tx_hash, timeout=180)
+
+        if receipt["status"] != 1:
+            log.error("Transaction reverted: %s", tx_hash.hex())
+            return None
+        return tx_hash.hex()
+
+    # ------------------------------------------------------------------
+    # Events
+    # ------------------------------------------------------------------
+
+    def restructuring_history(self, from_block: int = 0) -> Iterator[dict]:
+        """Every restructuring the protocol has performed — the agent's public audit trail."""
+        try:
+            logs = self.vault.events.LoanRestructured().get_logs(from_block=from_block)
+        except TypeError:
+            logs = self.vault.events.LoanRestructured().get_logs(fromBlock=from_block)
+        except Exception:
+            return iter(())
+
+        for entry in logs:
+            a = entry["args"]
+            yield {
+                "borrower": a["borrower"],
+                "triggeredBy": a["triggeredBy"],
+                "oldRateBps": a["oldRateBps"],
+                "newRateBps": a["newRateBps"],
+                "newMaturity": a["newMaturity"],
+                "debtRetired": a["debtRetiredFromReserve"],
+                "healthFactorBefore": a["healthFactorBefore"],
+                "healthFactorAfter": a["healthFactorAfter"],
+                "blockNumber": entry["blockNumber"],
+                "txHash": entry["transactionHash"].hex(),
+            }
