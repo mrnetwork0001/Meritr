@@ -2,31 +2,42 @@
   "name": "meritr",
   "version": "1.0.0",
   "private": true,
+  "description": "Autonomous DeAI Debt Restructuring & Cross-Chain Credit Risk Memory OS on Creditcoin",
+  "license": "Apache-2.0",
   "scripts": {
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
     "compile": "hardhat compile",
-    "deploy:testnet": "hardhat run scripts/deploy.js --network creditcoinTestnet"
+    "test": "hardhat test",
+    "node": "hardhat node",
+    "deploy:testnet": "hardhat run scripts/deploy.js --network creditcoinTestnet",
+    "deploy:local": "hardhat run scripts/deploy.js --network localhost",
+    "simulate": "hardhat run scripts/simulate.js --network localhost",
+    "agent": "python3 -m agents.underwriter",
+    "backend": "uvicorn backend.main:app --reload --port 8000"
   },
   "dependencies": {
-    "next": "14.1.0",
-    "react": "^18.2.0",
-    "react-dom": "^18.2.0",
-    "ethers": "^6.11.0",
-    "framer-motion": "^11.0.3",
-    "lucide-react": "^0.330.0"
+    "@gluwa/asc-contracts": "^0.2.1",
+    "@openzeppelin/contracts": "5.1.0",
+    "ethers": "^6.13.4",
+    "framer-motion": "^11.11.17",
+    "lucide-react": "^0.462.0",
+    "next": "14.2.18",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1"
   },
   "devDependencies": {
-    "@nomicfoundation/hardhat-toolbox": "^4.0.0",
-    "@types/node": "^20.11.16",
-    "@types/react": "^18.2.52",
-    "@types/react-dom": "^18.2.19",
-    "autoprefixer": "^10.4.17",
-    "hardhat": "^2.19.5",
-    "postcss": "^8.4.35",
-    "tailwindcss": "^3.4.1",
-    "typescript": "^5.3.3"
+    "@nomicfoundation/hardhat-toolbox": "^5.0.0",
+    "@types/node": "^22.9.0",
+    "@types/react": "^18.3.12",
+    "@types/react-dom": "^18.3.1",
+    "autoprefixer": "^10.4.20",
+    "dotenv": "^16.4.5",
+    "hardhat": "^2.22.17",
+    "postcss": "^8.4.49",
+    "tailwindcss": "^3.4.15",
+    "typescript": "^5.6.3"
   }
 }
