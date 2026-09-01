@@ -1,0 +1,20 @@
+node_modules/
+.next/
+out/
+build/
+cache/
+artifacts/
+typechain-types/
+.env
+.env.local
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+.DS_Store
+# Local-chain address books are ephemeral; testnet/mainnet ones are part of the submission
+# and must be committed so reviewers can find the deployed contracts.
+deployments/hardhat.json
+deployments/localhost.json
+coverage/
+coverage.json
