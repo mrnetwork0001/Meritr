@@ -68,12 +68,21 @@ Meritr uses the **Attestcoin Protocol** (`0x0FD2` precompile) to ingest cryptogr
 
 ## 📋 Required Submission Package Checklist
 
-- [x] Public GitHub repository (`mrnetwork/Meritr`).
-- [x] Deployed Smart Contracts on Creditcoin EVM Testnet (Chain ID 102031).
-- [x] Working Attestcoin Protocol (`attestcoin-sdk` / `0x0FD2`) integration code.
-- [x] Technical documentation & setup guide.
-- [x] Project Deck / Whitepaper PDF URL.
-- [x] Prototype Demo Video URL.
+- [x] Public GitHub repository (`mrnetwork/Meritr`), Apache 2.0.
+- [x] Working Attestcoin Protocol integration — `MeritrAttestor` inherits `ASCBase` from
+      `@gluwa/asc-contracts` and calls the native query verifier precompile `0x…0FD2`.
+- [x] Four subsystems implemented and tested (48 contract tests, 39 Python tests).
+- [x] One-command deployment: `npx hardhat run scripts/deploy.js --network creditcoinTestnet`.
+- [x] Technical documentation & setup guide — `README.md`, `docs/ARCHITECTURE.md`.
+- [x] End-to-end demo walkthrough — `npx hardhat run scripts/simulate.js`.
+- [ ] Deployed contract addresses on Creditcoin Testnet — **run the deploy command with a
+      funded key**; addresses land in `deployments/creditcoinTestnet.json`.
+- [ ] Project Deck / Whitepaper PDF URL.
+- [ ] Prototype Demo Video URL.
+
+> **Correction to an earlier assumption in this spec:** there is no `attestcoin-sdk` package on
+> npm. The real Attestcoin packages are `@gluwa/asc-contracts` and `@gluwa/asc-contracts-abi`;
+> readability integrations inherit `ASCBase`. The precompile address `0x0FD2` was correct.
 
 ---
 
