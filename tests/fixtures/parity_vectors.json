@@ -1,0 +1,3744 @@
+{
+  "generatedBy": "scripts/generateParityVectors.js",
+  "note": "On-chain CreditMath outputs. tests/test_parity.py asserts agents/scoring.py matches.",
+  "scoreVectors": [
+    {
+      "facts": {
+        "totalRepaidE8": "0",
+        "totalCollateralE8": "0",
+        "firstActivityAt": "0",
+        "lastActivityAt": "0",
+        "repaymentCount": "0",
+        "liquidationCount": "0",
+        "chainCount": "0",
+        "attestationCount": "0"
+      },
+      "nowTs": "1800000000",
+      "score": 300,
+      "repaymentPts": 0,
+      "collateralPts": 0,
+      "maturityPts": 0,
+      "diversityPts": 0,
+      "safetyPts": 0,
+      "aprBps": 2400,
+      "maxLtvBps": 3000
+    },
+    {
+      "facts": {
+        "totalRepaidE8": "25000000000000",
+        "totalCollateralE8": "15000000000000",
+        "firstActivityAt": "1736928000",
+        "lastActivityAt": "1800000000",
+        "repaymentCount": "40",
+        "liquidationCount": "0",
+        "chainCount": "4",
+        "attestationCount": "50"
+      },
+      "nowTs": "1800000000",
+      "score": 900,
+      "repaymentPts": 210,
+      "collateralPts": 150,
+      "maturityPts": 90,
+      "diversityPts": 60,
+      "safetyPts": 90,
+      "aprBps": 400,
+      "maxLtvBps": 8000
+    },
+    {
+      "facts": {
+        "totalRepaidE8": "99999900000000",
+        "totalCollateralE8": "99999900000000",
+        "firstActivityAt": "1",
+        "lastActivityAt": "1800000000",
+        "repaymentCount": "999",
+        "liquidationCount": "0",
+        "chainCount": "99",
+        "attestationCount": "999"
+      },
+      "nowTs": "1800000000",
+      "score": 900,
+      "repaymentPts": 210,
+      "collateralPts": 150,
+      "maturityPts": 90,
+      "diversityPts": 60,
+      "safetyPts": 90,
+      "aprBps": 400,
+      "maxLtvBps": 8000
+    },
+    {
+      "facts": {
+        "totalRepaidE8": "1",
+        "totalCollateralE8": "1",
+        "firstActivityAt": "1799999999",
+        "lastActivityAt": "1800000000",
+        "repaymentCount": "1",
+        "liquidationCount": "0",
+        "chainCount": "1",
+        "attestationCount": "1"
+      },
+      "nowTs": "1800000000",
+      "score": 407,
+      "repaymentPts": 2,
+      "collateralPts": 0,
+      "maturityPts": 0,
+      "diversityPts": 15,
+      "safetyPts": 90,
+      "aprBps": 2044,
+      "maxLtvBps": 3891
+    },
+    {
+      "facts": {
+        "totalRepaidE8": "5000000000000",
+        "totalCollateralE8": "2000000000000",
+        "firstActivityAt": "1782720000",
+        "lastActivityAt": "1800000000",
+        "repaymentCount": "7",
+        "liquidationCount": "1",
+        "chainCount": "2",
+        "attestationCount": "9"
+      },
+      "nowTs": "1800000000",
+      "score": 475,
+      "repaymentPts": 39,
+      "collateralPts": 19,
+      "maturityPts": 24,
+      "diversityPts": 30,
+      "safetyPts": 63,
+      "aprBps": 1817,
+      "maxLtvBps": 4458
+    },
+    {
+      "facts": {
+        "totalRepaidE8": "5000000000000",
+        "totalCollateralE8": "2000000000000",
+        "firstActivityAt": "1782720000",
+        "lastActivityAt": "1800000000",
+        "repaymentCount": "7",
+        "liquidationCount": "5",
+        "chainCount": "2",
+        "attestationCount": "9"
+      },
+      "nowTs": "1800000000",
+      "score": 427,
+      "repaymentPts": 39,
+      "collateralPts": 19,
+      "maturityPts": 24,
+      "diversityPts": 30,
+      "safetyPts": 15,
+      "aprBps": 1977,
+      "maxLtvBps": 4058
+    },
+    {
+      "facts": {
+        "totalRepaidE8": "5000000000000",
+        "totalCollateralE8": "2000000000000",
+        "firstActivityAt": "1782720000",
+        "lastActivityAt": "1800000000",
+        "repaymentCount": "7",
+        "liquidationCount": "40",
+        "chainCount": "2",
+        "attestationCount": "9"
+      },
+      "nowTs": "1800000000",
+      "score": 412,
+      "repaymentPts": 39,
+      "collateralPts": 19,
+      "maturityPts": 24,
+      "diversityPts": 30,
+      "safetyPts": 0,
+      "aprBps": 2027,
+      "maxLtvBps": 3933
+    },
+    {
+      "facts": {
+        "totalRepaidE8": "1000000000000",
+        "totalCollateralE8": "0",
+        "firstActivityAt": "1800005000",
+        "lastActivityAt": "1800000000",
+        "repaymentCount": "3",
+        "liquidationCount": "0",
+        "chainCount": "1",
+        "attestationCount": "3"
+      },
+      "nowTs": "1800000000",
+      "score": 416,
+      "repaymentPts": 11,
+      "collateralPts": 0,
+      "maturityPts": 0,
+      "diversityPts": 15,
+      "safetyPts": 90,
+      "aprBps": 2014,
+      "maxLtvBps": 3966
+    },
+    {
+      "facts": {
+        "totalRepaidE8": "16083000000000",
+        "totalCollateralE8": "11199300000000",
+        "firstActivityAt": "1742457600",
+        "lastActivityAt": "1800000000",
+        "repaymentCount": "2",
+        "liquidationCount": "1",
+        "chainCount": "2",
+        "attestationCount": "18"
+      },
+      "nowTs": "1800000000",
+      "score": 671,
+      "repaymentPts": 85,
+      "collateralPts": 111,
+      "maturityPts": 82,
+      "diversityPts": 30,
+      "safetyPts": 63,
+      "aprBps": 1164,
+      "maxLtvBps": 6091
+    },
+    {
+      "facts": {
+        "totalRepaidE8": "3738100000000",
+        "totalCollateralE8": "17030800000000",
+        "firstActivityAt": "1747036800",
+        "lastActivityAt": "1800000000",
+        "repaymentCount": "41",
+        "liquidationCount": "3",
+        "chainCount": "0",
+        "attestationCount": "111"
+      },
+      "nowTs": "1800000000",
+      "score": 657,
+      "repaymentPts": 102,
+      "collateralPts": 150,
+      "maturityPts": 75,
+      "diversityPts": 0,
+      "safetyPts": 30,
+      "aprBps": 1210,
+      "maxLtvBps": 5975
+    },
+    {
+      "facts": {
+        "totalRepaidE8": "39778600000000",
+        "totalCollateralE8": "9093300000000",
+        "firstActivityAt": "1708934400",
+        "lastActivityAt": "1800000000",
+        "repaymentCount": "30",
+        "liquidationCount": "0",
+        "chainCount": "4",
+        "attestationCount": "95"
+      },
+      "nowTs": "1800000000",
+      "score": 819,
+      "repaymentPts": 189,
+      "collateralPts": 90,
+      "maturityPts": 90,
+      "diversityPts": 60,
+      "safetyPts": 90,
+      "aprBps": 670,
+      "maxLtvBps": 7325
+    },
+    {
+      "facts": {
+        "totalRepaidE8": "25840500000000",
+        "totalCollateralE8": "19901600000000",
+        "firstActivityAt": "1747468800",
+        "lastActivityAt": "1800000000",
+        "repaymentCount": "1",
+        "liquidationCount": "1",
+        "chainCount": "0",
+        "attestationCount": "5"
+      },
+      "nowTs": "1800000000",
+      "score": 715,
+      "repaymentPts": 128,
+      "collateralPts": 150,
+      "maturityPts": 74,
+      "diversityPts": 0,
+      "safetyPts": 63,
+      "aprBps": 1017,
+      "maxLtvBps": 6458
+    },
+    {
+      "facts": {
+        "totalRepaidE8": "10710700000000",
+        "totalCollateralE8": "26581600000000",
+        "firstActivityAt": "1791532800",
+        "lastActivityAt": "1800000000",
+        "repaymentCount": "39",
+        "liquidationCount": "3",
+        "chainCount": "0",
+        "attestationCount": "73"
+      },
+      "nowTs": "1800000000",
+      "score": 627,
+      "repaymentPts": 135,
+      "collateralPts": 150,
+      "maturityPts": 12,
+      "diversityPts": 0,
+      "safetyPts": 30,
+      "aprBps": 1310,
+      "maxLtvBps": 5725
+    },
+    {
+      "facts": {
+        "totalRepaidE8": "31065600000000",
+        "totalCollateralE8": "21443500000000",
+        "firstActivityAt": "1774771200",
+        "lastActivityAt": "1800000000",
+        "repaymentCount": "15",
+        "liquidationCount": "0",
+        "chainCount": "1",
+        "attestationCount": "100"
+      },
+      "nowTs": "1800000000",
+      "score": 748,
+      "repaymentPts": 157,
+      "collateralPts": 150,
+      "maturityPts": 36,
+      "diversityPts": 15,
+      "safetyPts": 90,
+      "aprBps": 907,
+      "maxLtvBps": 6733
+    },
+    {
+      "facts": {
+        "totalRepaidE8": "19808000000000",
+        "totalCollateralE8": "27088600000000",
+        "firstActivityAt": "1712044800",
+        "lastActivityAt": "1800000000",
+        "repaymentCount": "28",
+        "liquidationCount": "1",
+        "chainCount": "3",
+        "attestationCount": "116"
+      },
+      "nowTs": "1800000000",
+      "score": 806,
+      "repaymentPts": 158,
+      "collateralPts": 150,
+      "maturityPts": 90,
+      "diversityPts": 45,
+      "safetyPts": 63,
+      "aprBps": 714,
+      "maxLtvBps": 7216
+    },
+    {
+      "facts": {
+        "totalRepaidE8": "34157700000000",
+        "totalCollateralE8": "28179100000000",
+        "firstActivityAt": "1789200000",
+        "lastActivityAt": "1800000000",
+        "repaymentCount": "53",
+        "liquidationCount": "2",
+        "chainCount": "1",
+        "attestationCount": "101"
+      },
+      "nowTs": "1800000000",
+      "score": 734,
+      "repaymentPts": 210,
+      "collateralPts": 150,
+      "maturityPts": 15,
+      "diversityPts": 15,
+      "safetyPts": 44,
+      "aprBps": 954,
+      "maxLtvBps": 6616
+    },
+    {
+      "facts": {
+        "totalRepaidE8": "32063300000000",
+        "totalCollateralE8": "10084000000000",
+        "firstActivityAt": "1697184000",
+        "lastActivityAt": "1800000000",
+        "repaymentCount": "51",
+        "liquidationCount": "4",
+        "chainCount": "4",
+        "attestationCount": "61"
+      },
+      "nowTs": "1800000000",
+      "score": 781,
+      "repaymentPts": 210,
+      "collateralPts": 100,
+      "maturityPts": 90,
+      "diversityPts": 60,
+      "safetyPts": 21,
+      "aprBps": 797,
+      "maxLtvBps": 7008
+    },
+    {
+      "facts": {
+        "totalRepaidE8": "6423000000000",
+        "totalCollateralE8": "18306600000000",
+        "firstActivityAt": "1747036800",
+        "lastActivityAt": "1800000000",
+        "repaymentCount": "49",
+        "liquidationCount": "0",
+        "chainCount": "4",
+        "attestationCount": "75"
+      },
+      "nowTs": "1800000000",
+      "score": 791,
+      "repaymentPts": 116,
+      "collateralPts": 150,
+      "maturityPts": 75,
+      "diversityPts": 60,
+      "safetyPts": 90,
+      "aprBps": 764,
+      "maxLtvBps": 7091
+    },
+    {
+      "facts": {
+        "totalRepaidE8": "25055500000000",
+        "totalCollateralE8": "17915100000000",
+        "firstActivityAt": "1735632000",
+        "lastActivityAt": "1800000000",
+        "repaymentCount": "57",
+        "liquidationCount": "5",
+        "chainCount": "5",
+        "attestationCount": "35"
+      },
+      "nowTs": "1800000000",
+      "score": 825,
+      "repaymentPts": 210,
+      "collateralPts": 150,
+      "maturityPts": 90,
+      "diversityPts": 60,
+      "safetyPts": 15,
+      "aprBps": 650,
+      "maxLtvBps": 7375
+    },
+    {
+      "facts": {
+        "totalRepaidE8": "38489800000000",
+        "totalCollateralE8": "6376100000000",
+        "firstActivityAt": "1715328000",
+        "lastActivityAt": "1800000000",
+        "repaymentCount": "43",
+        "liquidationCount": "5",
+        "chainCount": "3",
+        "attestationCount": "36"
+      },
+      "nowTs": "1800000000",
+      "score": 723,
+      "repaymentPts": 210,
+      "collateralPts": 63,
+      "maturityPts": 90,
+      "diversityPts": 45,
+      "safetyPts": 15,
+      "aprBps": 990,
+      "maxLtvBps": 6525
+    },
+    {
+      "facts": {
+        "totalRepaidE8": "35917400000000",
+        "totalCollateralE8": "5372900000000",
+        "firstActivityAt": "1783324800",
+        "lastActivityAt": "1800000000",
+        "repaymentCount": "54",
+        "liquidationCount": "0",
+        "chainCount": "0",
+        "attestationCount": "27"
+      },
+      "nowTs": "1800000000",
+      "score": 676,
+      "repaymentPts": 210,
+      "collateralPts": 53,
+      "maturityPts": 23,
+      "diversityPts": 0,
+      "safetyPts": 90,
+      "aprBps": 1147,
+      "maxLtvBps": 6133
+    },
+    {
+      "facts": {
+        "totalRepaidE8": "5589200000000",
+        "totalCollateralE8": "1990100000000",
+        "firstActivityAt": "1778745600",
+        "lastActivityAt": "1800000000",
+        "repaymentCount": "28",
+        "liquidationCount": "3",
+        "chainCount": "5",
+        "attestationCount": "54"
+      },
+      "nowTs": "1800000000",
+      "score": 525,
+      "repaymentPts": 86,
+      "collateralPts": 19,
+      "maturityPts": 30,
+      "diversityPts": 60,
+      "safetyPts": 30,
+      "aprBps": 1650,
+      "maxLtvBps": 4875
+    },
+    {
+      "facts": {
+        "totalRepaidE8": "25493700000000",
+        "totalCollateralE8": "26631300000000",
+        "firstActivityAt": "1717228800",
+        "lastActivityAt": "1800000000",
+        "repaymentCount": "47",
+        "liquidationCount": "5",
+        "chainCount": "2",
+        "attestationCount": "106"
+      },
+      "nowTs": "1800000000",
+      "score": 795,
+      "repaymentPts": 210,
+      "collateralPts": 150,
+      "maturityPts": 90,
+      "diversityPts": 30,
+      "safetyPts": 15,
+      "aprBps": 750,
+      "maxLtvBps": 7125
+    },
+    {
+      "facts": {
+        "totalRepaidE8": "17362000000000",
+        "totalCollateralE8": "3969900000000",
+        "firstActivityAt": "1728028800",
+        "lastActivityAt": "1800000000",
+        "repaymentCount": "45",
+        "liquidationCount": "5",
+        "chainCount": "4",
+        "attestationCount": "72"
+      },
+      "nowTs": "1800000000",
+      "score": 675,
+      "repaymentPts": 171,
+      "collateralPts": 39,
+      "maturityPts": 90,
+      "diversityPts": 60,
+      "safetyPts": 15,
+      "aprBps": 1150,
+      "maxLtvBps": 6125
+    },
+    {
+      "facts": {
+        "totalRepaidE8": "16130900000000",
+        "totalCollateralE8": "9229100000000",
+        "firstActivityAt": "1702800000",
+        "lastActivityAt": "1800000000",
+        "repaymentCount": "22",
+        "liquidationCount": "4",
+        "chainCount": "5",
+        "attestationCount": "50"
+      },
+      "nowTs": "1800000000",
+      "score": 690,
+      "repaymentPts": 127,
+      "collateralPts": 92,
+      "maturityPts": 90,
+      "diversityPts": 60,
+      "safetyPts": 21,
+      "aprBps": 1100,
+      "maxLtvBps": 6250
+    },
+    {
+      "facts": {
+        "totalRepaidE8": "21426900000000",
+        "totalCollateralE8": "16889200000000",
+        "firstActivityAt": "1707292800",
+        "lastActivityAt": "1800000000",
+        "repaymentCount": "5",
+        "liquidationCount": "5",
+        "chainCount": "1",
+        "attestationCount": "57"
+      },
+      "nowTs": "1800000000",
+      "score": 688,
+      "repaymentPts": 118,
+      "collateralPts": 150,
+      "maturityPts": 90,
+      "diversityPts": 15,
+      "safetyPts": 15,
+      "aprBps": 1107,
+      "maxLtvBps": 6233
+    },
+    {
+      "facts": {
+        "totalRepaidE8": "19419900000000",
+        "totalCollateralE8": "3621900000000",
+        "firstActivityAt": "1772611200",
+        "lastActivityAt": "1800000000",
+        "repaymentCount": "19",
+        "liquidationCount": "1",
+        "chainCount": "3",
+        "attestationCount": "89"
+      },
+      "nowTs": "1800000000",
+      "score": 620,
+      "repaymentPts": 137,
+      "collateralPts": 36,
+      "maturityPts": 39,
+      "diversityPts": 45,
+      "safetyPts": 63,
+      "aprBps": 1334,
+      "maxLtvBps": 5666
+    },
+    {
+      "facts": {
+        "totalRepaidE8": "28105700000000",
+        "totalCollateralE8": "28974800000000",
+        "firstActivityAt": "1707465600",
+        "lastActivityAt": "1800000000",
+        "repaymentCount": "38",
+        "liquidationCount": "4",
+        "chainCount": "0",
+        "attestationCount": "82"
+      },
+      "nowTs": "1800000000",
+      "score": 766,
+      "repaymentPts": 205,
+      "collateralPts": 150,
+      "maturityPts": 90,
+      "diversityPts": 0,
+      "safetyPts": 21,
+      "aprBps": 847,
+      "maxLtvBps": 6883
+    },
+    {
+      "facts": {
+        "totalRepaidE8": "34787900000000",
+        "totalCollateralE8": "26389300000000",
+        "firstActivityAt": "1767945600",
+        "lastActivityAt": "1800000000",
+        "repaymentCount": "42",
+        "liquidationCount": "5",
+        "chainCount": "4",
+        "attestationCount": "110"
+      },
+      "nowTs": "1800000000",
+      "score": 780,
+      "repaymentPts": 210,
+      "collateralPts": 150,
+      "maturityPts": 45,
+      "diversityPts": 60,
+      "safetyPts": 15,
+      "aprBps": 800,
+      "maxLtvBps": 7000
+    },
+    {
+      "facts": {
+        "totalRepaidE8": "15306100000000",
+        "totalCollateralE8": "3489100000000",
+        "firstActivityAt": "1784534400",
+        "lastActivityAt": "1800000000",
+        "repaymentCount": "54",
+        "liquidationCount": "5",
+        "chainCount": "0",
+        "attestationCount": "2"
+      },
+      "nowTs": "1800000000",
+      "score": 532,
+      "repaymentPts": 161,
+      "collateralPts": 34,
+      "maturityPts": 22,
+      "diversityPts": 0,
+      "safetyPts": 15,
+      "aprBps": 1627,
+      "maxLtvBps": 4933
+    },
+    {
+      "facts": {
+        "totalRepaidE8": "1588400000000",
+        "totalCollateralE8": "27325700000000",
+        "firstActivityAt": "1712131200",
+        "lastActivityAt": "1800000000",
+        "repaymentCount": "12",
+        "liquidationCount": "2",
+        "chainCount": "2",
+        "attestationCount": "0"
+      },
+      "nowTs": "1800000000",
+      "score": 603,
+      "repaymentPts": 33,
+      "collateralPts": 150,
+      "maturityPts": 90,
+      "diversityPts": 30,
+      "safetyPts": 0,
+      "aprBps": 1390,
+      "maxLtvBps": 5525
+    },
+    {
+      "facts": {
+        "totalRepaidE8": "98600000000",
+        "totalCollateralE8": "9217600000000",
+        "firstActivityAt": "1729584000",
+        "lastActivityAt": "1800000000",
+        "repaymentCount": "34",
+        "liquidationCount": "0",
+        "chainCount": "1",
+        "attestationCount": "82"
+      },
+      "nowTs": "1800000000",
+      "score": 658,
+      "repaymentPts": 71,
+      "collateralPts": 92,
+      "maturityPts": 90,
+      "diversityPts": 15,
+      "safetyPts": 90,
+      "aprBps": 1207,
+      "maxLtvBps": 5983
+    },
+    {
+      "facts": {
+        "totalRepaidE8": "18787500000000",
+        "totalCollateralE8": "22229900000000",
+        "firstActivityAt": "1768204800",
+        "lastActivityAt": "1800000000",
+        "repaymentCount": "12",
+        "liquidationCount": "3",
+        "chainCount": "5",
+        "attestationCount": "111"
+      },
+      "nowTs": "1800000000",
+      "score": 704,
+      "repaymentPts": 119,
+      "collateralPts": 150,
+      "maturityPts": 45,
+      "diversityPts": 60,
+      "safetyPts": 30,
+      "aprBps": 1054,
+      "maxLtvBps": 6366
+    },
+    {
+      "facts": {
+        "totalRepaidE8": "29503900000000",
+        "totalCollateralE8": "13951700000000",
+        "firstActivityAt": "1748937600",
+        "lastActivityAt": "1800000000",
+        "repaymentCount": "55",
+        "liquidationCount": "3",
+        "chainCount": "3",
+        "attestationCount": "31"
+      },
+      "nowTs": "1800000000",
+      "score": 796,
+      "repaymentPts": 210,
+      "collateralPts": 139,
+      "maturityPts": 72,
+      "diversityPts": 45,
+      "safetyPts": 30,
+      "aprBps": 747,
+      "maxLtvBps": 7133
+    },
+    {
+      "facts": {
+        "totalRepaidE8": "19975700000000",
+        "totalCollateralE8": "26133000000000",
+        "firstActivityAt": "1750924800",
+        "lastActivityAt": "1800000000",
+        "repaymentCount": "50",
+        "liquidationCount": "4",
+        "chainCount": "2",
+        "attestationCount": "86"
+      },
+      "nowTs": "1800000000",
+      "score": 755,
+      "repaymentPts": 184,
+      "collateralPts": 150,
+      "maturityPts": 70,
+      "diversityPts": 30,
+      "safetyPts": 21,
+      "aprBps": 884,
+      "maxLtvBps": 6791
+    },
+    {
+      "facts": {
+        "totalRepaidE8": "9918100000000",
+        "totalCollateralE8": "27274400000000",
+        "firstActivityAt": "1746259200",
+        "lastActivityAt": "1800000000",
+        "repaymentCount": "6",
+        "liquidationCount": "5",
+        "chainCount": "3",
+        "attestationCount": "65"
+      },
+      "nowTs": "1800000000",
+      "score": 648,
+      "repaymentPts": 62,
+      "collateralPts": 150,
+      "maturityPts": 76,
+      "diversityPts": 45,
+      "safetyPts": 15,
+      "aprBps": 1240,
+      "maxLtvBps": 5900
+    },
+    {
+      "facts": {
+        "totalRepaidE8": "39754000000000",
+        "totalCollateralE8": "12823900000000",
+        "firstActivityAt": "1754899200",
+        "lastActivityAt": "1800000000",
+        "repaymentCount": "53",
+        "liquidationCount": "0",
+        "chainCount": "4",
+        "attestationCount": "6"
+      },
+      "nowTs": "1800000000",
+      "score": 852,
+      "repaymentPts": 210,
+      "collateralPts": 128,
+      "maturityPts": 64,
+      "diversityPts": 60,
+      "safetyPts": 90,
+      "aprBps": 560,
+      "maxLtvBps": 7600
+    },
+    {
+      "facts": {
+        "totalRepaidE8": "4956200000000",
+        "totalCollateralE8": "29879500000000",
+        "firstActivityAt": "1751961600",
+        "lastActivityAt": "1800000000",
+        "repaymentCount": "57",
+        "liquidationCount": "1",
+        "chainCount": "1",
+        "attestationCount": "83"
+      },
+      "nowTs": "1800000000",
+      "score": 704,
+      "repaymentPts": 108,
+      "collateralPts": 150,
+      "maturityPts": 68,
+      "diversityPts": 15,
+      "safetyPts": 63,
+      "aprBps": 1054,
+      "maxLtvBps": 6366
+    },
+    {
+      "facts": {
+        "totalRepaidE8": "3053700000000",
+        "totalCollateralE8": "7734600000000",
+        "firstActivityAt": "1727164800",
+        "lastActivityAt": "1800000000",
+        "repaymentCount": "22",
+        "liquidationCount": "5",
+        "chainCount": "1",
+        "attestationCount": "87"
+      },
+      "nowTs": "1800000000",
+      "score": 558,
+      "repaymentPts": 61,
+      "collateralPts": 77,
+      "maturityPts": 90,
+      "diversityPts": 15,
+      "safetyPts": 15,
+      "aprBps": 1540,
+      "maxLtvBps": 5150
+    },
+    {
+      "facts": {
+        "totalRepaidE8": "27784400000000",
+        "totalCollateralE8": "5476200000000",
+        "firstActivityAt": "1763280000",
+        "lastActivityAt": "1800000000",
+        "repaymentCount": "1",
+        "liquidationCount": "4",
+        "chainCount": "3",
+        "attestationCount": "109"
+      },
+      "nowTs": "1800000000",
+      "score": 600,
+      "repaymentPts": 128,
+      "collateralPts": 54,
+      "maturityPts": 52,
+      "diversityPts": 45,
+      "safetyPts": 21,
+      "aprBps": 1400,
+      "maxLtvBps": 5500
+    },
+    {
+      "facts": {
+        "totalRepaidE8": "4141300000000",
+        "totalCollateralE8": "29401800000000",
+        "firstActivityAt": "1781164800",
+        "lastActivityAt": "1800000000",
+        "repaymentCount": "55",
+        "liquidationCount": "3",
+        "chainCount": "5",
+        "attestationCount": "4"
+      },
+      "nowTs": "1800000000",
+      "score": 670,
+      "repaymentPts": 104,
+      "collateralPts": 150,
+      "maturityPts": 26,
+      "diversityPts": 60,
+      "safetyPts": 30,
+      "aprBps": 1167,
+      "maxLtvBps": 6083
+    },
+    {
+      "facts": {
+        "totalRepaidE8": "38735200000000",
+        "totalCollateralE8": "2414300000000",
+        "firstActivityAt": "1745481600",
+        "lastActivityAt": "1800000000",
+        "repaymentCount": "29",
+        "liquidationCount": "5",
+        "chainCount": "5",
+        "attestationCount": "94"
+      },
+      "nowTs": "1800000000",
+      "score": 662,
+      "repaymentPts": 186,
+      "collateralPts": 24,
+      "maturityPts": 77,
+      "diversityPts": 60,
+      "safetyPts": 15,
+      "aprBps": 1194,
+      "maxLtvBps": 6016
+    },
+    {
+      "facts": {
+        "totalRepaidE8": "9444900000000",
+        "totalCollateralE8": "11702700000000",
+        "firstActivityAt": "1713254400",
+        "lastActivityAt": "1800000000",
+        "repaymentCount": "42",
+        "liquidationCount": "1",
+        "chainCount": "5",
+        "attestationCount": "62"
+      },
+      "nowTs": "1800000000",
+      "score": 761,
+      "repaymentPts": 131,
+      "collateralPts": 117,
+      "maturityPts": 90,
+      "diversityPts": 60,
+      "safetyPts": 63,
+      "aprBps": 864,
+      "maxLtvBps": 6841
+    },
+    {
+      "facts": {
+        "totalRepaidE8": "14667200000000",
+        "totalCollateralE8": "4889100000000",
+        "firstActivityAt": "1753257600",
+        "lastActivityAt": "1800000000",
+        "repaymentCount": "52",
+        "liquidationCount": "5",
+        "chainCount": "2",
+        "attestationCount": "45"
+      },
+      "nowTs": "1800000000",
+      "score": 616,
+      "repaymentPts": 157,
+      "collateralPts": 48,
+      "maturityPts": 66,
+      "diversityPts": 30,
+      "safetyPts": 15,
+      "aprBps": 1347,
+      "maxLtvBps": 5633
+    },
+    {
+      "facts": {
+        "totalRepaidE8": "10408400000000",
+        "totalCollateralE8": "1748600000000",
+        "firstActivityAt": "1707724800",
+        "lastActivityAt": "1800000000",
+        "repaymentCount": "14",
+        "liquidationCount": "0",
+        "chainCount": "3",
+        "attestationCount": "16"
+      },
+      "nowTs": "1800000000",
+      "score": 623,
+      "repaymentPts": 81,
+      "collateralPts": 17,
+      "maturityPts": 90,
+      "diversityPts": 45,
+      "safetyPts": 90,
+      "aprBps": 1324,
+      "maxLtvBps": 5691
+    },
+    {
+      "facts": {
+        "totalRepaidE8": "25629500000000",
+        "totalCollateralE8": "22325700000000",
+        "firstActivityAt": "1716883200",
+        "lastActivityAt": "1800000000",
+        "repaymentCount": "32",
+        "liquidationCount": "4",
+        "chainCount": "2",
+        "attestationCount": "78"
+      },
+      "nowTs": "1800000000",
+      "score": 784,
+      "repaymentPts": 193,
+      "collateralPts": 150,
+      "maturityPts": 90,
+      "diversityPts": 30,
+      "safetyPts": 21,
+      "aprBps": 787,
+      "maxLtvBps": 7033
+    },
+    {
+      "facts": {
+        "totalRepaidE8": "1836400000000",
+        "totalCollateralE8": "28585800000000",
+        "firstActivityAt": "1798012800",
+        "lastActivityAt": "1800000000",
+        "repaymentCount": "44",
+        "liquidationCount": "0",
+        "chainCount": "3",
+        "attestationCount": "38"
+      },
+      "nowTs": "1800000000",
+      "score": 680,
+      "repaymentPts": 93,
+      "collateralPts": 150,
+      "maturityPts": 2,
+      "diversityPts": 45,
+      "safetyPts": 90,
+      "aprBps": 1134,
+      "maxLtvBps": 6166
+    },
+    {
+      "facts": {
+        "totalRepaidE8": "19432300000000",
+        "totalCollateralE8": "29675000000000",
+        "firstActivityAt": "1759046400",
+        "lastActivityAt": "1800000000",
+        "repaymentCount": "9",
+        "liquidationCount": "5",
+        "chainCount": "4",
+        "attestationCount": "42"
+      },
+      "nowTs": "1800000000",
+      "score": 699,
+      "repaymentPts": 116,
+      "collateralPts": 150,
+      "maturityPts": 58,
+      "diversityPts": 60,
+      "safetyPts": 15,
+      "aprBps": 1070,
+      "maxLtvBps": 6325
+    },
+    {
+      "facts": {
+        "totalRepaidE8": "140200000000",
+        "totalCollateralE8": "2566400000000",
+        "firstActivityAt": "1741939200",
+        "lastActivityAt": "1800000000",
+        "repaymentCount": "42",
+        "liquidationCount": "1",
+        "chainCount": "5",
+        "attestationCount": "65"
+      },
+      "nowTs": "1800000000",
+      "score": 614,
+      "repaymentPts": 84,
+      "collateralPts": 25,
+      "maturityPts": 82,
+      "diversityPts": 60,
+      "safetyPts": 63,
+      "aprBps": 1354,
+      "maxLtvBps": 5616
+    },
+    {
+      "facts": {
+        "totalRepaidE8": "38200200000000",
+        "totalCollateralE8": "25245800000000",
+        "firstActivityAt": "1709366400",
+        "lastActivityAt": "1800000000",
+        "repaymentCount": "4",
+        "liquidationCount": "3",
+        "chainCount": "4",
+        "attestationCount": "77"
+      },
+      "nowTs": "1800000000",
+      "score": 764,
+      "repaymentPts": 134,
+      "collateralPts": 150,
+      "maturityPts": 90,
+      "diversityPts": 60,
+      "safetyPts": 30,
+      "aprBps": 854,
+      "maxLtvBps": 6866
+    },
+    {
+      "facts": {
+        "totalRepaidE8": "17026200000000",
+        "totalCollateralE8": "16298800000000",
+        "firstActivityAt": "1697011200",
+        "lastActivityAt": "1800000000",
+        "repaymentCount": "48",
+        "liquidationCount": "2",
+        "chainCount": "5",
+        "attestationCount": "87"
+      },
+      "nowTs": "1800000000",
+      "score": 813,
+      "repaymentPts": 169,
+      "collateralPts": 150,
+      "maturityPts": 90,
+      "diversityPts": 60,
+      "safetyPts": 44,
+      "aprBps": 690,
+      "maxLtvBps": 7275
+    },
+    {
+      "facts": {
+        "totalRepaidE8": "15400600000000",
+        "totalCollateralE8": "5740100000000",
+        "firstActivityAt": "1786694400",
+        "lastActivityAt": "1800000000",
+        "repaymentCount": "26",
+        "liquidationCount": "2",
+        "chainCount": "3",
+        "attestationCount": "31"
+      },
+      "nowTs": "1800000000",
+      "score": 596,
+      "repaymentPts": 132,
+      "collateralPts": 57,
+      "maturityPts": 18,
+      "diversityPts": 45,
+      "safetyPts": 44,
+      "aprBps": 1414,
+      "maxLtvBps": 5466
+    },
+    {
+      "facts": {
+        "totalRepaidE8": "19988400000000",
+        "totalCollateralE8": "12336700000000",
+        "firstActivityAt": "1762502400",
+        "lastActivityAt": "1800000000",
+        "repaymentCount": "7",
+        "liquidationCount": "1",
+        "chainCount": "2",
+        "attestationCount": "38"
+      },
+      "nowTs": "1800000000",
+      "score": 684,
+      "repaymentPts": 115,
+      "collateralPts": 123,
+      "maturityPts": 53,
+      "diversityPts": 30,
+      "safetyPts": 63,
+      "aprBps": 1120,
+      "maxLtvBps": 6200
+    },
+    {
+      "facts": {
+        "totalRepaidE8": "9688100000000",
+        "totalCollateralE8": "4706900000000",
+        "firstActivityAt": "1786521600",
+        "lastActivityAt": "1800000000",
+        "repaymentCount": "47",
+        "liquidationCount": "2",
+        "chainCount": "3",
+        "attestationCount": "16"
+      },
+      "nowTs": "1800000000",
+      "score": 587,
+      "repaymentPts": 132,
+      "collateralPts": 47,
+      "maturityPts": 19,
+      "diversityPts": 45,
+      "safetyPts": 44,
+      "aprBps": 1444,
+      "maxLtvBps": 5391
+    },
+    {
+      "facts": {
+        "totalRepaidE8": "13977300000000",
+        "totalCollateralE8": "2088500000000",
+        "firstActivityAt": "1754294400",
+        "lastActivityAt": "1800000000",
+        "repaymentCount": "4",
+        "liquidationCount": "0",
+        "chainCount": "5",
+        "attestationCount": "88"
+      },
+      "nowTs": "1800000000",
+      "score": 613,
+      "repaymentPts": 78,
+      "collateralPts": 20,
+      "maturityPts": 65,
+      "diversityPts": 60,
+      "safetyPts": 90,
+      "aprBps": 1357,
+      "maxLtvBps": 5608
+    },
+    {
+      "facts": {
+        "totalRepaidE8": "25698300000000",
+        "totalCollateralE8": "10075800000000",
+        "firstActivityAt": "1788940800",
+        "lastActivityAt": "1800000000",
+        "repaymentCount": "32",
+        "liquidationCount": "0",
+        "chainCount": "4",
+        "attestationCount": "102"
+      },
+      "nowTs": "1800000000",
+      "score": 758,
+      "repaymentPts": 193,
+      "collateralPts": 100,
+      "maturityPts": 15,
+      "diversityPts": 60,
+      "safetyPts": 90,
+      "aprBps": 874,
+      "maxLtvBps": 6816
+    },
+    {
+      "facts": {
+        "totalRepaidE8": "21307400000000",
+        "totalCollateralE8": "21710800000000",
+        "firstActivityAt": "1706083200",
+        "lastActivityAt": "1800000000",
+        "repaymentCount": "30",
+        "liquidationCount": "1",
+        "chainCount": "0",
+        "attestationCount": "82"
+      },
+      "nowTs": "1800000000",
+      "score": 773,
+      "repaymentPts": 170,
+      "collateralPts": 150,
+      "maturityPts": 90,
+      "diversityPts": 0,
+      "safetyPts": 63,
+      "aprBps": 824,
+      "maxLtvBps": 6941
+    },
+    {
+      "facts": {
+        "totalRepaidE8": "14148800000000",
+        "totalCollateralE8": "3138700000000",
+        "firstActivityAt": "1758787200",
+        "lastActivityAt": "1800000000",
+        "repaymentCount": "19",
+        "liquidationCount": "2",
+        "chainCount": "2",
+        "attestationCount": "119"
+      },
+      "nowTs": "1800000000",
+      "score": 574,
+      "repaymentPts": 111,
+      "collateralPts": 31,
+      "maturityPts": 58,
+      "diversityPts": 30,
+      "safetyPts": 44,
+      "aprBps": 1487,
+      "maxLtvBps": 5283
+    },
+    {
+      "facts": {
+        "totalRepaidE8": "11754900000000",
+        "totalCollateralE8": "25857100000000",
+        "firstActivityAt": "1791532800",
+        "lastActivityAt": "1800000000",
+        "repaymentCount": "25",
+        "liquidationCount": "0",
+        "chainCount": "0",
+        "attestationCount": "108"
+      },
+      "nowTs": "1800000000",
+      "score": 663,
+      "repaymentPts": 111,
+      "collateralPts": 150,
+      "maturityPts": 12,
+      "diversityPts": 0,
+      "safetyPts": 90,
+      "aprBps": 1190,
+      "maxLtvBps": 6025
+    },
+    {
+      "facts": {
+        "totalRepaidE8": "16769600000000",
+        "totalCollateralE8": "24700200000000",
+        "firstActivityAt": "1700899200",
+        "lastActivityAt": "1800000000",
+        "repaymentCount": "43",
+        "liquidationCount": "5",
+        "chainCount": "5",
+        "attestationCount": "100"
+      },
+      "nowTs": "1800000000",
+      "score": 783,
+      "repaymentPts": 168,
+      "collateralPts": 150,
+      "maturityPts": 90,
+      "diversityPts": 60,
+      "safetyPts": 15,
+      "aprBps": 790,
+      "maxLtvBps": 7025
+    },
+    {
+      "facts": {
+        "totalRepaidE8": "14361100000000",
+        "totalCollateralE8": "5960900000000",
+        "firstActivityAt": "1739347200",
+        "lastActivityAt": "1800000000",
+        "repaymentCount": "46",
+        "liquidationCount": "2",
+        "chainCount": "3",
+        "attestationCount": "84"
+      },
+      "nowTs": "1800000000",
+      "score": 690,
+      "repaymentPts": 156,
+      "collateralPts": 59,
+      "maturityPts": 86,
+      "diversityPts": 45,
+      "safetyPts": 44,
+      "aprBps": 1100,
+      "maxLtvBps": 6250
+    },
+    {
+      "facts": {
+        "totalRepaidE8": "8187700000000",
+        "totalCollateralE8": "28479600000000",
+        "firstActivityAt": "1713600000",
+        "lastActivityAt": "1800000000",
+        "repaymentCount": "17",
+        "liquidationCount": "0",
+        "chainCount": "4",
+        "attestationCount": "56"
+      },
+      "nowTs": "1800000000",
+      "score": 766,
+      "repaymentPts": 76,
+      "collateralPts": 150,
+      "maturityPts": 90,
+      "diversityPts": 60,
+      "safetyPts": 90,
+      "aprBps": 847,
+      "maxLtvBps": 6883
+    },
+    {
+      "facts": {
+        "totalRepaidE8": "19220900000000",
+        "totalCollateralE8": "18124400000000",
+        "firstActivityAt": "1702108800",
+        "lastActivityAt": "1800000000",
+        "repaymentCount": "56",
+        "liquidationCount": "1",
+        "chainCount": "2",
+        "attestationCount": "105"
+      },
+      "nowTs": "1800000000",
+      "score": 813,
+      "repaymentPts": 180,
+      "collateralPts": 150,
+      "maturityPts": 90,
+      "diversityPts": 30,
+      "safetyPts": 63,
+      "aprBps": 690,
+      "maxLtvBps": 7275
+    },
+    {
+      "facts": {
+        "totalRepaidE8": "9428600000000",
+        "totalCollateralE8": "26604700000000",
+        "firstActivityAt": "1775808000",
+        "lastActivityAt": "1800000000",
+        "repaymentCount": "46",
+        "liquidationCount": "4",
+        "chainCount": "0",
+        "attestationCount": "5"
+      },
+      "nowTs": "1800000000",
+      "score": 636,
+      "repaymentPts": 131,
+      "collateralPts": 150,
+      "maturityPts": 34,
+      "diversityPts": 0,
+      "safetyPts": 21,
+      "aprBps": 1280,
+      "maxLtvBps": 5800
+    },
+    {
+      "facts": {
+        "totalRepaidE8": "3974800000000",
+        "totalCollateralE8": "3523400000000",
+        "firstActivityAt": "1746950400",
+        "lastActivityAt": "1800000000",
+        "repaymentCount": "45",
+        "liquidationCount": "2",
+        "chainCount": "4",
+        "attestationCount": "73"
+      },
+      "nowTs": "1800000000",
+      "score": 618,
+      "repaymentPts": 104,
+      "collateralPts": 35,
+      "maturityPts": 75,
+      "diversityPts": 60,
+      "safetyPts": 44,
+      "aprBps": 1340,
+      "maxLtvBps": 5650
+    },
+    {
+      "facts": {
+        "totalRepaidE8": "28673200000000",
+        "totalCollateralE8": "21560400000000",
+        "firstActivityAt": "1765958400",
+        "lastActivityAt": "1800000000",
+        "repaymentCount": "19",
+        "liquidationCount": "3",
+        "chainCount": "5",
+        "attestationCount": "50"
+      },
+      "nowTs": "1800000000",
+      "score": 753,
+      "repaymentPts": 165,
+      "collateralPts": 150,
+      "maturityPts": 48,
+      "diversityPts": 60,
+      "safetyPts": 30,
+      "aprBps": 890,
+      "maxLtvBps": 6775
+    },
+    {
+      "facts": {
+        "totalRepaidE8": "28362000000000",
+        "totalCollateralE8": "13409700000000",
+        "firstActivityAt": "1749283200",
+        "lastActivityAt": "1800000000",
+        "repaymentCount": "5",
+        "liquidationCount": "5",
+        "chainCount": "2",
+        "attestationCount": "92"
+      },
+      "nowTs": "1800000000",
+      "score": 687,
+      "repaymentPts": 136,
+      "collateralPts": 134,
+      "maturityPts": 72,
+      "diversityPts": 30,
+      "safetyPts": 15,
+      "aprBps": 1110,
+      "maxLtvBps": 6225
+    },
+    {
+      "facts": {
+        "totalRepaidE8": "26826400000000",
+        "totalCollateralE8": "2613300000000",
+        "firstActivityAt": "1785139200",
+        "lastActivityAt": "1800000000",
+        "repaymentCount": "56",
+        "liquidationCount": "3",
+        "chainCount": "2",
+        "attestationCount": "107"
+      },
+      "nowTs": "1800000000",
+      "score": 617,
+      "repaymentPts": 210,
+      "collateralPts": 26,
+      "maturityPts": 21,
+      "diversityPts": 30,
+      "safetyPts": 30,
+      "aprBps": 1344,
+      "maxLtvBps": 5641
+    },
+    {
+      "facts": {
+        "totalRepaidE8": "23507200000000",
+        "totalCollateralE8": "28165200000000",
+        "firstActivityAt": "1710403200",
+        "lastActivityAt": "1800000000",
+        "repaymentCount": "59",
+        "liquidationCount": "0",
+        "chainCount": "0",
+        "attestationCount": "53"
+      },
+      "nowTs": "1800000000",
+      "score": 832,
+      "repaymentPts": 202,
+      "collateralPts": 150,
+      "maturityPts": 90,
+      "diversityPts": 0,
+      "safetyPts": 90,
+      "aprBps": 627,
+      "maxLtvBps": 7433
+    },
+    {
+      "facts": {
+        "totalRepaidE8": "10800000000000",
+        "totalCollateralE8": "6915800000000",
+        "firstActivityAt": "1708243200",
+        "lastActivityAt": "1800000000",
+        "repaymentCount": "27",
+        "liquidationCount": "2",
+        "chainCount": "1",
+        "attestationCount": "30"
+      },
+      "nowTs": "1800000000",
+      "score": 629,
+      "repaymentPts": 111,
+      "collateralPts": 69,
+      "maturityPts": 90,
+      "diversityPts": 15,
+      "safetyPts": 44,
+      "aprBps": 1304,
+      "maxLtvBps": 5741
+    },
+    {
+      "facts": {
+        "totalRepaidE8": "33124700000000",
+        "totalCollateralE8": "27314600000000",
+        "firstActivityAt": "1747900800",
+        "lastActivityAt": "1800000000",
+        "repaymentCount": "19",
+        "liquidationCount": "2",
+        "chainCount": "2",
+        "attestationCount": "2"
+      },
+      "nowTs": "1800000000",
+      "score": 763,
+      "repaymentPts": 165,
+      "collateralPts": 150,
+      "maturityPts": 74,
+      "diversityPts": 30,
+      "safetyPts": 44,
+      "aprBps": 857,
+      "maxLtvBps": 6858
+    },
+    {
+      "facts": {
+        "totalRepaidE8": "28705900000000",
+        "totalCollateralE8": "25559400000000",
+        "firstActivityAt": "1765440000",
+        "lastActivityAt": "1800000000",
+        "repaymentCount": "24",
+        "liquidationCount": "1",
+        "chainCount": "5",
+        "attestationCount": "110"
+      },
+      "nowTs": "1800000000",
+      "score": 798,
+      "repaymentPts": 176,
+      "collateralPts": 150,
+      "maturityPts": 49,
+      "diversityPts": 60,
+      "safetyPts": 63,
+      "aprBps": 740,
+      "maxLtvBps": 7150
+    },
+    {
+      "facts": {
+        "totalRepaidE8": "34017900000000",
+        "totalCollateralE8": "1803800000000",
+        "firstActivityAt": "1729411200",
+        "lastActivityAt": "1800000000",
+        "repaymentCount": "46",
+        "liquidationCount": "4",
+        "chainCount": "3",
+        "attestationCount": "74"
+      },
+      "nowTs": "1800000000",
+      "score": 684,
+      "repaymentPts": 210,
+      "collateralPts": 18,
+      "maturityPts": 90,
+      "diversityPts": 45,
+      "safetyPts": 21,
+      "aprBps": 1120,
+      "maxLtvBps": 6200
+    },
+    {
+      "facts": {
+        "totalRepaidE8": "879900000000",
+        "totalCollateralE8": "27179000000000",
+        "firstActivityAt": "1725177600",
+        "lastActivityAt": "1800000000",
+        "repaymentCount": "24",
+        "liquidationCount": "2",
+        "chainCount": "4",
+        "attestationCount": "103"
+      },
+      "nowTs": "1800000000",
+      "score": 698,
+      "repaymentPts": 54,
+      "collateralPts": 150,
+      "maturityPts": 90,
+      "diversityPts": 60,
+      "safetyPts": 44,
+      "aprBps": 1074,
+      "maxLtvBps": 6316
+    },
+    {
+      "facts": {
+        "totalRepaidE8": "5633900000000",
+        "totalCollateralE8": "13089100000000",
+        "firstActivityAt": "1703923200",
+        "lastActivityAt": "1800000000",
+        "repaymentCount": "28",
+        "liquidationCount": "5",
+        "chainCount": "4",
+        "attestationCount": "69"
+      },
+      "nowTs": "1800000000",
+      "score": 682,
+      "repaymentPts": 87,
+      "collateralPts": 130,
+      "maturityPts": 90,
+      "diversityPts": 60,
+      "safetyPts": 15,
+      "aprBps": 1127,
+      "maxLtvBps": 6183
+    },
+    {
+      "facts": {
+        "totalRepaidE8": "31321200000000",
+        "totalCollateralE8": "25688700000000",
+        "firstActivityAt": "1788422400",
+        "lastActivityAt": "1800000000",
+        "repaymentCount": "51",
+        "liquidationCount": "5",
+        "chainCount": "5",
+        "attestationCount": "56"
+      },
+      "nowTs": "1800000000",
+      "score": 751,
+      "repaymentPts": 210,
+      "collateralPts": 150,
+      "maturityPts": 16,
+      "diversityPts": 60,
+      "safetyPts": 15,
+      "aprBps": 897,
+      "maxLtvBps": 6758
+    },
+    {
+      "facts": {
+        "totalRepaidE8": "25505400000000",
+        "totalCollateralE8": "22513400000000",
+        "firstActivityAt": "1758182400",
+        "lastActivityAt": "1800000000",
+        "repaymentCount": "33",
+        "liquidationCount": "4",
+        "chainCount": "3",
+        "attestationCount": "80"
+      },
+      "nowTs": "1800000000",
+      "score": 770,
+      "repaymentPts": 195,
+      "collateralPts": 150,
+      "maturityPts": 59,
+      "diversityPts": 45,
+      "safetyPts": 21,
+      "aprBps": 834,
+      "maxLtvBps": 6916
+    },
+    {
+      "facts": {
+        "totalRepaidE8": "28234000000000",
+        "totalCollateralE8": "8717100000000",
+        "firstActivityAt": "1791705600",
+        "lastActivityAt": "1800000000",
+        "repaymentCount": "26",
+        "liquidationCount": "4",
+        "chainCount": "0",
+        "attestationCount": "63"
+      },
+      "nowTs": "1800000000",
+      "score": 599,
+      "repaymentPts": 180,
+      "collateralPts": 87,
+      "maturityPts": 11,
+      "diversityPts": 0,
+      "safetyPts": 21,
+      "aprBps": 1404,
+      "maxLtvBps": 5491
+    },
+    {
+      "facts": {
+        "totalRepaidE8": "11668600000000",
+        "totalCollateralE8": "20960500000000",
+        "firstActivityAt": "1793433600",
+        "lastActivityAt": "1800000000",
+        "repaymentCount": "21",
+        "liquidationCount": "0",
+        "chainCount": "1",
+        "attestationCount": "85"
+      },
+      "nowTs": "1800000000",
+      "score": 666,
+      "repaymentPts": 102,
+      "collateralPts": 150,
+      "maturityPts": 9,
+      "diversityPts": 15,
+      "safetyPts": 90,
+      "aprBps": 1180,
+      "maxLtvBps": 6050
+    },
+    {
+      "facts": {
+        "totalRepaidE8": "22396600000000",
+        "totalCollateralE8": "8691000000000",
+        "firstActivityAt": "1725955200",
+        "lastActivityAt": "1800000000",
+        "repaymentCount": "2",
+        "liquidationCount": "4",
+        "chainCount": "2",
+        "attestationCount": "2"
+      },
+      "nowTs": "1800000000",
+      "score": 644,
+      "repaymentPts": 117,
+      "collateralPts": 86,
+      "maturityPts": 90,
+      "diversityPts": 30,
+      "safetyPts": 21,
+      "aprBps": 1254,
+      "maxLtvBps": 5866
+    },
+    {
+      "facts": {
+        "totalRepaidE8": "27090000000000",
+        "totalCollateralE8": "29747800000000",
+        "firstActivityAt": "1726041600",
+        "lastActivityAt": "1800000000",
+        "repaymentCount": "32",
+        "liquidationCount": "3",
+        "chainCount": "5",
+        "attestationCount": "32"
+      },
+      "nowTs": "1800000000",
+      "score": 823,
+      "repaymentPts": 193,
+      "collateralPts": 150,
+      "maturityPts": 90,
+      "diversityPts": 60,
+      "safetyPts": 30,
+      "aprBps": 657,
+      "maxLtvBps": 7358
+    },
+    {
+      "facts": {
+        "totalRepaidE8": "30561200000000",
+        "totalCollateralE8": "13663600000000",
+        "firstActivityAt": "1699603200",
+        "lastActivityAt": "1800000000",
+        "repaymentCount": "55",
+        "liquidationCount": "3",
+        "chainCount": "2",
+        "attestationCount": "68"
+      },
+      "nowTs": "1800000000",
+      "score": 796,
+      "repaymentPts": 210,
+      "collateralPts": 136,
+      "maturityPts": 90,
+      "diversityPts": 30,
+      "safetyPts": 30,
+      "aprBps": 747,
+      "maxLtvBps": 7133
+    },
+    {
+      "facts": {
+        "totalRepaidE8": "17271200000000",
+        "totalCollateralE8": "1007500000000",
+        "firstActivityAt": "1716537600",
+        "lastActivityAt": "1800000000",
+        "repaymentCount": "20",
+        "liquidationCount": "0",
+        "chainCount": "3",
+        "attestationCount": "97"
+      },
+      "nowTs": "1800000000",
+      "score": 664,
+      "repaymentPts": 129,
+      "collateralPts": 10,
+      "maturityPts": 90,
+      "diversityPts": 45,
+      "safetyPts": 90,
+      "aprBps": 1187,
+      "maxLtvBps": 6033
+    },
+    {
+      "facts": {
+        "totalRepaidE8": "10498600000000",
+        "totalCollateralE8": "9271000000000",
+        "firstActivityAt": "1752307200",
+        "lastActivityAt": "1800000000",
+        "repaymentCount": "27",
+        "liquidationCount": "3",
+        "chainCount": "5",
+        "attestationCount": "67"
+      },
+      "nowTs": "1800000000",
+      "score": 659,
+      "repaymentPts": 109,
+      "collateralPts": 92,
+      "maturityPts": 68,
+      "diversityPts": 60,
+      "safetyPts": 30,
+      "aprBps": 1204,
+      "maxLtvBps": 5991
+    },
+    {
+      "facts": {
+        "totalRepaidE8": "23017200000000",
+        "totalCollateralE8": "6311100000000",
+        "firstActivityAt": "1752566400",
+        "lastActivityAt": "1800000000",
+        "repaymentCount": "4",
+        "liquidationCount": "1",
+        "chainCount": "3",
+        "attestationCount": "29"
+      },
+      "nowTs": "1800000000",
+      "score": 662,
+      "repaymentPts": 124,
+      "collateralPts": 63,
+      "maturityPts": 67,
+      "diversityPts": 45,
+      "safetyPts": 63,
+      "aprBps": 1194,
+      "maxLtvBps": 6016
+    },
+    {
+      "facts": {
+        "totalRepaidE8": "37158400000000",
+        "totalCollateralE8": "21002100000000",
+        "firstActivityAt": "1765785600",
+        "lastActivityAt": "1800000000",
+        "repaymentCount": "58",
+        "liquidationCount": "0",
+        "chainCount": "1",
+        "attestationCount": "8"
+      },
+      "nowTs": "1800000000",
+      "score": 813,
+      "repaymentPts": 210,
+      "collateralPts": 150,
+      "maturityPts": 48,
+      "diversityPts": 15,
+      "safetyPts": 90,
+      "aprBps": 690,
+      "maxLtvBps": 7275
+    },
+    {
+      "facts": {
+        "totalRepaidE8": "28364100000000",
+        "totalCollateralE8": "17860700000000",
+        "firstActivityAt": "1713772800",
+        "lastActivityAt": "1800000000",
+        "repaymentCount": "58",
+        "liquidationCount": "4",
+        "chainCount": "2",
+        "attestationCount": "100"
+      },
+      "nowTs": "1800000000",
+      "score": 801,
+      "repaymentPts": 210,
+      "collateralPts": 150,
+      "maturityPts": 90,
+      "diversityPts": 30,
+      "safetyPts": 21,
+      "aprBps": 730,
+      "maxLtvBps": 7175
+    },
+    {
+      "facts": {
+        "totalRepaidE8": "38197900000000",
+        "totalCollateralE8": "6661100000000",
+        "firstActivityAt": "1703750400",
+        "lastActivityAt": "1800000000",
+        "repaymentCount": "49",
+        "liquidationCount": "4",
+        "chainCount": "0",
+        "attestationCount": "14"
+      },
+      "nowTs": "1800000000",
+      "score": 687,
+      "repaymentPts": 210,
+      "collateralPts": 66,
+      "maturityPts": 90,
+      "diversityPts": 0,
+      "safetyPts": 21,
+      "aprBps": 1110,
+      "maxLtvBps": 6225
+    },
+    {
+      "facts": {
+        "totalRepaidE8": "21356600000000",
+        "totalCollateralE8": "4107800000000",
+        "firstActivityAt": "1726041600",
+        "lastActivityAt": "1800000000",
+        "repaymentCount": "12",
+        "liquidationCount": "4",
+        "chainCount": "3",
+        "attestationCount": "31"
+      },
+      "nowTs": "1800000000",
+      "score": 629,
+      "repaymentPts": 132,
+      "collateralPts": 41,
+      "maturityPts": 90,
+      "diversityPts": 45,
+      "safetyPts": 21,
+      "aprBps": 1304,
+      "maxLtvBps": 5741
+    },
+    {
+      "facts": {
+        "totalRepaidE8": "24367400000000",
+        "totalCollateralE8": "6860700000000",
+        "firstActivityAt": "1761724800",
+        "lastActivityAt": "1800000000",
+        "repaymentCount": "35",
+        "liquidationCount": "3",
+        "chainCount": "4",
+        "attestationCount": "22"
+      },
+      "nowTs": "1800000000",
+      "score": 708,
+      "repaymentPts": 196,
+      "collateralPts": 68,
+      "maturityPts": 54,
+      "diversityPts": 60,
+      "safetyPts": 30,
+      "aprBps": 1040,
+      "maxLtvBps": 6400
+    },
+    {
+      "facts": {
+        "totalRepaidE8": "15248800000000",
+        "totalCollateralE8": "3010200000000",
+        "firstActivityAt": "1703491200",
+        "lastActivityAt": "1800000000",
+        "repaymentCount": "34",
+        "liquidationCount": "0",
+        "chainCount": "5",
+        "attestationCount": "35"
+      },
+      "nowTs": "1800000000",
+      "score": 718,
+      "repaymentPts": 148,
+      "collateralPts": 30,
+      "maturityPts": 90,
+      "diversityPts": 60,
+      "safetyPts": 90,
+      "aprBps": 1007,
+      "maxLtvBps": 6483
+    },
+    {
+      "facts": {
+        "totalRepaidE8": "38394900000000",
+        "totalCollateralE8": "5984500000000",
+        "firstActivityAt": "1749024000",
+        "lastActivityAt": "1800000000",
+        "repaymentCount": "41",
+        "liquidationCount": "0",
+        "chainCount": "0",
+        "attestationCount": "40"
+      },
+      "nowTs": "1800000000",
+      "score": 731,
+      "repaymentPts": 210,
+      "collateralPts": 59,
+      "maturityPts": 72,
+      "diversityPts": 0,
+      "safetyPts": 90,
+      "aprBps": 964,
+      "maxLtvBps": 6591
+    },
+    {
+      "facts": {
+        "totalRepaidE8": "12270800000000",
+        "totalCollateralE8": "8203700000000",
+        "firstActivityAt": "1770105600",
+        "lastActivityAt": "1800000000",
+        "repaymentCount": "29",
+        "liquidationCount": "5",
+        "chainCount": "1",
+        "attestationCount": "36"
+      },
+      "nowTs": "1800000000",
+      "score": 576,
+      "repaymentPts": 122,
+      "collateralPts": 82,
+      "maturityPts": 42,
+      "diversityPts": 15,
+      "safetyPts": 15,
+      "aprBps": 1480,
+      "maxLtvBps": 5300
+    },
+    {
+      "facts": {
+        "totalRepaidE8": "27623100000000",
+        "totalCollateralE8": "21670200000000",
+        "firstActivityAt": "1798012800",
+        "lastActivityAt": "1800000000",
+        "repaymentCount": "5",
+        "liquidationCount": "1",
+        "chainCount": "4",
+        "attestationCount": "82"
+      },
+      "nowTs": "1800000000",
+      "score": 711,
+      "repaymentPts": 136,
+      "collateralPts": 150,
+      "maturityPts": 2,
+      "diversityPts": 60,
+      "safetyPts": 63,
+      "aprBps": 1030,
+      "maxLtvBps": 6425
+    },
+    {
+      "facts": {
+        "totalRepaidE8": "3863900000000",
+        "totalCollateralE8": "8001900000000",
+        "firstActivityAt": "1709539200",
+        "lastActivityAt": "1800000000",
+        "repaymentCount": "45",
+        "liquidationCount": "4",
+        "chainCount": "0",
+        "attestationCount": "11"
+      },
+      "nowTs": "1800000000",
+      "score": 594,
+      "repaymentPts": 103,
+      "collateralPts": 80,
+      "maturityPts": 90,
+      "diversityPts": 0,
+      "safetyPts": 21,
+      "aprBps": 1420,
+      "maxLtvBps": 5450
+    },
+    {
+      "facts": {
+        "totalRepaidE8": "23184300000000",
+        "totalCollateralE8": "16873900000000",
+        "firstActivityAt": "1713340800",
+        "lastActivityAt": "1800000000",
+        "repaymentCount": "16",
+        "liquidationCount": "5",
+        "chainCount": "5",
+        "attestationCount": "64"
+      },
+      "nowTs": "1800000000",
+      "score": 765,
+      "repaymentPts": 150,
+      "collateralPts": 150,
+      "maturityPts": 90,
+      "diversityPts": 60,
+      "safetyPts": 15,
+      "aprBps": 850,
+      "maxLtvBps": 6875
+    },
+    {
+      "facts": {
+        "totalRepaidE8": "2729800000000",
+        "totalCollateralE8": "21228000000000",
+        "firstActivityAt": "1779264000",
+        "lastActivityAt": "1800000000",
+        "repaymentCount": "0",
+        "liquidationCount": "4",
+        "chainCount": "3",
+        "attestationCount": "21"
+      },
+      "nowTs": "1800000000",
+      "score": 558,
+      "repaymentPts": 13,
+      "collateralPts": 150,
+      "maturityPts": 29,
+      "diversityPts": 45,
+      "safetyPts": 21,
+      "aprBps": 1540,
+      "maxLtvBps": 5150
+    },
+    {
+      "facts": {
+        "totalRepaidE8": "24478600000000",
+        "totalCollateralE8": "29344700000000",
+        "firstActivityAt": "1719129600",
+        "lastActivityAt": "1800000000",
+        "repaymentCount": "58",
+        "liquidationCount": "1",
+        "chainCount": "5",
+        "attestationCount": "99"
+      },
+      "nowTs": "1800000000",
+      "score": 870,
+      "repaymentPts": 207,
+      "collateralPts": 150,
+      "maturityPts": 90,
+      "diversityPts": 60,
+      "safetyPts": 63,
+      "aprBps": 500,
+      "maxLtvBps": 7750
+    },
+    {
+      "facts": {
+        "totalRepaidE8": "5674600000000",
+        "totalCollateralE8": "9304400000000",
+        "firstActivityAt": "1747123200",
+        "lastActivityAt": "1800000000",
+        "repaymentCount": "10",
+        "liquidationCount": "1",
+        "chainCount": "0",
+        "attestationCount": "56"
+      },
+      "nowTs": "1800000000",
+      "score": 580,
+      "repaymentPts": 49,
+      "collateralPts": 93,
+      "maturityPts": 75,
+      "diversityPts": 0,
+      "safetyPts": 63,
+      "aprBps": 1467,
+      "maxLtvBps": 5333
+    },
+    {
+      "facts": {
+        "totalRepaidE8": "24634400000000",
+        "totalCollateralE8": "28252500000000",
+        "firstActivityAt": "1767772800",
+        "lastActivityAt": "1800000000",
+        "repaymentCount": "46",
+        "liquidationCount": "4",
+        "chainCount": "4",
+        "attestationCount": "117"
+      },
+      "nowTs": "1800000000",
+      "score": 784,
+      "repaymentPts": 208,
+      "collateralPts": 150,
+      "maturityPts": 45,
+      "diversityPts": 60,
+      "safetyPts": 21,
+      "aprBps": 787,
+      "maxLtvBps": 7033
+    },
+    {
+      "facts": {
+        "totalRepaidE8": "4545700000000",
+        "totalCollateralE8": "7649100000000",
+        "firstActivityAt": "1702972800",
+        "lastActivityAt": "1800000000",
+        "repaymentCount": "3",
+        "liquidationCount": "4",
+        "chainCount": "2",
+        "attestationCount": "77"
+      },
+      "nowTs": "1800000000",
+      "score": 546,
+      "repaymentPts": 29,
+      "collateralPts": 76,
+      "maturityPts": 90,
+      "diversityPts": 30,
+      "safetyPts": 21,
+      "aprBps": 1580,
+      "maxLtvBps": 5050
+    },
+    {
+      "facts": {
+        "totalRepaidE8": "32981400000000",
+        "totalCollateralE8": "1139600000000",
+        "firstActivityAt": "1755763200",
+        "lastActivityAt": "1800000000",
+        "repaymentCount": "29",
+        "liquidationCount": "2",
+        "chainCount": "5",
+        "attestationCount": "75"
+      },
+      "nowTs": "1800000000",
+      "score": 664,
+      "repaymentPts": 186,
+      "collateralPts": 11,
+      "maturityPts": 63,
+      "diversityPts": 60,
+      "safetyPts": 44,
+      "aprBps": 1187,
+      "maxLtvBps": 6033
+    },
+    {
+      "facts": {
+        "totalRepaidE8": "28071100000000",
+        "totalCollateralE8": "3125800000000",
+        "firstActivityAt": "1797840000",
+        "lastActivityAt": "1800000000",
+        "repaymentCount": "46",
+        "liquidationCount": "3",
+        "chainCount": "0",
+        "attestationCount": "93"
+      },
+      "nowTs": "1800000000",
+      "score": 574,
+      "repaymentPts": 210,
+      "collateralPts": 31,
+      "maturityPts": 3,
+      "diversityPts": 0,
+      "safetyPts": 30,
+      "aprBps": 1487,
+      "maxLtvBps": 5283
+    },
+    {
+      "facts": {
+        "totalRepaidE8": "16854600000000",
+        "totalCollateralE8": "25683200000000",
+        "firstActivityAt": "1776240000",
+        "lastActivityAt": "1800000000",
+        "repaymentCount": "19",
+        "liquidationCount": "3",
+        "chainCount": "0",
+        "attestationCount": "113"
+      },
+      "nowTs": "1800000000",
+      "score": 637,
+      "repaymentPts": 124,
+      "collateralPts": 150,
+      "maturityPts": 33,
+      "diversityPts": 0,
+      "safetyPts": 30,
+      "aprBps": 1277,
+      "maxLtvBps": 5808
+    },
+    {
+      "facts": {
+        "totalRepaidE8": "22602600000000",
+        "totalCollateralE8": "4954200000000",
+        "firstActivityAt": "1744358400",
+        "lastActivityAt": "1800000000",
+        "repaymentCount": "57",
+        "liquidationCount": "5",
+        "chainCount": "4",
+        "attestationCount": "116"
+      },
+      "nowTs": "1800000000",
+      "score": 700,
+      "repaymentPts": 197,
+      "collateralPts": 49,
+      "maturityPts": 79,
+      "diversityPts": 60,
+      "safetyPts": 15,
+      "aprBps": 1067,
+      "maxLtvBps": 6333
+    },
+    {
+      "facts": {
+        "totalRepaidE8": "39776600000000",
+        "totalCollateralE8": "14343500000000",
+        "firstActivityAt": "1768464000",
+        "lastActivityAt": "1800000000",
+        "repaymentCount": "26",
+        "liquidationCount": "1",
+        "chainCount": "1",
+        "attestationCount": "31"
+      },
+      "nowTs": "1800000000",
+      "score": 746,
+      "repaymentPts": 180,
+      "collateralPts": 143,
+      "maturityPts": 45,
+      "diversityPts": 15,
+      "safetyPts": 63,
+      "aprBps": 914,
+      "maxLtvBps": 6716
+    },
+    {
+      "facts": {
+        "totalRepaidE8": "17149300000000",
+        "totalCollateralE8": "25963900000000",
+        "firstActivityAt": "1751356800",
+        "lastActivityAt": "1800000000",
+        "repaymentCount": "32",
+        "liquidationCount": "1",
+        "chainCount": "5",
+        "attestationCount": "12"
+      },
+      "nowTs": "1800000000",
+      "score": 795,
+      "repaymentPts": 153,
+      "collateralPts": 150,
+      "maturityPts": 69,
+      "diversityPts": 60,
+      "safetyPts": 63,
+      "aprBps": 750,
+      "maxLtvBps": 7125
+    },
+    {
+      "facts": {
+        "totalRepaidE8": "18727200000000",
+        "totalCollateralE8": "15192300000000",
+        "firstActivityAt": "1750924800",
+        "lastActivityAt": "1800000000",
+        "repaymentCount": "36",
+        "liquidationCount": "0",
+        "chainCount": "4",
+        "attestationCount": "5"
+      },
+      "nowTs": "1800000000",
+      "score": 839,
+      "repaymentPts": 169,
+      "collateralPts": 150,
+      "maturityPts": 70,
+      "diversityPts": 60,
+      "safetyPts": 90,
+      "aprBps": 604,
+      "maxLtvBps": 7491
+    },
+    {
+      "facts": {
+        "totalRepaidE8": "20157100000000",
+        "totalCollateralE8": "26265000000000",
+        "firstActivityAt": "1716624000",
+        "lastActivityAt": "1800000000",
+        "repaymentCount": "1",
+        "liquidationCount": "4",
+        "chainCount": "3",
+        "attestationCount": "104"
+      },
+      "nowTs": "1800000000",
+      "score": 709,
+      "repaymentPts": 103,
+      "collateralPts": 150,
+      "maturityPts": 90,
+      "diversityPts": 45,
+      "safetyPts": 21,
+      "aprBps": 1037,
+      "maxLtvBps": 6408
+    },
+    {
+      "facts": {
+        "totalRepaidE8": "22311500000000",
+        "totalCollateralE8": "23460700000000",
+        "firstActivityAt": "1778572800",
+        "lastActivityAt": "1800000000",
+        "repaymentCount": "54",
+        "liquidationCount": "3",
+        "chainCount": "1",
+        "attestationCount": "2"
+      },
+      "nowTs": "1800000000",
+      "score": 721,
+      "repaymentPts": 196,
+      "collateralPts": 150,
+      "maturityPts": 30,
+      "diversityPts": 15,
+      "safetyPts": 30,
+      "aprBps": 997,
+      "maxLtvBps": 6508
+    },
+    {
+      "facts": {
+        "totalRepaidE8": "34749000000000",
+        "totalCollateralE8": "14170000000000",
+        "firstActivityAt": "1788940800",
+        "lastActivityAt": "1800000000",
+        "repaymentCount": "30",
+        "liquidationCount": "3",
+        "chainCount": "3",
+        "attestationCount": "92"
+      },
+      "nowTs": "1800000000",
+      "score": 720,
+      "repaymentPts": 189,
+      "collateralPts": 141,
+      "maturityPts": 15,
+      "diversityPts": 45,
+      "safetyPts": 30,
+      "aprBps": 1000,
+      "maxLtvBps": 6500
+    },
+    {
+      "facts": {
+        "totalRepaidE8": "26678800000000",
+        "totalCollateralE8": "24974400000000",
+        "firstActivityAt": "1798617600",
+        "lastActivityAt": "1800000000",
+        "repaymentCount": "43",
+        "liquidationCount": "1",
+        "chainCount": "5",
+        "attestationCount": "95"
+      },
+      "nowTs": "1800000000",
+      "score": 784,
+      "repaymentPts": 210,
+      "collateralPts": 150,
+      "maturityPts": 1,
+      "diversityPts": 60,
+      "safetyPts": 63,
+      "aprBps": 787,
+      "maxLtvBps": 7033
+    },
+    {
+      "facts": {
+        "totalRepaidE8": "8083500000000",
+        "totalCollateralE8": "16419400000000",
+        "firstActivityAt": "1782028800",
+        "lastActivityAt": "1800000000",
+        "repaymentCount": "48",
+        "liquidationCount": "2",
+        "chainCount": "4",
+        "attestationCount": "34"
+      },
+      "nowTs": "1800000000",
+      "score": 703,
+      "repaymentPts": 124,
+      "collateralPts": 150,
+      "maturityPts": 25,
+      "diversityPts": 60,
+      "safetyPts": 44,
+      "aprBps": 1057,
+      "maxLtvBps": 6358
+    },
+    {
+      "facts": {
+        "totalRepaidE8": "19516700000000",
+        "totalCollateralE8": "29039700000000",
+        "firstActivityAt": "1793347200",
+        "lastActivityAt": "1800000000",
+        "repaymentCount": "11",
+        "liquidationCount": "4",
+        "chainCount": "2",
+        "attestationCount": "16"
+      },
+      "nowTs": "1800000000",
+      "score": 631,
+      "repaymentPts": 121,
+      "collateralPts": 150,
+      "maturityPts": 9,
+      "diversityPts": 30,
+      "safetyPts": 21,
+      "aprBps": 1297,
+      "maxLtvBps": 5758
+    },
+    {
+      "facts": {
+        "totalRepaidE8": "21625700000000",
+        "totalCollateralE8": "23307200000000",
+        "firstActivityAt": "1791273600",
+        "lastActivityAt": "1800000000",
+        "repaymentCount": "30",
+        "liquidationCount": "2",
+        "chainCount": "1",
+        "attestationCount": "28"
+      },
+      "nowTs": "1800000000",
+      "score": 692,
+      "repaymentPts": 171,
+      "collateralPts": 150,
+      "maturityPts": 12,
+      "diversityPts": 15,
+      "safetyPts": 44,
+      "aprBps": 1094,
+      "maxLtvBps": 6266
+    },
+    {
+      "facts": {
+        "totalRepaidE8": "36865000000000",
+        "totalCollateralE8": "3884200000000",
+        "firstActivityAt": "1778832000",
+        "lastActivityAt": "1800000000",
+        "repaymentCount": "41",
+        "liquidationCount": "4",
+        "chainCount": "4",
+        "attestationCount": "47"
+      },
+      "nowTs": "1800000000",
+      "score": 659,
+      "repaymentPts": 210,
+      "collateralPts": 38,
+      "maturityPts": 30,
+      "diversityPts": 60,
+      "safetyPts": 21,
+      "aprBps": 1204,
+      "maxLtvBps": 5991
+    },
+    {
+      "facts": {
+        "totalRepaidE8": "14940200000000",
+        "totalCollateralE8": "11052000000000",
+        "firstActivityAt": "1794038400",
+        "lastActivityAt": "1800000000",
+        "repaymentCount": "42",
+        "liquidationCount": "5",
+        "chainCount": "4",
+        "attestationCount": "46"
+      },
+      "nowTs": "1800000000",
+      "score": 652,
+      "repaymentPts": 159,
+      "collateralPts": 110,
+      "maturityPts": 8,
+      "diversityPts": 60,
+      "safetyPts": 15,
+      "aprBps": 1227,
+      "maxLtvBps": 5933
+    },
+    {
+      "facts": {
+        "totalRepaidE8": "15338800000000",
+        "totalCollateralE8": "26804600000000",
+        "firstActivityAt": "1703059200",
+        "lastActivityAt": "1800000000",
+        "repaymentCount": "4",
+        "liquidationCount": "0",
+        "chainCount": "4",
+        "attestationCount": "47"
+      },
+      "nowTs": "1800000000",
+      "score": 775,
+      "repaymentPts": 85,
+      "collateralPts": 150,
+      "maturityPts": 90,
+      "diversityPts": 60,
+      "safetyPts": 90,
+      "aprBps": 817,
+      "maxLtvBps": 6958
+    },
+    {
+      "facts": {
+        "totalRepaidE8": "28629600000000",
+        "totalCollateralE8": "15585000000000",
+        "firstActivityAt": "1748851200",
+        "lastActivityAt": "1800000000",
+        "repaymentCount": "48",
+        "liquidationCount": "3",
+        "chainCount": "2",
+        "attestationCount": "119"
+      },
+      "nowTs": "1800000000",
+      "score": 792,
+      "repaymentPts": 210,
+      "collateralPts": 150,
+      "maturityPts": 72,
+      "diversityPts": 30,
+      "safetyPts": 30,
+      "aprBps": 760,
+      "maxLtvBps": 7100
+    },
+    {
+      "facts": {
+        "totalRepaidE8": "26144900000000",
+        "totalCollateralE8": "23121500000000",
+        "firstActivityAt": "1700553600",
+        "lastActivityAt": "1800000000",
+        "repaymentCount": "51",
+        "liquidationCount": "3",
+        "chainCount": "3",
+        "attestationCount": "33"
+      },
+      "nowTs": "1800000000",
+      "score": 825,
+      "repaymentPts": 210,
+      "collateralPts": 150,
+      "maturityPts": 90,
+      "diversityPts": 45,
+      "safetyPts": 30,
+      "aprBps": 650,
+      "maxLtvBps": 7375
+    },
+    {
+      "facts": {
+        "totalRepaidE8": "24730600000000",
+        "totalCollateralE8": "25703600000000",
+        "firstActivityAt": "1727769600",
+        "lastActivityAt": "1800000000",
+        "repaymentCount": "52",
+        "liquidationCount": "2",
+        "chainCount": "3",
+        "attestationCount": "80"
+      },
+      "nowTs": "1800000000",
+      "score": 837,
+      "repaymentPts": 208,
+      "collateralPts": 150,
+      "maturityPts": 90,
+      "diversityPts": 45,
+      "safetyPts": 44,
+      "aprBps": 610,
+      "maxLtvBps": 7475
+    },
+    {
+      "facts": {
+        "totalRepaidE8": "9499600000000",
+        "totalCollateralE8": "27245900000000",
+        "firstActivityAt": "1797667200",
+        "lastActivityAt": "1800000000",
+        "repaymentCount": "57",
+        "liquidationCount": "1",
+        "chainCount": "5",
+        "attestationCount": "35"
+      },
+      "nowTs": "1800000000",
+      "score": 707,
+      "repaymentPts": 131,
+      "collateralPts": 150,
+      "maturityPts": 3,
+      "diversityPts": 60,
+      "safetyPts": 63,
+      "aprBps": 1044,
+      "maxLtvBps": 6391
+    },
+    {
+      "facts": {
+        "totalRepaidE8": "7767900000000",
+        "totalCollateralE8": "21151600000000",
+        "firstActivityAt": "1704355200",
+        "lastActivityAt": "1800000000",
+        "repaymentCount": "45",
+        "liquidationCount": "2",
+        "chainCount": "0",
+        "attestationCount": "58"
+      },
+      "nowTs": "1800000000",
+      "score": 707,
+      "repaymentPts": 123,
+      "collateralPts": 150,
+      "maturityPts": 90,
+      "diversityPts": 0,
+      "safetyPts": 44,
+      "aprBps": 1044,
+      "maxLtvBps": 6391
+    },
+    {
+      "facts": {
+        "totalRepaidE8": "11218900000000",
+        "totalCollateralE8": "25016300000000",
+        "firstActivityAt": "1781596800",
+        "lastActivityAt": "1800000000",
+        "repaymentCount": "9",
+        "liquidationCount": "2",
+        "chainCount": "4",
+        "attestationCount": "86"
+      },
+      "nowTs": "1800000000",
+      "score": 655,
+      "repaymentPts": 75,
+      "collateralPts": 150,
+      "maturityPts": 26,
+      "diversityPts": 60,
+      "safetyPts": 44,
+      "aprBps": 1217,
+      "maxLtvBps": 5958
+    },
+    {
+      "facts": {
+        "totalRepaidE8": "19234600000000",
+        "totalCollateralE8": "19491000000000",
+        "firstActivityAt": "1714291200",
+        "lastActivityAt": "1800000000",
+        "repaymentCount": "11",
+        "liquidationCount": "3",
+        "chainCount": "5",
+        "attestationCount": "27"
+      },
+      "nowTs": "1800000000",
+      "score": 750,
+      "repaymentPts": 120,
+      "collateralPts": 150,
+      "maturityPts": 90,
+      "diversityPts": 60,
+      "safetyPts": 30,
+      "aprBps": 900,
+      "maxLtvBps": 6750
+    },
+    {
+      "facts": {
+        "totalRepaidE8": "19857300000000",
+        "totalCollateralE8": "23325900000000",
+        "firstActivityAt": "1725782400",
+        "lastActivityAt": "1800000000",
+        "repaymentCount": "44",
+        "liquidationCount": "5",
+        "chainCount": "4",
+        "attestationCount": "31"
+      },
+      "nowTs": "1800000000",
+      "score": 799,
+      "repaymentPts": 184,
+      "collateralPts": 150,
+      "maturityPts": 90,
+      "diversityPts": 60,
+      "safetyPts": 15,
+      "aprBps": 737,
+      "maxLtvBps": 7158
+    },
+    {
+      "facts": {
+        "totalRepaidE8": "25024000000000",
+        "totalCollateralE8": "16524900000000",
+        "firstActivityAt": "1704009600",
+        "lastActivityAt": "1800000000",
+        "repaymentCount": "0",
+        "liquidationCount": "0",
+        "chainCount": "4",
+        "attestationCount": "9"
+      },
+      "nowTs": "1800000000",
+      "score": 816,
+      "repaymentPts": 126,
+      "collateralPts": 150,
+      "maturityPts": 90,
+      "diversityPts": 60,
+      "safetyPts": 90,
+      "aprBps": 680,
+      "maxLtvBps": 7300
+    },
+    {
+      "facts": {
+        "totalRepaidE8": "35306100000000",
+        "totalCollateralE8": "20319300000000",
+        "firstActivityAt": "1798790400",
+        "lastActivityAt": "1800000000",
+        "repaymentCount": "41",
+        "liquidationCount": "2",
+        "chainCount": "5",
+        "attestationCount": "101"
+      },
+      "nowTs": "1800000000",
+      "score": 765,
+      "repaymentPts": 210,
+      "collateralPts": 150,
+      "maturityPts": 1,
+      "diversityPts": 60,
+      "safetyPts": 44,
+      "aprBps": 850,
+      "maxLtvBps": 6875
+    },
+    {
+      "facts": {
+        "totalRepaidE8": "31785900000000",
+        "totalCollateralE8": "15369200000000",
+        "firstActivityAt": "1728028800",
+        "lastActivityAt": "1800000000",
+        "repaymentCount": "13",
+        "liquidationCount": "5",
+        "chainCount": "4",
+        "attestationCount": "54"
+      },
+      "nowTs": "1800000000",
+      "score": 768,
+      "repaymentPts": 153,
+      "collateralPts": 150,
+      "maturityPts": 90,
+      "diversityPts": 60,
+      "safetyPts": 15,
+      "aprBps": 840,
+      "maxLtvBps": 6900
+    },
+    {
+      "facts": {
+        "totalRepaidE8": "10743300000000",
+        "totalCollateralE8": "1456000000000",
+        "firstActivityAt": "1709452800",
+        "lastActivityAt": "1800000000",
+        "repaymentCount": "32",
+        "liquidationCount": "2",
+        "chainCount": "3",
+        "attestationCount": "10"
+      },
+      "nowTs": "1800000000",
+      "score": 614,
+      "repaymentPts": 121,
+      "collateralPts": 14,
+      "maturityPts": 90,
+      "diversityPts": 45,
+      "safetyPts": 44,
+      "aprBps": 1354,
+      "maxLtvBps": 5616
+    },
+    {
+      "facts": {
+        "totalRepaidE8": "6810900000000",
+        "totalCollateralE8": "10942600000000",
+        "firstActivityAt": "1789200000",
+        "lastActivityAt": "1800000000",
+        "repaymentCount": "3",
+        "liquidationCount": "2",
+        "chainCount": "0",
+        "attestationCount": "77"
+      },
+      "nowTs": "1800000000",
+      "score": 508,
+      "repaymentPts": 40,
+      "collateralPts": 109,
+      "maturityPts": 15,
+      "diversityPts": 0,
+      "safetyPts": 44,
+      "aprBps": 1707,
+      "maxLtvBps": 4733
+    },
+    {
+      "facts": {
+        "totalRepaidE8": "21735700000000",
+        "totalCollateralE8": "22904300000000",
+        "firstActivityAt": "1711008000",
+        "lastActivityAt": "1800000000",
+        "repaymentCount": "17",
+        "liquidationCount": "5",
+        "chainCount": "0",
+        "attestationCount": "66"
+      },
+      "nowTs": "1800000000",
+      "score": 700,
+      "repaymentPts": 145,
+      "collateralPts": 150,
+      "maturityPts": 90,
+      "diversityPts": 0,
+      "safetyPts": 15,
+      "aprBps": 1067,
+      "maxLtvBps": 6333
+    },
+    {
+      "facts": {
+        "totalRepaidE8": "9368600000000",
+        "totalCollateralE8": "16515900000000",
+        "firstActivityAt": "1775721600",
+        "lastActivityAt": "1800000000",
+        "repaymentCount": "44",
+        "liquidationCount": "1",
+        "chainCount": "0",
+        "attestationCount": "79"
+      },
+      "nowTs": "1800000000",
+      "score": 678,
+      "repaymentPts": 131,
+      "collateralPts": 150,
+      "maturityPts": 34,
+      "diversityPts": 0,
+      "safetyPts": 63,
+      "aprBps": 1140,
+      "maxLtvBps": 6150
+    },
+    {
+      "facts": {
+        "totalRepaidE8": "31651800000000",
+        "totalCollateralE8": "8401500000000",
+        "firstActivityAt": "1711785600",
+        "lastActivityAt": "1800000000",
+        "repaymentCount": "18",
+        "liquidationCount": "4",
+        "chainCount": "1",
+        "attestationCount": "86"
+      },
+      "nowTs": "1800000000",
+      "score": 673,
+      "repaymentPts": 163,
+      "collateralPts": 84,
+      "maturityPts": 90,
+      "diversityPts": 15,
+      "safetyPts": 21,
+      "aprBps": 1157,
+      "maxLtvBps": 6108
+    },
+    {
+      "facts": {
+        "totalRepaidE8": "21931000000000",
+        "totalCollateralE8": "28914500000000",
+        "firstActivityAt": "1728028800",
+        "lastActivityAt": "1800000000",
+        "repaymentCount": "57",
+        "liquidationCount": "4",
+        "chainCount": "0",
+        "attestationCount": "42"
+      },
+      "nowTs": "1800000000",
+      "score": 755,
+      "repaymentPts": 194,
+      "collateralPts": 150,
+      "maturityPts": 90,
+      "diversityPts": 0,
+      "safetyPts": 21,
+      "aprBps": 884,
+      "maxLtvBps": 6791
+    },
+    {
+      "facts": {
+        "totalRepaidE8": "3827200000000",
+        "totalCollateralE8": "8290100000000",
+        "firstActivityAt": "1783152000",
+        "lastActivityAt": "1800000000",
+        "repaymentCount": "8",
+        "liquidationCount": "3",
+        "chainCount": "3",
+        "attestationCount": "39"
+      },
+      "nowTs": "1800000000",
+      "score": 517,
+      "repaymentPts": 36,
+      "collateralPts": 82,
+      "maturityPts": 24,
+      "diversityPts": 45,
+      "safetyPts": 30,
+      "aprBps": 1677,
+      "maxLtvBps": 4808
+    },
+    {
+      "facts": {
+        "totalRepaidE8": "9910100000000",
+        "totalCollateralE8": "25870900000000",
+        "firstActivityAt": "1754640000",
+        "lastActivityAt": "1800000000",
+        "repaymentCount": "26",
+        "liquidationCount": "0",
+        "chainCount": "1",
+        "attestationCount": "69"
+      },
+      "nowTs": "1800000000",
+      "score": 723,
+      "repaymentPts": 104,
+      "collateralPts": 150,
+      "maturityPts": 64,
+      "diversityPts": 15,
+      "safetyPts": 90,
+      "aprBps": 990,
+      "maxLtvBps": 6525
+    },
+    {
+      "facts": {
+        "totalRepaidE8": "20654900000000",
+        "totalCollateralE8": "24270500000000",
+        "firstActivityAt": "1697184000",
+        "lastActivityAt": "1800000000",
+        "repaymentCount": "13",
+        "liquidationCount": "2",
+        "chainCount": "0",
+        "attestationCount": "102"
+      },
+      "nowTs": "1800000000",
+      "score": 715,
+      "repaymentPts": 131,
+      "collateralPts": 150,
+      "maturityPts": 90,
+      "diversityPts": 0,
+      "safetyPts": 44,
+      "aprBps": 1017,
+      "maxLtvBps": 6458
+    },
+    {
+      "facts": {
+        "totalRepaidE8": "30919800000000",
+        "totalCollateralE8": "14756900000000",
+        "firstActivityAt": "1710489600",
+        "lastActivityAt": "1800000000",
+        "repaymentCount": "38",
+        "liquidationCount": "5",
+        "chainCount": "3",
+        "attestationCount": "70"
+      },
+      "nowTs": "1800000000",
+      "score": 802,
+      "repaymentPts": 205,
+      "collateralPts": 147,
+      "maturityPts": 90,
+      "diversityPts": 45,
+      "safetyPts": 15,
+      "aprBps": 727,
+      "maxLtvBps": 7183
+    },
+    {
+      "facts": {
+        "totalRepaidE8": "10434900000000",
+        "totalCollateralE8": "9885500000000",
+        "firstActivityAt": "1757836800",
+        "lastActivityAt": "1800000000",
+        "repaymentCount": "14",
+        "liquidationCount": "0",
+        "chainCount": "4",
+        "attestationCount": "113"
+      },
+      "nowTs": "1800000000",
+      "score": 689,
+      "repaymentPts": 81,
+      "collateralPts": 98,
+      "maturityPts": 60,
+      "diversityPts": 60,
+      "safetyPts": 90,
+      "aprBps": 1104,
+      "maxLtvBps": 6241
+    },
+    {
+      "facts": {
+        "totalRepaidE8": "31643700000000",
+        "totalCollateralE8": "3361100000000",
+        "firstActivityAt": "1776585600",
+        "lastActivityAt": "1800000000",
+        "repaymentCount": "27",
+        "liquidationCount": "1",
+        "chainCount": "4",
+        "attestationCount": "71"
+      },
+      "nowTs": "1800000000",
+      "score": 671,
+      "repaymentPts": 182,
+      "collateralPts": 33,
+      "maturityPts": 33,
+      "diversityPts": 60,
+      "safetyPts": 63,
+      "aprBps": 1164,
+      "maxLtvBps": 6091
+    },
+    {
+      "facts": {
+        "totalRepaidE8": "16919800000000",
+        "totalCollateralE8": "29243300000000",
+        "firstActivityAt": "1740470400",
+        "lastActivityAt": "1800000000",
+        "repaymentCount": "22",
+        "liquidationCount": "1",
+        "chainCount": "0",
+        "attestationCount": "26"
+      },
+      "nowTs": "1800000000",
+      "score": 728,
+      "repaymentPts": 131,
+      "collateralPts": 150,
+      "maturityPts": 84,
+      "diversityPts": 0,
+      "safetyPts": 63,
+      "aprBps": 974,
+      "maxLtvBps": 6566
+    },
+    {
+      "facts": {
+        "totalRepaidE8": "4646900000000",
+        "totalCollateralE8": "22390300000000",
+        "firstActivityAt": "1789027200",
+        "lastActivityAt": "1800000000",
+        "repaymentCount": "11",
+        "liquidationCount": "3",
+        "chainCount": "4",
+        "attestationCount": "23"
+      },
+      "nowTs": "1800000000",
+      "score": 601,
+      "repaymentPts": 46,
+      "collateralPts": 150,
+      "maturityPts": 15,
+      "diversityPts": 60,
+      "safetyPts": 30,
+      "aprBps": 1397,
+      "maxLtvBps": 5508
+    },
+    {
+      "facts": {
+        "totalRepaidE8": "16531600000000",
+        "totalCollateralE8": "24366200000000",
+        "firstActivityAt": "1707984000",
+        "lastActivityAt": "1800000000",
+        "repaymentCount": "45",
+        "liquidationCount": "4",
+        "chainCount": "3",
+        "attestationCount": "66"
+      },
+      "nowTs": "1800000000",
+      "score": 773,
+      "repaymentPts": 167,
+      "collateralPts": 150,
+      "maturityPts": 90,
+      "diversityPts": 45,
+      "safetyPts": 21,
+      "aprBps": 824,
+      "maxLtvBps": 6941
+    },
+    {
+      "facts": {
+        "totalRepaidE8": "21416700000000",
+        "totalCollateralE8": "22841300000000",
+        "firstActivityAt": "1762070400",
+        "lastActivityAt": "1800000000",
+        "repaymentCount": "5",
+        "liquidationCount": "1",
+        "chainCount": "2",
+        "attestationCount": "19"
+      },
+      "nowTs": "1800000000",
+      "score": 715,
+      "repaymentPts": 118,
+      "collateralPts": 150,
+      "maturityPts": 54,
+      "diversityPts": 30,
+      "safetyPts": 63,
+      "aprBps": 1017,
+      "maxLtvBps": 6458
+    },
+    {
+      "facts": {
+        "totalRepaidE8": "16702600000000",
+        "totalCollateralE8": "29197600000000",
+        "firstActivityAt": "1753516800",
+        "lastActivityAt": "1800000000",
+        "repaymentCount": "55",
+        "liquidationCount": "2",
+        "chainCount": "3",
+        "attestationCount": "42"
+      },
+      "nowTs": "1800000000",
+      "score": 773,
+      "repaymentPts": 168,
+      "collateralPts": 150,
+      "maturityPts": 66,
+      "diversityPts": 45,
+      "safetyPts": 44,
+      "aprBps": 824,
+      "maxLtvBps": 6941
+    },
+    {
+      "facts": {
+        "totalRepaidE8": "4049400000000",
+        "totalCollateralE8": "11182300000000",
+        "firstActivityAt": "1754899200",
+        "lastActivityAt": "1800000000",
+        "repaymentCount": "44",
+        "liquidationCount": "1",
+        "chainCount": "0",
+        "attestationCount": "58"
+      },
+      "nowTs": "1800000000",
+      "score": 642,
+      "repaymentPts": 104,
+      "collateralPts": 111,
+      "maturityPts": 64,
+      "diversityPts": 0,
+      "safetyPts": 63,
+      "aprBps": 1260,
+      "maxLtvBps": 5850
+    },
+    {
+      "facts": {
+        "totalRepaidE8": "18205800000000",
+        "totalCollateralE8": "5088600000000",
+        "firstActivityAt": "1785139200",
+        "lastActivityAt": "1800000000",
+        "repaymentCount": "6",
+        "liquidationCount": "1",
+        "chainCount": "2",
+        "attestationCount": "72"
+      },
+      "nowTs": "1800000000",
+      "score": 568,
+      "repaymentPts": 104,
+      "collateralPts": 50,
+      "maturityPts": 21,
+      "diversityPts": 30,
+      "safetyPts": 63,
+      "aprBps": 1507,
+      "maxLtvBps": 5233
+    },
+    {
+      "facts": {
+        "totalRepaidE8": "18819000000000",
+        "totalCollateralE8": "28284500000000",
+        "firstActivityAt": "1777276800",
+        "lastActivityAt": "1800000000",
+        "repaymentCount": "50",
+        "liquidationCount": "0",
+        "chainCount": "5",
+        "attestationCount": "101"
+      },
+      "nowTs": "1800000000",
+      "score": 810,
+      "repaymentPts": 178,
+      "collateralPts": 150,
+      "maturityPts": 32,
+      "diversityPts": 60,
+      "safetyPts": 90,
+      "aprBps": 700,
+      "maxLtvBps": 7250
+    },
+    {
+      "facts": {
+        "totalRepaidE8": "37193300000000",
+        "totalCollateralE8": "22887100000000",
+        "firstActivityAt": "1712563200",
+        "lastActivityAt": "1800000000",
+        "repaymentCount": "3",
+        "liquidationCount": "1",
+        "chainCount": "5",
+        "attestationCount": "31"
+      },
+      "nowTs": "1800000000",
+      "score": 795,
+      "repaymentPts": 132,
+      "collateralPts": 150,
+      "maturityPts": 90,
+      "diversityPts": 60,
+      "safetyPts": 63,
+      "aprBps": 750,
+      "maxLtvBps": 7125
+    },
+    {
+      "facts": {
+        "totalRepaidE8": "22874600000000",
+        "totalCollateralE8": "16116900000000",
+        "firstActivityAt": "1771401600",
+        "lastActivityAt": "1800000000",
+        "repaymentCount": "13",
+        "liquidationCount": "0",
+        "chainCount": "4",
+        "attestationCount": "75"
+      },
+      "nowTs": "1800000000",
+      "score": 782,
+      "repaymentPts": 142,
+      "collateralPts": 150,
+      "maturityPts": 40,
+      "diversityPts": 60,
+      "safetyPts": 90,
+      "aprBps": 794,
+      "maxLtvBps": 7016
+    },
+    {
+      "facts": {
+        "totalRepaidE8": "21448600000000",
+        "totalCollateralE8": "19946500000000",
+        "firstActivityAt": "1785312000",
+        "lastActivityAt": "1800000000",
+        "repaymentCount": "40",
+        "liquidationCount": "3",
+        "chainCount": "0",
+        "attestationCount": "70"
+      },
+      "nowTs": "1800000000",
+      "score": 692,
+      "repaymentPts": 192,
+      "collateralPts": 150,
+      "maturityPts": 20,
+      "diversityPts": 0,
+      "safetyPts": 30,
+      "aprBps": 1094,
+      "maxLtvBps": 6266
+    },
+    {
+      "facts": {
+        "totalRepaidE8": "3006400000000",
+        "totalCollateralE8": "6250400000000",
+        "firstActivityAt": "1759305600",
+        "lastActivityAt": "1800000000",
+        "repaymentCount": "36",
+        "liquidationCount": "5",
+        "chainCount": "0",
+        "attestationCount": "105"
+      },
+      "nowTs": "1800000000",
+      "score": 525,
+      "repaymentPts": 90,
+      "collateralPts": 62,
+      "maturityPts": 58,
+      "diversityPts": 0,
+      "safetyPts": 15,
+      "aprBps": 1650,
+      "maxLtvBps": 4875
+    },
+    {
+      "facts": {
+        "totalRepaidE8": "2587500000000",
+        "totalCollateralE8": "20828800000000",
+        "firstActivityAt": "1791187200",
+        "lastActivityAt": "1800000000",
+        "repaymentCount": "10",
+        "liquidationCount": "2",
+        "chainCount": "2",
+        "attestationCount": "38"
+      },
+      "nowTs": "1800000000",
+      "score": 570,
+      "repaymentPts": 34,
+      "collateralPts": 150,
+      "maturityPts": 12,
+      "diversityPts": 30,
+      "safetyPts": 44,
+      "aprBps": 1500,
+      "maxLtvBps": 5250
+    },
+    {
+      "facts": {
+        "totalRepaidE8": "5303300000000",
+        "totalCollateralE8": "28070800000000",
+        "firstActivityAt": "1774684800",
+        "lastActivityAt": "1800000000",
+        "repaymentCount": "0",
+        "liquidationCount": "2",
+        "chainCount": "5",
+        "attestationCount": "44"
+      },
+      "nowTs": "1800000000",
+      "score": 616,
+      "repaymentPts": 26,
+      "collateralPts": 150,
+      "maturityPts": 36,
+      "diversityPts": 60,
+      "safetyPts": 44,
+      "aprBps": 1347,
+      "maxLtvBps": 5633
+    },
+    {
+      "facts": {
+        "totalRepaidE8": "24104100000000",
+        "totalCollateralE8": "27578200000000",
+        "firstActivityAt": "1739779200",
+        "lastActivityAt": "1800000000",
+        "repaymentCount": "19",
+        "liquidationCount": "3",
+        "chainCount": "4",
+        "attestationCount": "80"
+      },
+      "nowTs": "1800000000",
+      "score": 786,
+      "repaymentPts": 161,
+      "collateralPts": 150,
+      "maturityPts": 85,
+      "diversityPts": 60,
+      "safetyPts": 30,
+      "aprBps": 780,
+      "maxLtvBps": 7050
+    },
+    {
+      "facts": {
+        "totalRepaidE8": "19095300000000",
+        "totalCollateralE8": "19164900000000",
+        "firstActivityAt": "1741939200",
+        "lastActivityAt": "1800000000",
+        "repaymentCount": "40",
+        "liquidationCount": "0",
+        "chainCount": "2",
+        "attestationCount": "21"
+      },
+      "nowTs": "1800000000",
+      "score": 832,
+      "repaymentPts": 180,
+      "collateralPts": 150,
+      "maturityPts": 82,
+      "diversityPts": 30,
+      "safetyPts": 90,
+      "aprBps": 627,
+      "maxLtvBps": 7433
+    },
+    {
+      "facts": {
+        "totalRepaidE8": "36760300000000",
+        "totalCollateralE8": "23555400000000",
+        "firstActivityAt": "1779264000",
+        "lastActivityAt": "1800000000",
+        "repaymentCount": "9",
+        "liquidationCount": "2",
+        "chainCount": "2",
+        "attestationCount": "31"
+      },
+      "nowTs": "1800000000",
+      "score": 697,
+      "repaymentPts": 144,
+      "collateralPts": 150,
+      "maturityPts": 29,
+      "diversityPts": 30,
+      "safetyPts": 44,
+      "aprBps": 1077,
+      "maxLtvBps": 6308
+    },
+    {
+      "facts": {
+        "totalRepaidE8": "20333200000000",
+        "totalCollateralE8": "7478700000000",
+        "firstActivityAt": "1776844800",
+        "lastActivityAt": "1800000000",
+        "repaymentCount": "49",
+        "liquidationCount": "0",
+        "chainCount": "1",
+        "attestationCount": "35"
+      },
+      "nowTs": "1800000000",
+      "score": 698,
+      "repaymentPts": 186,
+      "collateralPts": 74,
+      "maturityPts": 33,
+      "diversityPts": 15,
+      "safetyPts": 90,
+      "aprBps": 1074,
+      "maxLtvBps": 6316
+    },
+    {
+      "facts": {
+        "totalRepaidE8": "359500000000",
+        "totalCollateralE8": "23328700000000",
+        "firstActivityAt": "1704268800",
+        "lastActivityAt": "1800000000",
+        "repaymentCount": "57",
+        "liquidationCount": "3",
+        "chainCount": "4",
+        "attestationCount": "61"
+      },
+      "nowTs": "1800000000",
+      "score": 715,
+      "repaymentPts": 85,
+      "collateralPts": 150,
+      "maturityPts": 90,
+      "diversityPts": 60,
+      "safetyPts": 30,
+      "aprBps": 1017,
+      "maxLtvBps": 6458
+    },
+    {
+      "facts": {
+        "totalRepaidE8": "11001400000000",
+        "totalCollateralE8": "1441400000000",
+        "firstActivityAt": "1797753600",
+        "lastActivityAt": "1800000000",
+        "repaymentCount": "47",
+        "liquidationCount": "5",
+        "chainCount": "0",
+        "attestationCount": "25"
+      },
+      "nowTs": "1800000000",
+      "score": 471,
+      "repaymentPts": 139,
+      "collateralPts": 14,
+      "maturityPts": 3,
+      "diversityPts": 0,
+      "safetyPts": 15,
+      "aprBps": 1830,
+      "maxLtvBps": 4425
+    },
+    {
+      "facts": {
+        "totalRepaidE8": "36915600000000",
+        "totalCollateralE8": "24389800000000",
+        "firstActivityAt": "1732176000",
+        "lastActivityAt": "1800000000",
+        "repaymentCount": "54",
+        "liquidationCount": "4",
+        "chainCount": "0",
+        "attestationCount": "12"
+      },
+      "nowTs": "1800000000",
+      "score": 771,
+      "repaymentPts": 210,
+      "collateralPts": 150,
+      "maturityPts": 90,
+      "diversityPts": 0,
+      "safetyPts": 21,
+      "aprBps": 830,
+      "maxLtvBps": 6925
+    },
+    {
+      "facts": {
+        "totalRepaidE8": "24793400000000",
+        "totalCollateralE8": "12168100000000",
+        "firstActivityAt": "1757059200",
+        "lastActivityAt": "1800000000",
+        "repaymentCount": "8",
+        "liquidationCount": "1",
+        "chainCount": "3",
+        "attestationCount": "115"
+      },
+      "nowTs": "1800000000",
+      "score": 731,
+      "repaymentPts": 141,
+      "collateralPts": 121,
+      "maturityPts": 61,
+      "diversityPts": 45,
+      "safetyPts": 63,
+      "aprBps": 964,
+      "maxLtvBps": 6591
+    },
+    {
+      "facts": {
+        "totalRepaidE8": "27148800000000",
+        "totalCollateralE8": "23874500000000",
+        "firstActivityAt": "1798531200",
+        "lastActivityAt": "1800000000",
+        "repaymentCount": "18",
+        "liquidationCount": "0",
+        "chainCount": "0",
+        "attestationCount": "3"
+      },
+      "nowTs": "1800000000",
+      "score": 705,
+      "repaymentPts": 163,
+      "collateralPts": 150,
+      "maturityPts": 2,
+      "diversityPts": 0,
+      "safetyPts": 90,
+      "aprBps": 1050,
+      "maxLtvBps": 6375
+    },
+    {
+      "facts": {
+        "totalRepaidE8": "37599900000000",
+        "totalCollateralE8": "7974900000000",
+        "firstActivityAt": "1717574400",
+        "lastActivityAt": "1800000000",
+        "repaymentCount": "33",
+        "liquidationCount": "2",
+        "chainCount": "4",
+        "attestationCount": "21"
+      },
+      "nowTs": "1800000000",
+      "score": 768,
+      "repaymentPts": 195,
+      "collateralPts": 79,
+      "maturityPts": 90,
+      "diversityPts": 60,
+      "safetyPts": 44,
+      "aprBps": 840,
+      "maxLtvBps": 6900
+    },
+    {
+      "facts": {
+        "totalRepaidE8": "12587600000000",
+        "totalCollateralE8": "19396100000000",
+        "firstActivityAt": "1728460800",
+        "lastActivityAt": "1800000000",
+        "repaymentCount": "6",
+        "liquidationCount": "4",
+        "chainCount": "2",
+        "attestationCount": "50"
+      },
+      "nowTs": "1800000000",
+      "score": 667,
+      "repaymentPts": 76,
+      "collateralPts": 150,
+      "maturityPts": 90,
+      "diversityPts": 30,
+      "safetyPts": 21,
+      "aprBps": 1177,
+      "maxLtvBps": 6058
+    },
+    {
+      "facts": {
+        "totalRepaidE8": "16867400000000",
+        "totalCollateralE8": "7645800000000",
+        "firstActivityAt": "1770364800",
+        "lastActivityAt": "1800000000",
+        "repaymentCount": "20",
+        "liquidationCount": "4",
+        "chainCount": "0",
+        "attestationCount": "83"
+      },
+      "nowTs": "1800000000",
+      "score": 565,
+      "repaymentPts": 126,
+      "collateralPts": 76,
+      "maturityPts": 42,
+      "diversityPts": 0,
+      "safetyPts": 21,
+      "aprBps": 1517,
+      "maxLtvBps": 5208
+    },
+    {
+      "facts": {
+        "totalRepaidE8": "21845400000000",
+        "totalCollateralE8": "26916500000000",
+        "firstActivityAt": "1758960000",
+        "lastActivityAt": "1800000000",
+        "repaymentCount": "5",
+        "liquidationCount": "2",
+        "chainCount": "0",
+        "attestationCount": "91"
+      },
+      "nowTs": "1800000000",
+      "score": 672,
+      "repaymentPts": 120,
+      "collateralPts": 150,
+      "maturityPts": 58,
+      "diversityPts": 0,
+      "safetyPts": 44,
+      "aprBps": 1160,
+      "maxLtvBps": 6100
+    }
+  ],
+  "curve": [
+    {
+      "score": 250,
+      "aprBps": 2400,
+      "maxLtvBps": 3000
+    },
+    {
+      "score": 275,
+      "aprBps": 2400,
+      "maxLtvBps": 3000
+    },
+    {
+      "score": 300,
+      "aprBps": 2400,
+      "maxLtvBps": 3000
+    },
+    {
+      "score": 325,
+      "aprBps": 2317,
+      "maxLtvBps": 3208
+    },
+    {
+      "score": 350,
+      "aprBps": 2234,
+      "maxLtvBps": 3416
+    },
+    {
+      "score": 375,
+      "aprBps": 2150,
+      "maxLtvBps": 3625
+    },
+    {
+      "score": 400,
+      "aprBps": 2067,
+      "maxLtvBps": 3833
+    },
+    {
+      "score": 425,
+      "aprBps": 1984,
+      "maxLtvBps": 4041
+    },
+    {
+      "score": 450,
+      "aprBps": 1900,
+      "maxLtvBps": 4250
+    },
+    {
+      "score": 475,
+      "aprBps": 1817,
+      "maxLtvBps": 4458
+    },
+    {
+      "score": 500,
+      "aprBps": 1734,
+      "maxLtvBps": 4666
+    },
+    {
+      "score": 525,
+      "aprBps": 1650,
+      "maxLtvBps": 4875
+    },
+    {
+      "score": 550,
+      "aprBps": 1567,
+      "maxLtvBps": 5083
+    },
+    {
+      "score": 575,
+      "aprBps": 1484,
+      "maxLtvBps": 5291
+    },
+    {
+      "score": 600,
+      "aprBps": 1400,
+      "maxLtvBps": 5500
+    },
+    {
+      "score": 625,
+      "aprBps": 1317,
+      "maxLtvBps": 5708
+    },
+    {
+      "score": 650,
+      "aprBps": 1234,
+      "maxLtvBps": 5916
+    },
+    {
+      "score": 675,
+      "aprBps": 1150,
+      "maxLtvBps": 6125
+    },
+    {
+      "score": 700,
+      "aprBps": 1067,
+      "maxLtvBps": 6333
+    },
+    {
+      "score": 725,
+      "aprBps": 984,
+      "maxLtvBps": 6541
+    },
+    {
+      "score": 750,
+      "aprBps": 900,
+      "maxLtvBps": 6750
+    },
+    {
+      "score": 775,
+      "aprBps": 817,
+      "maxLtvBps": 6958
+    },
+    {
+      "score": 800,
+      "aprBps": 734,
+      "maxLtvBps": 7166
+    },
+    {
+      "score": 825,
+      "aprBps": 650,
+      "maxLtvBps": 7375
+    },
+    {
+      "score": 850,
+      "aprBps": 567,
+      "maxLtvBps": 7583
+    },
+    {
+      "score": 875,
+      "aprBps": 484,
+      "maxLtvBps": 7791
+    },
+    {
+      "score": 900,
+      "aprBps": 400,
+      "maxLtvBps": 8000
+    },
+    {
+      "score": 925,
+      "aprBps": 400,
+      "maxLtvBps": 8000
+    },
+    {
+      "score": 950,
+      "aprBps": 400,
+      "maxLtvBps": 8000
+    }
+  ],
+  "risk": [
+    {
+      "collateralE8": "3000000000000",
+      "debtE8": "1200000000000",
+      "liqThresholdBps": 8250,
+      "healthFactor": "2062500000000000000",
+      "sustainableDebtE8": "1833333333333"
+    },
+    {
+      "collateralE8": "1600000000000",
+      "debtE8": "1200000000000",
+      "liqThresholdBps": 8250,
+      "healthFactor": "1100000000000000000",
+      "sustainableDebtE8": "977777777777"
+    },
+    {
+      "collateralE8": "1",
+      "debtE8": "1",
+      "liqThresholdBps": 8250,
+      "healthFactor": "825000000000000000",
+      "sustainableDebtE8": "0"
+    },
+    {
+      "collateralE8": "12345678",
+      "debtE8": "987654",
+      "liqThresholdBps": 8250,
+      "healthFactor": "10312502505938314429",
+      "sustainableDebtE8": "7544581"
+    },
+    {
+      "collateralE8": "0",
+      "debtE8": "500000000000",
+      "liqThresholdBps": 8250,
+      "healthFactor": "0",
+      "sustainableDebtE8": "0"
+    }
+  ],
+  "interest": [
+    {
+      "principalE8": "1200000000000",
+      "rateBps": 1200,
+      "elapsed": 31536000,
+      "accrued": "144000000000"
+    },
+    {
+      "principalE8": "1200000000000",
+      "rateBps": 1200,
+      "elapsed": 1,
+      "accrued": "4566"
+    },
+    {
+      "principalE8": "7777777",
+      "rateBps": 933,
+      "elapsed": 86401,
+      "accrued": "1988"
+    },
+    {
+      "principalE8": "1",
+      "rateBps": 2400,
+      "elapsed": 1,
+      "accrued": "0"
+    }
+  ]
+}
