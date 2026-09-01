@@ -2,11 +2,15 @@ require("@nomicfoundation/hardhat-toolbox");
 require("dotenv").config();
 
 /**
- * Meritr — Creditcoin EVM Testnet (Chain ID 102031).
+ * Meritr — Creditcoin EVM.
+ *
+ * Primary target is Creditcoin Mainnet (Chain ID 102030). Testnet is 102031 and devnet is
+ * 102032; all three were verified live against their public RPC endpoints, because an earlier
+ * revision of this file had 102030 mislabelled as devnet.
  *
  * The Attestcoin native query verifier lives at the precompile address
- * 0x0000000000000000000000000000000000000FD2 on Creditcoin networks. Local runs substitute a
- * mock at that address (see test/helpers.js); nothing else about the verification path changes.
+ * 0x0000000000000000000000000000000000000FD2 on all three. Local runs substitute a mock at that
+ * address (see test/helpers.js); nothing else about the verification path changes.
  */
 module.exports = {
   solidity: {
@@ -21,12 +25,20 @@ module.exports = {
   networks: {
     hardhat: {
       chainId: 31337,
-      // Meritr accrues interest over days; tests advance time explicitly.
       allowUnlimitedContractSize: false,
     },
     localhost: {
-      url: "http://127.0.0.1:8545",
+      // Overridable so a local run can coexist with another node already on 8545
+      // (anvil, a second hardhat instance) instead of fighting it for the port.
+      url: process.env.HARDHAT_LOCALHOST_RPC || "http://127.0.0.1:8545",
       chainId: 31337,
+    },
+    // Meritr's primary target. Chain ids verified live against the public RPCs:
+    //   102030 mainnet · 102031 testnet · 102032 devnet
+    creditcoinMainnet: {
+      url: process.env.CREDITCOIN_MAINNET_RPC || "https://mainnet3.creditcoin.network",
+      chainId: 102030,
+      accounts: process.env.PRIVATE_KEY ? [process.env.PRIVATE_KEY] : [],
     },
     creditcoinTestnet: {
       url: process.env.CREDITCOIN_TESTNET_RPC || "https://rpc.cc3-testnet.creditcoin.network",
@@ -35,13 +47,24 @@ module.exports = {
     },
     creditcoinDevnet: {
       url: process.env.CREDITCOIN_DEVNET_RPC || "https://rpc.cc3-devnet.creditcoin.network",
-      chainId: 102030,
+      chainId: 102032,
       accounts: process.env.PRIVATE_KEY ? [process.env.PRIVATE_KEY] : [],
     },
   },
   etherscan: {
-    apiKey: { creditcoinTestnet: "blockscout" },
+    apiKey: {
+      creditcoinMainnet: "blockscout",
+      creditcoinTestnet: "blockscout",
+    },
     customChains: [
+      {
+        network: "creditcoinMainnet",
+        chainId: 102030,
+        urls: {
+          apiURL: "https://creditcoin.blockscout.com/api",
+          browserURL: "https://creditcoin.blockscout.com",
+        },
+      },
       {
         network: "creditcoinTestnet",
         chainId: 102031,

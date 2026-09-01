@@ -20,14 +20,29 @@ const ACTION = { REPAYMENT: 1, COLLATERAL: 2, LIQUIDATION: 3, BORROW: 4 };
  * NOTE: `chainKey` is the Attestcoin protocol's own chain identifier, which is not necessarily
  * the EVM chain id. The values below use the EVM chain id as the key, which is the convention
  * Creditcoin's testnet bridge examples follow. Confirm against the chain-key registry of the
- * Creditcoin deployment you target before mainnet use; `configureSourceChain` makes this a
+ * Creditcoin deployment you target before relying on it; `configureSourceChain` makes this a
  * one-transaction correction rather than a redeploy.
+ *
+ * `genesisTimestamp` + `blockTimeSeconds` let MeritrAttestor derive an approximate wall-clock
+ * time for a *proven* block height, which feeds the wallet-maturity score component. Always
+ * clamped to `block.timestamp` on-chain, so a height can never manufacture future history.
  */
 const CHAINS = {
+  ETHEREUM: {
+    chainKey: 1n,
+    name: "Ethereum",
+    genesisTimestamp: 1438269973n, // 2015-07-30
+    blockTimeSeconds: 12,
+  },
+  BASE: {
+    chainKey: 8453n,
+    name: "Base",
+    genesisTimestamp: 1686789347n, // 2023-06-15
+    blockTimeSeconds: 2,
+  },
   ETHEREUM_SEPOLIA: {
     chainKey: 11155111n,
     name: "Ethereum Sepolia",
-    // Sepolia genesis, seconds. Used with blockTime to approximate a proven block's wall clock.
     genesisTimestamp: 1655733600n,
     blockTimeSeconds: 12,
   },
@@ -35,18 +50,6 @@ const CHAINS = {
     chainKey: 84532n,
     name: "Base Sepolia",
     genesisTimestamp: 1695902400n,
-    blockTimeSeconds: 2,
-  },
-  ETHEREUM_MAINNET: {
-    chainKey: 1n,
-    name: "Ethereum",
-    genesisTimestamp: 1438269973n,
-    blockTimeSeconds: 12,
-  },
-  BASE_MAINNET: {
-    chainKey: 8453n,
-    name: "Base",
-    genesisTimestamp: 1686789347n,
     blockTimeSeconds: 2,
   },
 };
@@ -137,15 +140,41 @@ const AAVE_V3_EVENTS = {
 };
 
 /**
- * Known Aave V3 Pool addresses per source chain, plus the reserve assets Meritr prices.
- * Prices are USD 1e8. Stablecoin reserves are pinned to $1.00; add a feed before extending
- * this to volatile reserves.
+ * Aave V3 deployments Meritr reads credit history from, per source chain.
+ *
+ * Every address below was verified on-chain (contract code present; ERC-20 `symbol()` and
+ * `decimals()` read back) rather than copied from documentation.
+ *
+ * Prices are USD 1e8. Only stablecoin reserves are registered, pinned to $1.00 — a volatile
+ * reserve needs a real price feed before it can be added, and MeritrAttestor deliberately
+ * records activity but *zero dollar value* for any asset nobody has priced.
  */
-const DEPLOYMENTS = [
+const MAINNET_DEPLOYMENTS = [
+  {
+    chain: CHAINS.ETHEREUM,
+    protocol: "Aave V3",
+    pool: "0x87870Bca3F3fD6335C3F4ce8392D69350B4fA4E2",
+    assets: [
+      { symbol: "USDC", address: "0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48", decimals: 6, priceE8: 100000000n },
+      { symbol: "USDT", address: "0xdAC17F958D2ee523a2206206994597C13D831ec7", decimals: 6, priceE8: 100000000n },
+      { symbol: "DAI", address: "0x6B175474E89094C44Da98b954EedeAC495271d0F", decimals: 18, priceE8: 100000000n },
+    ],
+  },
+  {
+    chain: CHAINS.BASE,
+    protocol: "Aave V3",
+    pool: "0xA238Dd80C259a72e81d7e4664a9801593F98d1c5",
+    assets: [
+      { symbol: "USDC", address: "0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913", decimals: 6, priceE8: 100000000n },
+    ],
+  },
+];
+
+/** Testnet equivalents, used when deploying to Creditcoin testnet or devnet. */
+const TESTNET_DEPLOYMENTS = [
   {
     chain: CHAINS.ETHEREUM_SEPOLIA,
     protocol: "Aave V3",
-    // Aave V3 Sepolia testnet Pool.
     pool: "0x6Ae43d3271ff6888e7Fc43Fd7321a503ff738951",
     assets: [
       { symbol: "USDC", address: "0x94a9D9AC8a22534E3FaCa9F4e7F2E2cf85d5E4C8", decimals: 6, priceE8: 100000000n },
@@ -163,4 +192,24 @@ const DEPLOYMENTS = [
   },
 ];
 
-module.exports = { ACTION, CHAINS, AAVE_V3_EVENTS, DEPLOYMENTS };
+/**
+ * Pick the source-chain catalogue that matches the Creditcoin network being deployed to.
+ * Mainnet reads mainnet history; testnet and devnet read testnet history. Registering Sepolia
+ * pools on mainnet would score borrowers on activity that costs nothing to manufacture.
+ */
+function deploymentsFor(creditcoinChainId) {
+  return Number(creditcoinChainId) === 102030 ? MAINNET_DEPLOYMENTS : TESTNET_DEPLOYMENTS;
+}
+
+/** Default export kept pointing at mainnet, which is Meritr's primary target. */
+const DEPLOYMENTS = MAINNET_DEPLOYMENTS;
+
+module.exports = {
+  ACTION,
+  CHAINS,
+  AAVE_V3_EVENTS,
+  DEPLOYMENTS,
+  MAINNET_DEPLOYMENTS,
+  TESTNET_DEPLOYMENTS,
+  deploymentsFor,
+};
