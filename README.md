@@ -4,6 +4,8 @@
 
 Built for the [BUIDL CTC 2026 Fall Hackathon](https://dorahacks.io/hackathon/buidl-ctc-2026-fall/detail) · Creditcoin & Credit Labs · Track: `AI` / `RWA` · Apache 2.0
 
+**Target: Creditcoin Mainnet — Chain ID 102030.** Source credit history is read from Aave V3 on Ethereum and Base mainnet.
+
 ---
 
 ## The problem
@@ -23,7 +25,7 @@ Meritr makes cross-chain credit history **provable** and makes distress **surviv
 3. When a position enters distress, an autonomous **DeAI risk agent restructures it instead of liquidating** — cutting the rate, extending the term, and retiring debt from a protocol reserve until the position is healthy again. The borrower keeps every unit of their collateral.
 
 ```
-Ethereum · Base                Creditcoin EVM (102031)
+Ethereum · Base                Creditcoin EVM mainnet (102030)
 ─────────────────              ────────────────────────────────────────────
 Aave V3 repayments  ──proof──▶  Attestcoin precompile 0xFD2
 Aave V3 supplies                        │  verifies inclusion + continuity
@@ -108,15 +110,31 @@ The passport publishes a coarse tier plus `factsCommitment`, a keccak256 binding
 
 ## Quickstart
 
-### Deploy to Creditcoin Testnet (one command)
+### Deploy to Creditcoin Mainnet (one command)
 
 ```bash
 npm install
-cp .env.example .env          # add PRIVATE_KEY, fund it from the Creditcoin faucet
-npx hardhat run scripts/deploy.js --network creditcoinTestnet
+cp .env.example .env          # add PRIVATE_KEY and fund it with CTC
+
+MERITR_CONFIRM_MAINNET=yes \
+MERITR_ASSET=0x…  MERITR_COLLATERAL=0x… \
+npx hardhat run scripts/deploy.js --network creditcoinMainnet
 ```
 
-Deploys all four subsystems, wires roles, registers Aave V3 schemas for Ethereum Sepolia and Base Sepolia, and writes `deployments/creditcoinTestnet.json` — the single address book the agent, API and frontend all read.
+Deploys all four subsystems, wires roles, registers Aave V3 schemas for **Ethereum and Base mainnet**, and writes `deployments/creditcoinMainnet.json` — the single address book the agent, API and frontend all read.
+
+Two deliberate gates stand in front of mainnet, because a lending protocol that custodies real deposits should never deploy on the strength of a default:
+
+| Gate | Why |
+|---|---|
+| `MERITR_CONFIRM_MAINNET=yes` | The contracts are **not audited**. Deploying them must be an explicit act. |
+| `MERITR_ASSET` / `MERITR_COLLATERAL` required | `MockERC20` has an open `mint`. Shipping it to mainnet would create a token anyone can print. Override with `MERITR_ALLOW_MOCK_TOKENS=yes` only if you genuinely want demo tokens. |
+
+Testnet needs neither gate:
+
+```bash
+npx hardhat run scripts/deploy.js --network creditcoinTestnet   # chain 102031
+```
 
 ### Run the whole stack locally
 
@@ -207,7 +225,8 @@ Stated because a credit protocol that hides its assumptions is not one anyone sh
 
 - **Collateral pricing is governance-fed.** `setPrices` behind `PRICE_ROLE` is the single trusted input in the risk path; every other term derives from proof-verified data. Production needs a real price feed.
 - **Source-block timestamps are approximated.** The prover exposes a verified *height*, not a verified timestamp, so wallet maturity is derived from `genesis + height × blockTime`, clamped to `block.timestamp` so no height can manufacture future history.
-- **`chainKey` values follow the EVM chain-id convention** used by Creditcoin's testnet bridge examples. Confirm against the chain-key registry of your target deployment — `configureSourceChain` makes that a one-transaction correction, not a redeploy.
+- **`chainKey` values follow the EVM chain-id convention** used by Creditcoin's bridge examples (Ethereum `1`, Base `8453`). Confirm against the chain-key registry of your target deployment — `configureSourceChain` makes that a one-transaction correction, not a redeploy.
+- **The contracts are unaudited.** A CertiK audit is a hackathon prize, not a completed step. Treat any mainnet deployment accordingly.
 - **Non-stable reserve assets need a price feed** before being registered; the current catalogue prices stablecoin reserves at $1.00.
 - **"ZK-Credit" is a commitment scheme today, not a SNARK.** See the passport section above.
 

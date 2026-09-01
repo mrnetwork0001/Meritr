@@ -11,8 +11,11 @@ accident.
 ## Verified facts about the stack
 
 - The Attestcoin **native query verifier precompile** is at
-  `0x0000000000000000000000000000000000000FD2` (`0xFD2` = 4050). Creditcoin chain ids that carry
-  it: **102030** (devnet), **102031** (testnet), **102032**.
+  `0x0000000000000000000000000000000000000FD2` (`0xFD2` = 4050), and is **live on mainnet** -
+  an `eth_call` to `calculateTxIndex` there returns a real value.
+- Creditcoin chain ids, each verified live against its public RPC:
+  **102030 = MAINNET** (Meritr's primary target), **102031 = testnet**, **102032 = devnet**.
+  Do not assume 102030 is devnet; an earlier revision of the Hardhat config got this wrong.
 - The real packages are **`@gluwa/asc-contracts`** (Solidity source) and
   **`@gluwa/asc-contracts-abi`**. There is **no `attestcoin-sdk` package on npm** — early specs
   referred to it by that name.
@@ -71,10 +74,16 @@ whose credit is affected — for Aave `Repay` that is `user` (topic 2), **not** 
 ```
 npx hardhat compile / test                     contracts (48 tests)
 pytest                                         agent + parity (39 tests)
-npx hardhat run scripts/deploy.js --network creditcoinTestnet
 npx hardhat run scripts/simulate.js            six-act walkthrough
 python3 main.py                                project doctor
+
+MERITR_CONFIRM_MAINNET=yes MERITR_ASSET=0x… MERITR_COLLATERAL=0x… \
+  npx hardhat run scripts/deploy.js --network creditcoinMainnet
+npx hardhat run scripts/deploy.js --network creditcoinTestnet
 ```
+
+Mainnet is gated twice on purpose: an explicit confirmation, and a refusal to deploy the
+freely-mintable MockERC20 pair. Do not remove either to make a script run more smoothly.
 
 ## Claims to keep honest
 

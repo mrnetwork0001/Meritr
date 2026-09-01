@@ -330,9 +330,47 @@ than merely accepting whatever it is handed.
 
 ## 8. Deployment
 
+### 8.1 Networks
+
+Chain ids were verified live against the public RPC endpoints, because an earlier revision of
+the Hardhat config had `102030` mislabelled as devnet:
+
+| Network | Chain ID | RPC | Explorer |
+|---|---|---|---|
+| **Creditcoin Mainnet** | **102030** | `https://mainnet3.creditcoin.network` | `creditcoin.blockscout.com` |
+| Creditcoin Testnet | 102031 | `https://rpc.cc3-testnet.creditcoin.network` | `creditcoin-testnet.blockscout.com` |
+| Creditcoin Devnet | 102032 | `https://rpc.cc3-devnet.creditcoin.network` | — |
+
+The Attestcoin native query verifier was confirmed live on **mainnet**: an `eth_call` to
+`calculateTxIndex` at `0x…0FD2` on chain 102030 returns a real value rather than the empty `0x`
+an address with no code would give. `eth_getCode` returns `0x` there, which is normal for a
+native precompile and is why `NativeQueryVerifierLib.hasPrecompile` falls back to a chain-id
+check.
+
+### 8.2 Source-chain catalogue is selected by target
+
+`deploymentsFor(chainId)` returns the mainnet catalogue for 102030 and the testnet catalogue
+otherwise. Registering Sepolia pools against a mainnet deployment would score borrowers on
+activity that costs nothing to manufacture, so the two are never mixed.
+
+Every mainnet address was verified on-chain — contract code present, and ERC-20 `symbol()` /
+`decimals()` read back — rather than copied from documentation:
+
+| Chain | Aave V3 Pool | Reserves registered |
+|---|---|---|
+| Ethereum (1) | `0x87870Bca3F3fD6335C3F4ce8392D69350B4fA4E2` | USDC, USDT, DAI |
+| Base (8453) | `0xA238Dd80C259a72e81d7e4664a9801593F98d1c5` | USDC |
+
+### 8.3 Running it
+
 ```bash
-npx hardhat run scripts/deploy.js --network creditcoinTestnet
+MERITR_CONFIRM_MAINNET=yes MERITR_ASSET=0x… MERITR_COLLATERAL=0x… \
+  npx hardhat run scripts/deploy.js --network creditcoinMainnet
 ```
+
+Two gates guard mainnet: an explicit confirmation, and a refusal to deploy the freely-mintable
+`MockERC20` demo pair. Both are one environment variable to clear — they exist to make the step
+deliberate, not to obstruct it.
 
 Deploys the four subsystems, grants `RISK_AGENT_ROLE` and `REFRESHER_ROLE`, registers source
 chains, priced assets and Aave V3 schemas, then writes `deployments/<network>.json` — the single
@@ -342,8 +380,9 @@ no hand-edited config.
 The script preflights the precompile and refuses to run with a zero balance rather than failing
 halfway through a multi-transaction setup.
 
-Point the vault at real tokens with `MERITR_ASSET` / `MERITR_COLLATERAL`; otherwise it deploys a
-demo ERC-20 pair, since Creditcoin testnet has no canonical stablecoin.
+On testnet, the vault deploys a demo ERC-20 pair when `MERITR_ASSET` / `MERITR_COLLATERAL` are
+unset, since Creditcoin testnet has no canonical stablecoin. On mainnet that fallback is
+blocked by default.
 
 ---
 
@@ -360,3 +399,5 @@ demo ERC-20 pair, since Creditcoin testnet has no canonical stablecoin.
    for a range proof — future work, not a present claim.
 6. **Single collateral asset per vault.** Multi-collateral is a natural extension; it would
    change the health-factor math from scalar to a weighted basket.
+7. **The contracts are unaudited.** A CertiK audit is a hackathon prize rather than a completed
+   step, which is precisely why mainnet deployment sits behind an explicit gate.
