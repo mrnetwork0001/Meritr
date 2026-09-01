@@ -1,0 +1,49 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  color-scheme: dark;
+}
+
+body {
+  @apply bg-ink-900 text-mist-200 antialiased;
+  background-image:
+    radial-gradient(ellipse 80% 50% at 50% -20%, rgba(129, 140, 248, 0.13), transparent),
+    radial-gradient(ellipse 60% 40% at 90% 10%, rgba(125, 249, 255, 0.06), transparent);
+  background-attachment: fixed;
+}
+
+@layer components {
+  .card {
+    @apply rounded-2xl border border-ink-600/70 bg-ink-800/60 backdrop-blur-sm;
+  }
+  .card-pad {
+    @apply p-5 sm:p-6;
+  }
+  .label {
+    @apply text-[11px] uppercase tracking-[0.18em] text-mist-500 font-medium;
+  }
+  .stat {
+    @apply font-mono text-2xl font-semibold text-mist-100 tabular-nums;
+  }
+  .chip {
+    @apply inline-flex items-center gap-1.5 rounded-full px-2.5 py-1 text-[11px]
+           font-medium tracking-wide border;
+  }
+  .btn {
+    @apply inline-flex items-center justify-center gap-2 rounded-xl px-4 py-2.5 text-sm
+           font-medium transition-colors disabled:opacity-40 disabled:cursor-not-allowed;
+  }
+  .btn-primary {
+    @apply btn bg-accent/90 text-ink-900 hover:bg-accent;
+  }
+  .btn-ghost {
+    @apply btn border border-ink-500 text-mist-300 hover:bg-ink-700 hover:text-mist-100;
+  }
+}
+
+/* Keep long addresses from forcing horizontal page scroll on narrow screens. */
+.addr {
+  @apply font-mono text-xs break-all;
+}
