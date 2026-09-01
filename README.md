@@ -1,46 +1,220 @@
-# 💳 Meritr — Autonomous DeAI Debt Restructuring & Cross-Chain Credit Risk Memory OS
+# Meritr
 
-> Built for **BUIDL CTC 2026 Fall Hackathon** on DoraHacks by **Creditcoin & Credit Labs** ($15,000 Prize Pool)  
-> **Target:** 1st Place / Grand Prize ($10,000 Cash + CEIP Investment Fast-Track + CertiK Audit)  
-> **Submission Deadline:** September 13, 2026 @ 23:59 ET  
-> **Primary Track:** `AI` / `RWA`  
-> **Core Tech Stack:** Creditcoin EVM Testnet + Attestcoin Protocol (`attestcoin-sdk` / `0x0FD2`) + Solidity + Next.js 14  
-> **License:** Apache 2.0 Open Source  
+**Autonomous DeAI Debt Restructuring & Cross-Chain Credit Risk Memory OS on Creditcoin**
+
+Built for the [BUIDL CTC 2026 Fall Hackathon](https://dorahacks.io/hackathon/buidl-ctc-2026-fall/detail) · Creditcoin & Credit Labs · Track: `AI` / `RWA` · Apache 2.0
 
 ---
 
-## 📌 Overview
+## The problem
 
-**Meritr** is an **Autonomous DeAI Debt Restructuring & Cross-Chain Credit Risk Memory OS** built natively on Creditcoin.
+On-chain credit is amnesiac and brutal.
 
-- **Attestcoin Protocol (`0x0FD2` Precompile):** Ingests cryptographically verified repayment data from Ethereum/Base without oracle operators.
-- **DeAI Risk Agent (`agents/underwriter.py`):** Calculates dynamic ZK-Credit scores and evaluates cross-chain liquidation threats.
-- **Auto-Refinancing Vault (`contracts/MeritrVault.sol`):** Automatically restructures loans and adjusts interest rates on Creditcoin before liquidations occur.
-- **Soulbound Passport (`contracts/MeritrPassport.sol`):** Non-transferable credit memory passport for RWA borrowers.
+**Amnesiac:** a borrower with three years of flawless Aave repayments on Ethereum arrives on a new chain as a stranger. Their history is real, it is public, and it is unusable — because no contract on the destination chain can verify it without trusting an oracle operator to report it faithfully.
 
----
+**Brutal:** every major lending market answers borrower distress with exactly one action — liquidation. A temporary 30% collateral drawdown destroys the borrower's equity, dumps collateral into a falling market, pays a bonus to a bot, and permanently ends a paying customer relationship. Traditional finance restructures distressed debt every day. DeFi seizes it.
 
-## 🚀 Quickstart & Setup Instructions
+## What Meritr does
 
-### 1. Prerequisites
-- Node.js 18+ & Hardhat
-- Python 3.11+
-- Creditcoin Testnet RPC (`Chain ID: 102031`)
+Meritr makes cross-chain credit history **provable** and makes distress **survivable**.
 
-### 2. Installation
-```bash
-git clone https://github.com/mrnetwork/Meritr.git
-cd Meritr
-npm install
-pip install -r requirements.txt
+1. It ingests a borrower's real repayment, collateral and liquidation history from Ethereum and Base through Creditcoin's **Attestcoin native query verifier precompile at `0x0000000000000000000000000000000000000FD2`** — a Merkle-inclusion and continuity proof the Creditcoin runtime itself validates. No oracle operator, no multisig relayer, no trusted price poster sits anywhere in that path.
+2. It scores that proven history into a portable **ZK-Credit score** that sets a borrower's interest rate and borrowing capacity.
+3. When a position enters distress, an autonomous **DeAI risk agent restructures it instead of liquidating** — cutting the rate, extending the term, and retiring debt from a protocol reserve until the position is healthy again. The borrower keeps every unit of their collateral.
+
+```
+Ethereum · Base                Creditcoin EVM (102031)
+─────────────────              ────────────────────────────────────────────
+Aave V3 repayments  ──proof──▶  Attestcoin precompile 0xFD2
+Aave V3 supplies                        │  verifies inclusion + continuity
+Aave V3 liquidations                    ▼
+                                MeritrAttestor  ──▶ cross-chain credit memory
+                                        │
+                                        ▼
+                                MeritrVault  ◀── DeAI agent triggers restructuring
+                                        │        (agent chooses *whom*; the chain
+                                        ▼         recomputes *how much*)
+                                MeritrPassport (soulbound)
 ```
 
-### 3. Deploy Smart Contracts to Creditcoin Testnet
+---
+
+## The load-bearing design decision
+
+**`restructure` takes one argument: an address.**
+
+```solidity
+function restructure(address borrower) external returns (uint256, uint256, uint256);
+```
+
+No rate. No amount. No score. No signature over off-chain numbers.
+
+The vault re-reads the borrower's score from `MeritrAttestor` — whose every input carries an Attestcoin proof — and recomputes each term through the same `CreditMath` library the off-chain agent used. The AI decides **whether and whom** to help. The chain decides **how much**.
+
+This is what makes an autonomous agent safe to point at user debt. A fully compromised agent key can trigger restructurings the protocol would already have approved, and nothing else. It cannot invent a score, grant itself a rate, or drain the reserve.
+
+Two properties make that claim real rather than rhetorical:
+
+- **The agent's math is verified against the chain's.** `agents/scoring.py` mirrors `CreditMath.sol` exactly, including integer truncation. [`tests/test_parity.py`](tests/test_parity.py) runs 168 vectors generated from the *deployed* library and asserts every component of every score matches. A one-wei divergence fails the build.
+- **The agent is not a liveness dependency.** If it goes offline while a position is stressed, anyone may trigger the identical restructuring after a 6-hour grace period. Borrower protection does not hinge on a server staying up.
+
+---
+
+## The four subsystems
+
+### 1. Attestcoin ingestion — [`contracts/MeritrAttestor.sol`](contracts/MeritrAttestor.sol)
+
+Inherits Creditcoin's canonical `ASCBase` from [`@gluwa/asc-contracts`](https://www.npmjs.com/package/@gluwa/asc-contracts), which calls the `0xFD2` precompile and deduplicates by query id.
+
+Ingestion is **permissionless** — the proof is self-validating, so anyone may submit history for anyone. Credit accrues to the address decoded *out of the proven log*, never to the submitter. Relayers can backfill a borrower's history without being able to forge it.
+
+Rather than hard-coding Aave's ABI, Meritr keeps an on-chain **event schema registry**: `(chainKey, emitter, topic0) → {action, subjectTopic, amountWord, …}`. Supporting Compound, Morpho or a new Aave market is a registry write, not a redeploy. An unregistered emitter is ignored, so a proof of a log from an attacker's own contract contributes nothing.
+
+### 2. DeAI risk agent — [`agents/`](agents/)
+
+- [`scoring.py`](agents/scoring.py) — the verified mirror of on-chain `CreditMath`.
+- [`risk.py`](agents/risk.py) — classification, buffer-to-liquidation, time-to-liquidation, expected-loss-averted, and **triage**. The reserve is finite, so when three positions are stressed the order the agent works the queue in changes the outcome. It ranks by loss averted, not arrival.
+- [`underwriter.py`](agents/underwriter.py) — the loop. Discovers every borrower from the vault's own `LoanOpened` logs (no external index — a restarted agent rebuilds its whole working set from the chain), assesses, triages, simulates, then broadcasts.
+
+Every decision carries a human-readable rationale, surfaced in the API and dashboard.
+
+### 3. Auto-refinancing vault — [`contracts/MeritrVault.sol`](contracts/MeritrVault.sol)
+
+Between *healthy* and *liquidatable* Meritr inserts a **stress band** (health factor 1.00–1.15). Inside it, three levers are applied in increasing order of cost:
+
+| Lever | Effect | Cost to lenders |
+|---|---|---|
+| Rate relief | reprice to the borrower's earned rate, capped at 6pp of relief, floored at the protocol's best rate | none |
+| Term extension | +30 days per event | none |
+| Micro-refinance | retire debt from the reserve until health factor reaches 1.35 | none — **reserve-funded** |
+
+**Relief is funded, not conjured.** The reserve accrues from 15% of realised interest. Lender principal is never touched; `totalAssets()` deliberately excludes the reserve so a lender cannot withdraw the capital earmarked to keep borrowers solvent. When the reserve is empty, restructuring degrades gracefully to rate relief and term extension.
+
+Guardrails: max 3 restructurings per loan, 12-hour cooldown, 25% cap on reserve drawdown per event. An **already-underwater** position is explicitly *not* restructurable — absorbing it would socialise real bad debt into the reserve, so liquidation remains the correct path there.
+
+### 4. Soulbound credit passport — [`contracts/MeritrPassport.sol`](contracts/MeritrPassport.sol)
+
+A non-transferable ERC-721 carrying the borrower's credit memory.
+
+Soulbinding is the mechanism, not the branding: a transferable credit NFT is a credit score with a market price, and anyone could farm a pristine score on a clean wallet and sell it to a defaulter. Enforcement sits at OpenZeppelin v5's `_update` hook — the single chokepoint every ERC-721 movement passes through — so mint and burn work while `transferFrom`, `safeTransferFrom`, and all operator paths revert. Approvals revert outright, so no marketplace can list a score that could never settle.
+
+Metadata is **fully on-chain** (SVG + JSON, base64). A credit record whose art disappears when a hackathon's IPFS pin lapses is not a credit record.
+
+The passport publishes a coarse tier plus `factsCommitment`, a keccak256 binding of the exact attested inputs. A holder can disclose their facts off-chain and a counterparty can verify the commitment matches what the chain scored — selective disclosure without publishing their whole financial position.
+
+> **Scope note, stated plainly:** this is a hash commitment, not a zero-knowledge proof. It hides the values but proves nothing about them on its own. It is the intended substitution point for a SNARK range proof, which is future work and is not claimed as implemented.
+
+---
+
+## Quickstart
+
+### Deploy to Creditcoin Testnet (one command)
+
 ```bash
+npm install
+cp .env.example .env          # add PRIVATE_KEY, fund it from the Creditcoin faucet
 npx hardhat run scripts/deploy.js --network creditcoinTestnet
 ```
 
+Deploys all four subsystems, wires roles, registers Aave V3 schemas for Ethereum Sepolia and Base Sepolia, and writes `deployments/creditcoinTestnet.json` — the single address book the agent, API and frontend all read.
+
+### Run the whole stack locally
+
+```bash
+npm install && pip install -r requirements.txt
+
+npx hardhat node                                          # terminal 1
+npx hardhat run scripts/deploy.js   --network localhost   # terminal 2
+npx hardhat run scripts/seedLocal.js --network localhost  # 3 borrowers, one stressed
+
+MERITR_NETWORK=localhost \
+RISK_AGENT_PRIVATE_KEY=0x… npm run backend                # terminal 3 — API on :8000
+npm run dev                                               # terminal 4 — dashboard on :3000
+
+MERITR_NETWORK=localhost \
+RISK_AGENT_PRIVATE_KEY=0x… python3 -m agents.underwriter --once
+```
+
+### See the whole thesis in one command
+
+```bash
+npx hardhat run scripts/simulate.js
+```
+
+Six acts, every number read back from chain state:
+
+```
+ACT I    anonymous wallet   score 300 · 24.00% APR · 30% max LTV
+ACT II   17 Attestcoin proofs ingested from Ethereum + Base
+         score 300 → 765 · APR 24.00% → 8.50% · LTV 30% → 68.75%
+ACT III  soulbound passport minted; transfer attempt reverts
+ACT IV   loan opened at the earned rate
+ACT V    collateral −34.5%, health factor 1.070 → stress band
+ACT VI   agent restructures: rate 8.50% → 7.37%, +30 days,
+         $3,143.71 debt retired from reserve, HF 1.070 → 1.350,
+         10.0 mWETH collateral held — none seized
+```
+
+### Health check
+
+```bash
+python3 main.py     # verifies toolchain, contracts, deployment, RPC, precompile
+```
+
 ---
 
-## 📄 License
-Apache 2.0 Open Source
+## Tests
+
+```bash
+npx hardhat test    # 48 passing — contracts
+pytest              # 39 passing — agent, risk engine, cross-language parity
+```
+
+**Contracts (48).** Real proof ingestion through `ASCBase` + `EvmV1Decoder` using prover-format `txBytes`; rejection of unverified proofs; query-id replay protection; unregistered-emitter rejection; reverted-source-tx rejection; multi-chain diversity scoring; soulbound enforcement across every transfer path; restructuring mechanics, cooldowns, caps and the agent-offline fallback; the invariant that the vault's asset balance always equals the buckets it tracks.
+
+**Python (39).** 168-vector cross-language parity against the deployed `CreditMath`; monotonicity of the APR and LTV curves; risk-band boundaries at exact wei; the refusal to restructure underwater positions; triage ordering under a binding reserve.
+
+---
+
+## Repository layout
+
+```
+contracts/
+  MeritrAttestor.sol      Attestcoin ingestion — inherits ASCBase, schema registry
+  MeritrVault.sol         lending + autonomous restructuring
+  MeritrPassport.sol      soulbound ERC-721, on-chain SVG
+  libraries/CreditMath.sol  scoring, pricing curves, health math (shared with the agent)
+  mocks/                  MockNativeQueryVerifier (0xFD2 stand-in), MockERC20, harness
+agents/
+  scoring.py  risk.py  underwriter.py  chain.py  config.py
+backend/main.py           FastAPI risk API — no database, derives everything from chain
+app/                      Next.js 14 dashboard
+scripts/
+  deploy.js               one-command deployment
+  simulate.js             six-act end-to-end walkthrough
+  seedLocal.js            three-borrower local scenario
+  sourceSchemas.js        Aave V3 event schema catalogue
+  generateParityVectors.js
+test/                     Hardhat suite
+tests/                    pytest suite
+```
+
+---
+
+## Honest limitations
+
+Stated because a credit protocol that hides its assumptions is not one anyone should use.
+
+- **Collateral pricing is governance-fed.** `setPrices` behind `PRICE_ROLE` is the single trusted input in the risk path; every other term derives from proof-verified data. Production needs a real price feed.
+- **Source-block timestamps are approximated.** The prover exposes a verified *height*, not a verified timestamp, so wallet maturity is derived from `genesis + height × blockTime`, clamped to `block.timestamp` so no height can manufacture future history.
+- **`chainKey` values follow the EVM chain-id convention** used by Creditcoin's testnet bridge examples. Confirm against the chain-key registry of your target deployment — `configureSourceChain` makes that a one-transaction correction, not a redeploy.
+- **Non-stable reserve assets need a price feed** before being registered; the current catalogue prices stablecoin reserves at $1.00.
+- **"ZK-Credit" is a commitment scheme today, not a SNARK.** See the passport section above.
+
+---
+
+## License
+
+Apache 2.0 — see [LICENSE](LICENSE).
+
+**Author:** Ifeanyichukwu Onwo (`mrnetwork`)
