@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { useCallback, useEffect, useState } from "react";
 import {
   api,
@@ -8,13 +9,13 @@ import {
   type Portfolio,
   type ProtocolStats,
   type RestructureEvent,
-} from "./lib/api";
-import { usd } from "./lib/format";
-import { ProtocolPanel } from "./components/ProtocolPanel";
-import { PortfolioTable } from "./components/PortfolioTable";
-import { BorrowerPanel } from "./components/BorrowerPanel";
-import { AgentFeed } from "./components/AgentFeed";
-import { AttestationFlow } from "./components/AttestationFlow";
+} from "../lib/api";
+import { usd } from "../lib/format";
+import { ProtocolPanel } from "../components/ProtocolPanel";
+import { PortfolioTable } from "../components/PortfolioTable";
+import { BorrowerPanel } from "../components/BorrowerPanel";
+import { AgentFeed } from "../components/AgentFeed";
+import { AttestationFlow } from "../components/AttestationFlow";
 
 const REFRESH_MS = 12_000;
 
@@ -67,12 +68,14 @@ export default function Dashboard() {
       <header className="mb-8">
         <div className="flex flex-wrap items-end justify-between gap-4">
           <div>
-            <div className="flex items-center gap-3">
+            <Link href="/" className="inline-flex items-center gap-3 group">
               <span className="flex h-9 w-9 items-center justify-center rounded-xl bg-gradient-to-br from-accent to-credit font-mono text-sm font-bold text-ink-900">
                 M
               </span>
-              <h1 className="text-2xl font-semibold tracking-tight text-mist-100">Meritr</h1>
-            </div>
+              <h1 className="text-2xl font-semibold tracking-tight text-mist-100 group-hover:text-white transition-colors">
+                Meritr
+              </h1>
+            </Link>
             <p className="mt-2 max-w-2xl text-sm leading-relaxed text-mist-400">
               Autonomous DeAI debt restructuring and cross-chain credit risk memory, built natively
               on Creditcoin. Credit is scored only from transactions proven through the Attestcoin
