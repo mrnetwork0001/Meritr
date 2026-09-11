@@ -199,8 +199,10 @@ class Underwriter:
                 )
                 log.info("  Confirmed: %s", tx)
                 # Keep the borrower's passport in step with their post-rescue standing.
+                # No-ops cleanly when they never minted one.
                 try:
-                    self.client.send_refresh_passport(borrower)
+                    if self.client.send_refresh_passport(borrower):
+                        log.info("  Passport refreshed for %s", borrower)
                 except Exception as exc:
                     log.debug("Passport refresh skipped for %s: %s", borrower, exc)
 

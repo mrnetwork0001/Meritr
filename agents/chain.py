@@ -83,20 +83,44 @@ class ChainClient:
     # Reads
     # ------------------------------------------------------------------
 
-    def discover_borrowers(self, from_block: int = 0) -> list[str]:
+    #: Public RPCs reject wide `eth_getLogs` ranges. Creditcoin testnet accepts 10k blocks;
+    #: this stays under that with room to spare.
+    LOG_CHUNK = 9_000
+
+    def _scan_logs(self, event, from_block: int | None = None) -> list:
+        """Collect an event's logs in RPC-sized chunks.
+
+        Scanning from genesis is the obvious implementation and it is wrong on any real chain:
+        the node rejects the range, the exception is swallowed, and the caller concludes the
+        book is empty. That failure is indistinguishable from "no loans exist", which is how it
+        survives testing against a local chain where the range is small enough to work.
+        """
+        head = self.w3.eth.block_number
+        start = self.cfg.deployed_at_block or from_block or 0
+        if from_block is not None:
+            start = max(start, from_block)
+
+        out: list = []
+        lo = start
+        while lo <= head:
+            hi = min(lo + self.LOG_CHUNK - 1, head)
+            try:
+                try:
+                    out.extend(event().get_logs(from_block=lo, to_block=hi))
+                except TypeError:  # web3 v6 keyword spelling
+                    out.extend(event().get_logs(fromBlock=lo, toBlock=hi))
+            except Exception as exc:
+                log.warning("Log scan failed for blocks %s-%s: %s", lo, hi, exc)
+            lo = hi + 1
+        return out
+
+    def discover_borrowers(self, from_block: int | None = None) -> list[str]:
         """Every address that has ever opened a loan, newest first.
 
         Sourced from ``LoanOpened`` logs so the agent needs no off-chain index or database to
         rebuild its entire working set after a restart.
         """
-        try:
-            logs = self.vault.events.LoanOpened().get_logs(from_block=from_block)
-        except TypeError:  # web3 v6 keyword
-            logs = self.vault.events.LoanOpened().get_logs(fromBlock=from_block)
-        except Exception as exc:
-            log.warning("Could not scan LoanOpened logs (%s); falling back to empty set.", exc)
-            return []
-
+        logs = self._scan_logs(self.vault.events.LoanOpened, from_block)
         seen: dict[str, None] = {}
         for entry in reversed(logs):
             seen.setdefault(entry["args"]["borrower"], None)
@@ -161,7 +185,24 @@ class ChainClient:
     def send_flag_stress(self, borrower: str) -> str | None:
         return self._send(self.vault.functions.flagStress(Web3.to_checksum_address(borrower)))
 
+    def has_passport(self, holder: str) -> bool:
+        """Whether `holder` has minted a passport. Refresh reverts with NoPassport if not."""
+        try:
+            return self.passport.functions.passportOf(
+                Web3.to_checksum_address(holder)
+            ).call() != 0
+        except Exception:
+            return False
+
     def send_refresh_passport(self, holder: str) -> str | None:
+        """Restamp a holder's passport with their latest attested score.
+
+        Checked first rather than attempted-and-caught: a borrower who never minted one is the
+        common case, and letting it fail means a reverted gas estimation and an alarming log
+        line on every single cycle for every passport-less borrower.
+        """
+        if not self.has_passport(holder):
+            return None
         return self._send(self.passport.functions.refresh(Web3.to_checksum_address(holder)))
 
     def _send(self, fn) -> str | None:
@@ -196,14 +237,9 @@ class ChainClient:
     # Events
     # ------------------------------------------------------------------
 
-    def restructuring_history(self, from_block: int = 0) -> Iterator[dict]:
+    def restructuring_history(self, from_block: int | None = None) -> Iterator[dict]:
         """Every restructuring the protocol has performed — the agent's public audit trail."""
-        try:
-            logs = self.vault.events.LoanRestructured().get_logs(from_block=from_block)
-        except TypeError:
-            logs = self.vault.events.LoanRestructured().get_logs(fromBlock=from_block)
-        except Exception:
-            return iter(())
+        logs = self._scan_logs(self.vault.events.LoanRestructured, from_block)
 
         for entry in logs:
             a = entry["args"]

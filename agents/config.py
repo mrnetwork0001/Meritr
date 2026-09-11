@@ -32,8 +32,9 @@ CREDITCOIN_TESTNET = 102031
 CREDITCOIN_DEVNET = 102032
 CREDITCOIN_CHAIN_IDS = (CREDITCOIN_MAINNET, CREDITCOIN_TESTNET, CREDITCOIN_DEVNET)
 
-#: Meritr's primary target.
-DEFAULT_NETWORK = "creditcoinMainnet"
+#: Meritr's primary target. Testnet is where the hackathon requires deployment and where the
+#: Attestcoin proof-builder is publicly reachable; it attests Ethereum mainnet under chainKey 3.
+DEFAULT_NETWORK = "creditcoinTestnet"
 
 DEFAULT_RPC = {
     "creditcoinMainnet": "https://mainnet3.creditcoin.network",
@@ -68,6 +69,8 @@ class Config:
     private_key: str | None
     poll_interval: int
     source_chains: list
+    #: Block the contracts were deployed at. Log scans start here rather than at genesis.
+    deployed_at_block: int
 
     @property
     def has_signer(self) -> bool:
@@ -82,7 +85,19 @@ class Config:
         return EXPLORERS.get(self.chain_id)
 
 
+#: Cache of parsed address books, keyed by network -> (mtime_ns, parsed).
+_BOOK_CACHE: dict[str, tuple[int, dict]] = {}
+
+
 def _load_book(network: str) -> dict:
+    """Read a deployment address book, re-reading whenever the file changes on disk.
+
+    Caching this for the process lifetime is the obvious thing to do and it is wrong: a redeploy
+    rewrites the file, and a long-lived API would keep serving the previous deployment's
+    addresses. Both sets of contracts exist on the chain, so nothing errors — the dashboard
+    simply reports a different vault than the one you just deployed, which is an unpleasant
+    thing to debug. Keying the cache on mtime keeps the read cheap and the answer current.
+    """
     path = DEPLOYMENTS_DIR / f"{network}.json"
     if not path.exists():
         available = sorted(p.stem for p in DEPLOYMENTS_DIR.glob("*.json"))
@@ -91,7 +106,15 @@ def _load_book(network: str) -> dict:
             f"Available: {available or 'none'}\n"
             "Deploy first:  npx hardhat run scripts/deploy.js --network creditcoinTestnet"
         )
-    return json.loads(path.read_text())
+
+    mtime = path.stat().st_mtime_ns
+    cached = _BOOK_CACHE.get(network)
+    if cached and cached[0] == mtime:
+        return cached[1]
+
+    book = json.loads(path.read_text())
+    _BOOK_CACHE[network] = (mtime, book)
+    return book
 
 
 def load(network: str | None = None) -> Config:
@@ -122,6 +145,7 @@ def load(network: str | None = None) -> Config:
         private_key=os.getenv("RISK_AGENT_PRIVATE_KEY") or os.getenv("PRIVATE_KEY"),
         poll_interval=int(os.getenv("MERITR_POLL_INTERVAL", "60")),
         source_chains=book.get("sourceChains", []),
+        deployed_at_block=int(book.get("deployedAtBlock", 0)),
     )
 
 

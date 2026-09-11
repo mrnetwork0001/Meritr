@@ -84,11 +84,34 @@ api = APIRouter(prefix="/api")
 
 
 def client() -> ChainClient:
+    """Return a chain client bound to the *current* address book.
+
+    Re-reads the deployment on every call (cheap — `config.load` caches on file mtime) and
+    rebuilds the client when the addresses have changed. Without this, deploying while the API
+    is running leaves it serving the previous deployment's contracts until someone notices and
+    restarts it.
+    """
     if state["client"] is None:
         raise HTTPException(
             status_code=503,
             detail=state["error"] or "Not connected to a Meritr deployment.",
         )
+
+    try:
+        fresh = config.load()
+    except Exception:
+        return state["client"]  # keep serving the last good config
+
+    current = state.get("config")
+    if current is None or fresh.vault != current.vault or fresh.chain_id != current.chain_id:
+        log.info(
+            "Deployment changed (%s -> %s); rebinding client.",
+            getattr(current, "vault", None),
+            fresh.vault,
+        )
+        state["config"] = fresh
+        state["client"] = ChainClient(fresh)
+
     return state["client"]
 
 
