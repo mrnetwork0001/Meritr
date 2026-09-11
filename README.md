@@ -4,7 +4,18 @@
 
 Built for the [BUIDL CTC 2026 Fall Hackathon](https://dorahacks.io/hackathon/buidl-ctc-2026-fall/detail) · Creditcoin & Credit Labs · Track: `AI` / `RWA` · Apache 2.0
 
-**Target: Creditcoin Mainnet — Chain ID 102030.** Source credit history is read from Aave V3 on Ethereum and Base mainnet.
+**Live on Creditcoin CC3 Testnet (chain 102031).** Credit history is read from Aave V3 on **Ethereum mainnet** via Attestcoin `chainKey 3`.
+
+| Contract | Address |
+|---|---|
+| MeritrAttestor | [`0xB462C2772b8003e3c511C373dDC5715642B34D4c`](https://creditcoin-testnet.blockscout.com/address/0xB462C2772b8003e3c511C373dDC5715642B34D4c) |
+| MeritrVault | [`0x233D2aE279230fBFFbe61e6dF2A9DC6bF6ff3e84`](https://creditcoin-testnet.blockscout.com/address/0x233D2aE279230fBFFbe61e6dF2A9DC6bF6ff3e84) |
+| MeritrPassport | [`0xAdd2C477A101250C8A3e6Fe26a642143F610A601`](https://creditcoin-testnet.blockscout.com/address/0xAdd2C477A101250C8A3e6Fe26a642143F610A601) |
+
+**30 real Attestcoin proofs are ingested**, giving 20 real Ethereum borrowers on-chain credit
+from $2.6M of proven Aave repayment — and the agent has restructured two distressed positions
+on-chain ([tx](https://creditcoin-testnet.blockscout.com/tx/0x45f9963cd6dc535dfb7fb8670ecc9e5b2b329a6c7edac19df538dddadcb25be6)),
+health factor 1.070 → 1.350, with **no collateral seized**.
 
 ---
 
@@ -20,12 +31,12 @@ On-chain credit is amnesiac and brutal.
 
 Meritr makes cross-chain credit history **provable** and makes distress **survivable**.
 
-1. It ingests a borrower's real repayment, collateral and liquidation history from Ethereum and Base through Creditcoin's **Attestcoin native query verifier precompile at `0x0000000000000000000000000000000000000FD2`** — a Merkle-inclusion and continuity proof the Creditcoin runtime itself validates. No oracle operator, no multisig relayer, no trusted price poster sits anywhere in that path.
+1. It ingests a borrower's real repayment, collateral and liquidation history from Ethereum through Creditcoin's **Attestcoin native query verifier precompile at `0x0000000000000000000000000000000000000FD2`** — a Merkle-inclusion and continuity proof the Creditcoin runtime itself validates. No oracle operator, no multisig relayer, no trusted price poster sits anywhere in that path.
 2. It scores that proven history into a portable **ZK-Credit score** that sets a borrower's interest rate and borrowing capacity.
 3. When a position enters distress, an autonomous **DeAI risk agent restructures it instead of liquidating** — cutting the rate, extending the term, and retiring debt from a protocol reserve until the position is healthy again. The borrower keeps every unit of their collateral.
 
 ```
-Ethereum · Base                Creditcoin EVM mainnet (102030)
+Ethereum mainnet              Creditcoin EVM testnet (102031)
 ─────────────────              ────────────────────────────────────────────
 Aave V3 repayments  ──proof──▶  Attestcoin precompile 0xFD2
 Aave V3 supplies                        │  verifies inclusion + continuity
@@ -121,7 +132,7 @@ MERITR_ASSET=0x…  MERITR_COLLATERAL=0x… \
 npx hardhat run scripts/deploy.js --network creditcoinMainnet
 ```
 
-Deploys all four subsystems, wires roles, registers Aave V3 schemas for **Ethereum and Base mainnet**, and writes `deployments/creditcoinMainnet.json` — the single address book the agent, API and frontend all read.
+Deploys all four subsystems, wires roles, registers Aave V3 schemas for **Ethereum mainnet and Sepolia**, and writes `deployments/creditcoinMainnet.json` — the single address book the agent, API and frontend all read.
 
 Two deliberate gates stand in front of mainnet, because a lending protocol that custodies real deposits should never deploy on the strength of a default:
 
@@ -163,7 +174,7 @@ Six acts, every number read back from chain state:
 
 ```
 ACT I    anonymous wallet   score 300 · 24.00% APR · 30% max LTV
-ACT II   17 Attestcoin proofs ingested from Ethereum + Base
+ACT II   17 Attestcoin proofs ingested from Ethereum and Sepolia
          score 300 → 765 · APR 24.00% → 8.50% · LTV 30% → 68.75%
 ACT III  soulbound passport minted; transfer attempt reverts
 ACT IV   loan opened at the earned rate
@@ -184,11 +195,11 @@ python3 main.py     # verifies toolchain, contracts, deployment, RPC, precompile
 ## Tests
 
 ```bash
-npx hardhat test    # 48 passing — contracts
+npx hardhat test    # 50 passing — contracts
 pytest              # 39 passing — agent, risk engine, cross-language parity
 ```
 
-**Contracts (48).** Real proof ingestion through `ASCBase` + `EvmV1Decoder` using prover-format `txBytes`; rejection of unverified proofs; query-id replay protection; unregistered-emitter rejection; reverted-source-tx rejection; multi-chain diversity scoring; soulbound enforcement across every transfer path; restructuring mechanics, cooldowns, caps and the agent-offline fallback; the invariant that the vault's asset balance always equals the buckets it tracks.
+**Contracts (50).** Real proof ingestion through `ASCBase` + `EvmV1Decoder` using prover-format `txBytes`; rejection of unverified proofs; query-id replay protection; unregistered-emitter rejection; reverted-source-tx rejection; multi-chain diversity scoring; soulbound enforcement across every transfer path; restructuring mechanics, cooldowns, caps and the agent-offline fallback; the invariant that the vault's asset balance always equals the buckets it tracks.
 
 **Python (39).** 168-vector cross-language parity against the deployed `CreditMath`; monotonicity of the APR and LTV curves; risk-band boundaries at exact wei; the refusal to restructure underwater positions; triage ordering under a binding reserve.
 
@@ -219,13 +230,39 @@ tests/                    pytest suite
 
 ---
 
+## Asset provenance — what is real and what is not
+
+Run it yourself: `npx hardhat run scripts/assetProvenance.js --network creditcoinTestnet`
+
+| Input | Address | Who can create units | Price source | Verdict |
+|---|---|---|---|---|
+| Borrowed asset (mUSD, 6dp) | `0xd3291cF8…` | **anyone** — `mint()` is ungated | pinned $1.00 by `PRICE_ROLE` | **synthetic** |
+| Collateral (mWETH, 18dp) | `0x53653C70…` | **anyone** — `mint()` is ungated | **live Chainlink ETH/USD** | synthetic unit, **real mark** |
+| Credit facts | `MeritrAttestor` | **nobody** — every fact needs a Merkle inclusion + continuity proof the `0x…0FD2` precompile accepts | n/a | **proof-verified** |
+
+Creditcoin testnet has no canonical stablecoin, so the vault trades a demo pair Meritr deployed
+itself. Both have an open mint and are worth nothing.
+
+**That does not reach the credit data, and the separation is checkable in one command:**
+
+```bash
+grep -ci 'vault' contracts/MeritrAttestor.sol contracts/MeritrPassport.sol   # → 0
+```
+
+The credit layer holds no reference to the market layer. Scores derive from proven source-chain
+facts alone — the demo tokens cannot influence them, and swapping the market for real assets
+would leave every score unchanged.
+
 ## Honest limitations
 
 Stated because a credit protocol that hides its assumptions is not one anyone should use.
 
 - **Collateral pricing is governance-fed.** `setPrices` behind `PRICE_ROLE` is the single trusted input in the risk path; every other term derives from proof-verified data. Production needs a real price feed.
 - **Source-block timestamps are approximated.** The prover exposes a verified *height*, not a verified timestamp, so wallet maturity is derived from `genesis + height × blockTime`, clamped to `block.timestamp` so no height can manufacture future history.
-- **`chainKey` values follow the EVM chain-id convention** used by Creditcoin's bridge examples (Ethereum `1`, Base `8453`). Confirm against the chain-key registry of your target deployment — `configureSourceChain` makes that a one-transaction correction, not a redeploy.
+- **`chainKey` is not the EVM chain id, and differs per Creditcoin network.** Read from the ChainInfo precompile at `0x…0FD3`: on Creditcoin **testnet** Ethereum is `chainKey 3` and Sepolia is `chainKey 1`; on **mainnet** Ethereum is `chainKey 1`. `scripts/verifyChainKeys.js` checks the catalogue against the live registry and `deploy.js` aborts on a mismatch, because a wrong key fails silently — proofs simply never match a schema.
+- **The market's demo tokens are freely mintable.** See the provenance table above. The vault's
+  `ASSET` and `COLLATERAL` are `immutable`, so swapping them needs a new vault — which would
+  reset the live positions and restructuring history. Disclosed rather than papered over.
 - **The contracts are unaudited.** A CertiK audit is a hackathon prize, not a completed step. Treat any mainnet deployment accordingly.
 - **Non-stable reserve assets need a price feed** before being registered; the current catalogue prices stablecoin reserves at $1.00.
 - **"ZK-Credit" is a commitment scheme today, not a SNARK.** See the passport section above.

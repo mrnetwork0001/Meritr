@@ -359,7 +359,7 @@ Every mainnet address was verified on-chain — contract code present, and ERC-2
 | Chain | Aave V3 Pool | Reserves registered |
 |---|---|---|
 | Ethereum (1) | `0x87870Bca3F3fD6335C3F4ce8392D69350B4fA4E2` | USDC, USDT, DAI |
-| Base (8453) | `0xA238Dd80C259a72e81d7e4664a9801593F98d1c5` | USDC |
+
 
 ### 8.3 Running it
 
@@ -390,9 +390,9 @@ blocked by default.
 
 1. **Collateral pricing is governance-fed** (§1). The single trusted input in the risk path.
 2. **Source timestamps are approximated** from block height (§2.5).
-3. **`chainKey` follows the EVM chain-id convention** used by Creditcoin's testnet bridge
-   examples. Confirm against your target deployment's chain-key registry;
-   `configureSourceChain` makes that a one-transaction correction.
+3. **`chainKey` is not the EVM chain id** and differs per Creditcoin network — Ethereum is
+   `3` on testnet and `1` on mainnet. Read from the ChainInfo precompile and verified at
+   deploy time by `scripts/verifyChainKeys.js`.
 4. **Non-stable reserves need a price feed** before registration.
 5. **"ZK-Credit" is a hash commitment, not a SNARK.** `factsCommitment` hides values and enables
    selective disclosure, but proves nothing about them on its own. It is the substitution point
