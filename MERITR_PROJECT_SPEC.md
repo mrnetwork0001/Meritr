@@ -75,8 +75,10 @@ Meritr uses the **Attestcoin Protocol** (`0x0FD2` precompile) to ingest cryptogr
 - [x] One-command deployment: `npx hardhat run scripts/deploy.js --network creditcoinTestnet`.
 - [x] Technical documentation & setup guide — `README.md`, `docs/ARCHITECTURE.md`.
 - [x] End-to-end demo walkthrough — `npx hardhat run scripts/simulate.js`.
-- [ ] Deployed contract addresses on Creditcoin Testnet — **run the deploy command with a
-      funded key**; addresses land in `deployments/creditcoinTestnet.json`.
+- [x] Deployed contract addresses on Creditcoin Testnet (102031) — see
+      `deployments/creditcoinTestnet.json` and the README.
+- [x] A **real** Attestcoin proof ingested on the live deployment: an Ethereum mainnet
+      Aave V3 repayment, verified by the `0x…0FD2` precompile with no mock involved.
 - [ ] Project Deck / Whitepaper PDF URL.
 - [ ] Prototype Demo Video URL.
 

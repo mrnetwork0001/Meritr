@@ -1,0 +1,94 @@
+{
+  "network": "creditcoinTestnet",
+  "chainId": "102031",
+  "deployedAt": "2026-09-11T11:31:00.905Z",
+  "deployer": "0x88ba08d2b352E3cac29dd3BCA911734e8E11f2f4",
+  "riskAgent": "0x88ba08d2b352E3cac29dd3BCA911734e8E11f2f4",
+  "attestcoinPrecompile": "0x0000000000000000000000000000000000000FD2",
+  "contracts": {
+    "MeritrAttestor": "0xB462C2772b8003e3c511C373dDC5715642B34D4c",
+    "MeritrPassport": "0xAdd2C477A101250C8A3e6Fe26a642143F610A601",
+    "MeritrVault": "0x233D2aE279230fBFFbe61e6dF2A9DC6bF6ff3e84",
+    "asset": "0xd3291cF85D4f9CD4f2dF77Fcbc4E89B806A39981",
+    "collateral": "0x53653C7005c0b3406d42Af27570F63D28C4EB7f7"
+  },
+  "decimals": {
+    "asset": 6,
+    "collateral": 18
+  },
+  "sourceChains": [
+    {
+      "chainKey": "3",
+      "name": "Ethereum",
+      "evmChainId": 1,
+      "protocol": "Aave V3",
+      "pool": "0x87870Bca3F3fD6335C3F4ce8392D69350B4fA4E2",
+      "assets": [
+        {
+          "symbol": "USDC",
+          "address": "0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48",
+          "decimals": 6,
+          "priceE8": "100000000"
+        },
+        {
+          "symbol": "USDT",
+          "address": "0xdAC17F958D2ee523a2206206994597C13D831ec7",
+          "decimals": 6,
+          "priceE8": "100000000"
+        },
+        {
+          "symbol": "DAI",
+          "address": "0x6B175474E89094C44Da98b954EedeAC495271d0F",
+          "decimals": 18,
+          "priceE8": "100000000"
+        }
+      ]
+    },
+    {
+      "chainKey": "1",
+      "name": "Sepolia",
+      "evmChainId": 11155111,
+      "protocol": "Aave V3",
+      "pool": "0x6Ae43d3271ff6888e7Fc43Fd7321a503ff738951",
+      "assets": [
+        {
+          "symbol": "USDC",
+          "address": "0x94a9D9AC8a22534E3FaCa9F4e7F2E2cf85d5E4C8",
+          "decimals": 6,
+          "priceE8": "100000000"
+        },
+        {
+          "symbol": "DAI",
+          "address": "0xFF34B3d4Aee8ddCd6F9AFFFB6Fe49bD371b8a357",
+          "decimals": 18,
+          "priceE8": "100000000"
+        },
+        {
+          "symbol": "USDT",
+          "address": "0xaA8E23Fb1079EA71e0a56F48a2aA51851D8433D0",
+          "decimals": 6,
+          "priceE8": "100000000"
+        }
+      ]
+    }
+  ],
+  "attestcoin": {
+    "blockProverPrecompile": "0x0000000000000000000000000000000000000FD2",
+    "chainInfoPrecompile": "0x0000000000000000000000000000000000000FD3",
+    "proofBuilder": "https://proof-gen-api.cc3-testnet.creditcoin.network",
+    "firstRealProof": {
+      "sourceChain": "Ethereum mainnet",
+      "chainKey": 3,
+      "protocol": "Aave V3",
+      "sourceTx": "0x7db669953c8d25a9132cd3f0c7bd5c7fe2c2ffbc64cc5fb4797f47e94d596e4a",
+      "sourceBlock": 25931487,
+      "borrower": "0x76f30e3f75437fB862B8D2C4D80a671bCeBA5b1A",
+      "asset": "USDT",
+      "valueUsd": 67465.4,
+      "ingestTx": "0xcd7735bb5061a1e532d68d29710edea98085808cee056e1f3f6259287bc2cd4f",
+      "ingestBlock": 5469027,
+      "resultingScore": 497
+    }
+  },
+  "deployedAtBlock": 5469007
+}
