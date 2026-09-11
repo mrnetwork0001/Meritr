@@ -1,5 +1,7 @@
 import type { Metadata } from "next";
 import "./globals.css";
+import { WalletProvider } from "./lib/wallet";
+import { TxProvider } from "./components/TxModal";
 
 export const metadata: Metadata = {
   title: "Meritr — Cross-Chain Credit Risk Memory OS",
@@ -19,7 +21,11 @@ export const metadata: Metadata = {
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en">
-      <body>{children}</body>
+      <body>
+        <WalletProvider>
+          <TxProvider>{children}</TxProvider>
+        </WalletProvider>
+      </body>
     </html>
   );
 }
