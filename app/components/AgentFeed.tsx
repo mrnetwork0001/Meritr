@@ -6,70 +6,64 @@ import { short, usd } from "../lib/format";
 /**
  * The protocol's public record of every autonomous intervention.
  *
- * Read straight from `LoanRestructured` logs, so it cannot drift from what actually happened —
- * an autonomous agent that acts on user debt should be auditable by anyone with an RPC endpoint.
+ * Read straight from `LoanRestructured` logs, so it cannot drift from what actually happened.
+ * An agent acting on user debt should be auditable by anyone with an RPC endpoint.
  */
 export function AgentFeed({ events }: { events: RestructureEvent[] }) {
   return (
-    <div className="card card-pad">
-      <div className="flex items-center justify-between">
-        <h2 className="text-sm font-semibold text-mist-100">Restructuring history</h2>
-        <span className="text-[11px] text-mist-500">on-chain audit trail</span>
+    <div className="rounded-lg border border-ink-700 bg-ink-900">
+      <div className="flex items-center justify-between border-b border-ink-700 px-5 py-3">
+        <h2 className="text-[13px] font-semibold text-gray-200">Restructuring history</h2>
+        <span className="font-mono text-[10.5px] text-gray-600">on-chain audit trail</span>
       </div>
 
       {events.length === 0 ? (
-        <p className="mt-4 text-sm text-mist-500">
-          No interventions yet. The agent acts only when a position enters the stress band
-          between a health factor of 1.00 and 1.15.
+        <p className="px-5 py-8 text-[12.5px] leading-relaxed text-gray-500">
+          No interventions yet. The agent acts only when a position enters the stress band between
+          a health factor of 1.00 and 1.15.
         </p>
       ) : (
-        <ul className="mt-4 space-y-3">
+        <ul className="divide-y divide-ink-700/70">
           {events.map((e) => {
-            const rateCut = e.oldRatePct - e.newRatePct;
+            const cut = e.oldRatePct - e.newRatePct;
             return (
-              <li
-                key={e.txHash}
-                className="animate-slide-up rounded-xl border border-ink-600 bg-ink-700/40 p-4"
-              >
-                <div className="flex flex-wrap items-center justify-between gap-2">
-                  <span className="font-mono text-xs text-mist-300">{short(e.borrower)}</span>
-                  <span className="text-[10px] text-mist-500">block {e.blockNumber}</span>
+              <li key={e.txHash} className="px-5 py-4">
+                <div className="flex flex-wrap items-baseline justify-between gap-2">
+                  <span className="mono text-[12px] text-gray-300">{short(e.borrower)}</span>
+                  <span className="font-mono text-[10px] text-gray-600">block {e.blockNumber}</span>
                 </div>
 
-                <div className="mt-3 grid grid-cols-3 gap-3 text-xs">
+                <div className="mt-3 grid grid-cols-3 gap-3">
                   <div>
-                    <p className="label">Health</p>
-                    <p className="mt-1 font-mono tabular-nums">
-                      <span className="text-stress">{e.hfBefore.toFixed(3)}</span>
-                      <span className="mx-1 text-mist-500">→</span>
-                      <span className="text-healthy">{e.hfAfter.toFixed(3)}</span>
+                    <p className="font-mono text-[9.5px] uppercase tracking-wider text-gray-600">health</p>
+                    <p className="mono mt-1 text-[12px]">
+                      <span className="text-down">{e.hfBefore.toFixed(3)}</span>
+                      <span className="mx-1 text-gray-600">→</span>
+                      <span className="text-up">{e.hfAfter.toFixed(3)}</span>
                     </p>
                   </div>
                   <div>
-                    <p className="label">Rate</p>
-                    <p className="mt-1 font-mono tabular-nums text-mist-200">
-                      {rateCut > 0 ? (
+                    <p className="font-mono text-[9.5px] uppercase tracking-wider text-gray-600">rate</p>
+                    <p className="mono mt-1 text-[12px]">
+                      {cut > 0 ? (
                         <>
-                          <span className="text-mist-500">{e.oldRatePct.toFixed(2)}%</span>
-                          <span className="mx-1 text-mist-500">→</span>
-                          <span className="text-healthy">{e.newRatePct.toFixed(2)}%</span>
+                          <span className="text-gray-600">{e.oldRatePct.toFixed(2)}%</span>
+                          <span className="mx-1 text-gray-600">→</span>
+                          <span className="text-up">{e.newRatePct.toFixed(2)}%</span>
                         </>
                       ) : (
-                        <span className="text-mist-400">{e.newRatePct.toFixed(2)}% held</span>
+                        <span className="text-gray-400">{e.newRatePct.toFixed(2)}% held</span>
                       )}
                     </p>
                   </div>
                   <div>
-                    <p className="label">Debt retired</p>
-                    <p className="mt-1 font-mono tabular-nums text-credit">
-                      {usd(e.debtRetiredUsd, 2)}
-                    </p>
+                    <p className="font-mono text-[9.5px] uppercase tracking-wider text-gray-600">retired</p>
+                    <p className="mono mt-1 text-[12px] text-model">{usd(e.debtRetiredUsd, 2)}</p>
                   </div>
                 </div>
 
-                <p className="mt-3 text-[10px] leading-relaxed text-mist-500">
-                  No collateral seized. Relief funded from the protocol reserve; retired principal
-                  returned to the lendable pool.
+                <p className="mt-3 font-mono text-[10px] leading-relaxed text-gray-600">
+                  no collateral seized · funded from the reserve · principal returned to the pool
                 </p>
               </li>
             );

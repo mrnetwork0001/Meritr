@@ -3,77 +3,47 @@
 import type { MeritrConfig } from "../lib/api";
 
 /**
- * The Attestcoin data path, drawn as a pipeline.
+ * The Attestcoin data path.
  *
- * This is the part of Meritr judges and integrators most need to understand quickly: where the
- * credit data comes from, and why no oracle operator sits anywhere in it. The diagram names the
- * actual precompile and the actual contracts rather than generic boxes.
+ * Names the actual precompile and contracts rather than generic boxes — where the credit data
+ * comes from, and why no oracle operator sits anywhere in it, is what a reviewer needs first.
  */
 export function AttestationFlow({ config }: { config: MeritrConfig | null }) {
   const stages = [
-    {
-      title: "Source chains",
-      detail: "Aave V3 repayments, supplies and liquidations on Ethereum and Base",
-      accent: "#818CF8",
-    },
-    {
-      title: "Attestcoin precompile",
-      detail: `Native query verifier at ${config?.attestcoinPrecompile ?? "0x…0FD2"} — Merkle inclusion + continuity, verified by the Creditcoin runtime`,
-      accent: "#7DF9FF",
-    },
-    {
-      title: "MeritrAttestor",
-      detail: "Decodes proven logs against a registered event schema and folds them into cross-chain credit memory",
-      accent: "#34D399",
-    },
-    {
-      title: "MeritrVault",
-      detail: "Recomputes rate, LTV and relief on-chain from the attested score, then restructures",
-      accent: "#FBBF24",
-    },
+    ["01", "Source chain", "Aave V3 repayments, supplies and liquidations on Ethereum"],
+    ["02", "Attestcoin 0xFD2", "Native query verifier — Merkle inclusion + continuity, checked by the Creditcoin runtime"],
+    ["03", "MeritrAttestor", "Decodes proven logs against a registered event schema into cross-chain credit memory"],
+    ["04", "MeritrVault", "Recomputes rate, LTV and relief on-chain from the attested score"],
   ];
 
   return (
-    <div className="card card-pad">
-      <div className="flex items-center justify-between">
-        <h2 className="text-sm font-semibold text-mist-100">Attestcoin data path</h2>
-        <span className="chip border-credit/30 bg-credit/10 text-credit">no oracle operator</span>
+    <div className="rounded-lg border border-ink-700 bg-ink-900">
+      <div className="flex items-center justify-between border-b border-ink-700 px-5 py-3">
+        <h2 className="text-[13px] font-semibold text-gray-200">Attestcoin data path</h2>
+        <span className="rounded border border-model/40 bg-model/[0.08] px-2 py-0.5 font-mono text-[10px] text-model">
+          no oracle operator
+        </span>
       </div>
 
-      <ol className="mt-5 space-y-0">
-        {stages.map((s, i) => (
-          <li key={s.title} className="relative flex gap-4 pb-6 last:pb-0">
-            {i < stages.length - 1 && (
-              <span
-                className="absolute left-[7px] top-5 h-full w-px bg-gradient-to-b from-ink-500 to-transparent"
-                aria-hidden
-              />
-            )}
-            <span
-              className="relative z-10 mt-1.5 h-3.5 w-3.5 shrink-0 rounded-full border-2"
-              style={{ borderColor: s.accent, background: "#05070D" }}
-              aria-hidden
-            />
+      <ul className="divide-y divide-ink-700/70">
+        {stages.map(([n, title, detail]) => (
+          <li key={n} className="flex gap-3 px-5 py-3.5">
+            <span className="mono shrink-0 text-[11px] text-model">{n}</span>
             <div className="min-w-0">
-              <p className="text-sm font-medium text-mist-200">{s.title}</p>
-              <p className="mt-1 text-xs leading-relaxed text-mist-500">{s.detail}</p>
+              <p className="text-[13px] font-medium text-gray-200">{title}</p>
+              <p className="mt-1 text-[11.5px] leading-relaxed text-gray-500">{detail}</p>
             </div>
           </li>
         ))}
-      </ol>
+      </ul>
 
       {config?.sourceChains?.length ? (
-        <div className="mt-2 border-t border-ink-600 pt-4">
-          <p className="label">Registered sources</p>
-          <div className="mt-2.5 flex flex-wrap gap-2">
+        <div className="border-t border-ink-700 px-5 py-3.5">
+          <p className="font-mono text-[9.5px] uppercase tracking-wider text-gray-600">registered sources</p>
+          <div className="mt-2 flex flex-wrap gap-2">
             {config.sourceChains.map((c) => (
-              <span
-                key={c.chainKey}
-                className="chip border-ink-500 bg-ink-700/60 text-mist-300"
-                title={`${c.protocol} pool ${c.pool}`}
-              >
-                {c.name}
-                <span className="text-mist-500">· {c.protocol}</span>
+              <span key={c.chainKey} className="chip" title={`${c.protocol} pool ${c.pool}`}>
+                {c.name} · {c.protocol}
               </span>
             ))}
           </div>
