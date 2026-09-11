@@ -24,11 +24,12 @@ export function band(hf: number | null): Band {
   return "healthy";
 }
 
+/** Health-band colours, drawn from the shared palette so gauges and badges never drift. */
 export const bandColor: Record<Band, string> = {
-  healthy: "#34D399",
-  watch: "#FBBF24",
-  stress: "#FB923C",
-  danger: "#F87171",
+  healthy: "rgb(52 211 153)", // up
+  watch: "rgb(129 140 248)", // model
+  stress: "rgb(251 146 60)",
+  danger: "rgb(251 113 133)", // down
 };
 
 export const bandLabel: Record<Band, string> = {
@@ -39,11 +40,11 @@ export const bandLabel: Record<Band, string> = {
 };
 
 export const tierColor: Record<string, string> = {
-  Diamond: "#7DF9FF",
-  Platinum: "#C0C6D4",
-  Gold: "#E8B33C",
-  Silver: "#9AA3B2",
-  Bronze: "#B87333",
+  Diamond: "rgb(129 140 248)",
+  Platinum: "rgb(203 213 225)",
+  Gold: "rgb(232 179 60)",
+  Silver: "rgb(148 163 184)",
+  Bronze: "rgb(184 115 51)",
 };
 
 export const relTime = (unix: number) => {
