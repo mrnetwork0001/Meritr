@@ -160,12 +160,21 @@ class ChainClient:
         wasted gas — into a log line, and it gives the agent the projected health factor to
         record alongside its decision.
         """
-        if not self.account:
+        # Read-only: simulated *as* the risk agent without needing its key, so the API can
+        # run with no key material at all and the simulate panel still works.
+        caller = (
+            self.account.address
+            if self.account
+            else Web3.to_checksum_address(self.cfg.risk_agent)
+            if self.cfg.risk_agent
+            else None
+        )
+        if not caller:
             return None
         try:
             return self.vault.functions.restructure(
                 Web3.to_checksum_address(borrower)
-            ).call({"from": self.account.address})
+            ).call({"from": caller})
         except ContractLogicError as exc:
             log.info("Restructure would revert for %s: %s", borrower, exc)
             return None

@@ -71,6 +71,11 @@ class Config:
     source_chains: list
     #: Block the contracts were deployed at. Log scans start here rather than at genesis.
     deployed_at_block: int
+    #: Address expected to hold RISK_AGENT_ROLE. Used for read-only simulation, so the API
+    #: needs no key of its own, and to warn if the loaded signer is the deployer.
+    risk_agent: str
+    #: The deployer, recorded so a misconfigured host can be detected rather than trusted.
+    deployer: str
 
     @property
     def has_signer(self) -> bool:
@@ -142,10 +147,15 @@ def load(network: str | None = None) -> Config:
         collateral=contracts["collateral"],
         asset_decimals=int(book["decimals"]["asset"]),
         collateral_decimals=int(book["decimals"]["collateral"]),
-        private_key=os.getenv("RISK_AGENT_PRIVATE_KEY") or os.getenv("PRIVATE_KEY"),
+        # Deliberately NOT falling back to PRIVATE_KEY. That variable holds the deployer key,
+        # which carries DEFAULT_ADMIN_ROLE and PRICE_ROLE; a typo in the agent's variable name
+        # on an unattended host would otherwise load full admin authority in complete silence.
+        private_key=os.getenv("RISK_AGENT_PRIVATE_KEY"),
         poll_interval=int(os.getenv("MERITR_POLL_INTERVAL", "60")),
         source_chains=book.get("sourceChains", []),
         deployed_at_block=int(book.get("deployedAtBlock", 0)),
+        risk_agent=book.get("riskAgent", ""),
+        deployer=book.get("deployer", ""),
     )
 
 

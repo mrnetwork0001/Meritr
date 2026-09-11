@@ -1,0 +1,29 @@
+[Unit]
+Description=Meritr DeAI underwriting agent — restructures distressed loans autonomously
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=simple
+User=meritr
+WorkingDirectory=/opt/meritr
+EnvironmentFile=/etc/meritr/agent.env
+ExecStart=/opt/meritr/.venv/bin/python -m agents.underwriter --interval 300
+Restart=always
+RestartSec=15
+StartLimitIntervalSec=300
+StartLimitBurst=5
+# The agent registers SIGTERM/SIGINT and drains its sleep a second at a time, so a clean stop
+# never strands a half-broadcast restructuring. Give it room to finish the current cycle.
+KillSignal=SIGTERM
+TimeoutStopSec=120
+StandardOutput=journal
+StandardError=journal
+NoNewPrivileges=true
+PrivateTmp=true
+ProtectSystem=strict
+ProtectHome=true
+ReadWritePaths=/opt/meritr/var
+
+[Install]
+WantedBy=multi-user.target

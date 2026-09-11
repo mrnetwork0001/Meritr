@@ -91,6 +91,16 @@ class Underwriter:
 
         if self.client.account:
             log.info("Agent identity : %s", self.client.account.address)
+            # Loud, but not a hard gate: running as the deployer still works and is the
+            # manual fallback. It simply must never happen silently on an unattended host.
+            if (
+                cfg.deployer
+                and self.client.account.address.lower() == cfg.deployer.lower()
+            ):
+                log.warning(
+                    "Signing as the DEPLOYER, which holds admin and price roles. "
+                    "Use a key with RISK_AGENT_ROLE only for unattended operation."
+                )
         elif self.dry_run:
             log.info("Agent identity : none (dry run)")
         else:

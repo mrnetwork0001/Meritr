@@ -1,0 +1,36 @@
+# Meritr — one origin for the console and the API.
+#
+# Serving both from the same hostname removes CORS entirely: the browser never makes a
+# cross-origin request, so MERITR_CORS_ORIGINS becomes belt-and-braces rather than load-bearing.
+#
+# Replace meritr.example.com with the real hostname BEFORE building the frontend —
+# NEXT_PUBLIC_MERITR_API is inlined at build time, not read at runtime.
+
+meritr.example.com {
+	encode zstd gzip
+
+	# API surface
+	handle /api/* {
+		reverse_proxy 127.0.0.1:8000
+	}
+	handle /health {
+		reverse_proxy 127.0.0.1:8000
+	}
+	handle /docs* {
+		reverse_proxy 127.0.0.1:8000
+	}
+	handle /openapi.json {
+		reverse_proxy 127.0.0.1:8000
+	}
+
+	# Everything else is the Next.js console
+	handle {
+		reverse_proxy 127.0.0.1:3000
+	}
+
+	header {
+		X-Content-Type-Options nosniff
+		X-Frame-Options DENY
+		Referrer-Policy strict-origin-when-cross-origin
+	}
+}

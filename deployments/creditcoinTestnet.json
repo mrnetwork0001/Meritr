@@ -3,7 +3,7 @@
   "chainId": "102031",
   "deployedAt": "2026-09-11T11:31:00.905Z",
   "deployer": "0x88ba08d2b352E3cac29dd3BCA911734e8E11f2f4",
-  "riskAgent": "0x88ba08d2b352E3cac29dd3BCA911734e8E11f2f4",
+  "riskAgent": "0xC06B60156473A15ED4505691403eEF1F7650a2A5",
   "attestcoinPrecompile": "0x0000000000000000000000000000000000000FD2",
   "contracts": {
     "MeritrAttestor": "0xB462C2772b8003e3c511C373dDC5715642B34D4c",
@@ -109,5 +109,31 @@
       "tx": "0x48a4e760b25de14b577bc57bfd8aea6addf8f2b33daef84798dc8db200cbaf5d"
     }
   ],
-  "note": "Restructurings were produced by agents/underwriter.py acting autonomously. The collateral mark-down that created the distress was an admin action through PRICE_ROLE \u2014 a documented governance input \u2014 not a market event. Everything downstream of it is genuine on-chain state."
+  "note": "Restructurings were produced by agents/underwriter.py acting autonomously. The collateral mark-down that created the distress was an admin action through PRICE_ROLE \u2014 a documented governance input \u2014 not a market event. Everything downstream of it is genuine on-chain state.",
+  "relayer": "0x3110C60D98d17cA8dCf4dDf6C2D4Bb2f9262c4E3",
+  "roles": {
+    "deployer": {
+      "address": "0x88ba08d2b352E3cac29dd3BCA911734e8E11f2f4",
+      "holds": [
+        "DEFAULT_ADMIN_ROLE",
+        "PRICE_ROLE",
+        "RISK_AGENT_ROLE",
+        "REGISTRAR_ROLE",
+        "REFRESHER_ROLE"
+      ],
+      "note": "Laptop only. Never deployed to a public host."
+    },
+    "riskAgent": {
+      "address": "0xC06B60156473A15ED4505691403eEF1F7650a2A5",
+      "holds": [
+        "RISK_AGENT_ROLE"
+      ],
+      "note": "Runs unattended. Can only trigger restructurings the protocol would already approve."
+    },
+    "relayer": {
+      "address": "0x3110C60D98d17cA8dCf4dDf6C2D4Bb2f9262c4E3",
+      "holds": [],
+      "note": "Zero roles. MeritrAttestor.ingest has no onlyRole, so a roleless key is sufficient \u2014 which demonstrates the permissionlessness claim."
+    }
+  }
 }
