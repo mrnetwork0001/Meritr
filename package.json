@@ -22,7 +22,8 @@
     "verify:chainkeys": "hardhat run scripts/verifyChainKeys.js --network creditcoinTestnet",
     "proof": "node scripts/attestcoin/fetchProof.js",
     "proof:decode": "hardhat run scripts/attestcoin/decodeCheck.js",
-    "preflight": "hardhat run scripts/preflight.js --network creditcoinTestnet"
+    "preflight": "hardhat run scripts/preflight.js --network creditcoinTestnet",
+    "build:check": "NEXT_DIST_DIR=.next-build next build"
   },
   "dependencies": {
     "@gluwa/asc-contracts": "^0.2.1",

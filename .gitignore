@@ -21,3 +21,4 @@ coverage.json
 .deployer-address
 deployments/simulation.json
 tsconfig.tsbuildinfo
+.next-build
