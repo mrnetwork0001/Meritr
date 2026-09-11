@@ -1,0 +1,9 @@
+Meritr
+Copyright 2026 Ifeanyichukwu Onwo
+
+This product includes software developed for the BUIDL CTC 2026 Fall Hackathon
+hosted by Creditcoin and Credit Labs.
+
+It depends on, and is licensed separately from:
+  - @gluwa/asc-contracts      (MIT)  Attestcoin Smart Contracts, Gluwa Inc.
+  - @openzeppelin/contracts   (MIT)  OpenZeppelin
