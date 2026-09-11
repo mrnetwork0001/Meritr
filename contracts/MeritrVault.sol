@@ -173,6 +173,8 @@ contract MeritrVault is AccessControl, ReentrancyGuard, Pausable {
     event Liquidated(
         address indexed borrower, address indexed liquidator, uint256 debtRepaid, uint256 collateralSeized
     );
+    /// @notice Collateral left over after a liquidation cleared the debt, returned to the borrower.
+    event ResidualCollateralReturned(address indexed borrower, uint256 amount);
     event PricesUpdated(uint64 assetPriceE8, uint64 collateralPriceE8);
     event ReserveFunded(address indexed from, uint256 amount);
 
@@ -545,10 +547,30 @@ contract MeritrVault is AccessControl, ReentrancyGuard, Pausable {
         reserveBalance += reserveCut;
 
         loan.collateral -= uint128(collateralSeized);
-        if (loan.principal == 0 && loan.interestOwed == 0) loan.active = false;
+
+        // Clearing the debt closes the loan, and a closed loan has no exit left: `repay` and
+        // `addCollateral` both revert on an inactive loan, and there is no standalone
+        // collateral withdrawal. Any collateral the liquidator did not seize would therefore be
+        // stranded in this contract permanently.
+        //
+        // This is not an edge case. Below a health factor of 1 the position holds at most
+        // `debt / LIQUIDATION_THRESHOLD` ~= 1.21x its debt in collateral, while the liquidator
+        // takes 1.05x - so a routine full liquidation leaves roughly 16% of the debt's value
+        // behind. Return it to the borrower as part of closing the loan.
+        uint256 residual;
+        if (loan.principal == 0 && loan.interestOwed == 0) {
+            loan.active = false;
+            residual = loan.collateral;
+            loan.collateral = 0;
+        }
 
         COLLATERAL.safeTransfer(msg.sender, collateralSeized);
         emit Liquidated(borrower, msg.sender, repaid, collateralSeized);
+
+        if (residual > 0) {
+            COLLATERAL.safeTransfer(borrower, residual);
+            emit ResidualCollateralReturned(borrower, residual);
+        }
     }
 
     // ---------------------------------------------------------------------

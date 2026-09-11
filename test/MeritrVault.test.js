@@ -8,9 +8,9 @@ const {
   proofArgs,
   increaseTime,
 } = require("./helpers");
-const { ACTION, CHAINS, AAVE_V3_EVENTS } = require("../scripts/sourceSchemas");
+const { ACTION, TEST_CHAINS, AAVE_V3_EVENTS } = require("../scripts/sourceSchemas");
 
-const CHAIN = CHAINS.ETHEREUM_SEPOLIA;
+const CHAIN = TEST_CHAINS.SEPOLIA;
 const AAVE_POOL = "0x6Ae43d3271ff6888e7Fc43Fd7321a503ff738951";
 const USDC_SRC = "0x94a9D9AC8a22534E3FaCa9F4e7F2E2cf85d5E4C8";
 const ONE_USD_E8 = 100_000_000n;
@@ -405,6 +405,63 @@ describe("MeritrVault — autonomous debt restructuring", function () {
       );
       // Liquidator receives collateral plus the 5% bonus.
       expect(await collateral.balanceOf(liquidator.address)).to.be.greaterThan(before);
+    });
+
+    /**
+     * Mark collateral so the position is liquidatable but still over-collateralised
+     * relative to the seizure.
+     *
+     * A residue only exists in a band: below HF 1 the collateral is worth less than
+     * `debt / 0.825` = 1.212x debt, and the liquidator seizes 1.05x debt. So the collateral
+     * must land between 1.05x and 1.212x for anything to be left over. Marking the position
+     * far underwater (say 1.0x) means the liquidator takes every unit and the bug is invisible
+     * — which is exactly how it survived the original suite.
+     */
+    async function markForResidue(multiple = 1.13) {
+      const loan = await vault.loanOf(borrower.address);
+      const debt = await vault.debtOf(borrower.address);
+      const debtE8 = (debt * (await vault.assetPriceE8())) / USDC(1);
+      const wantCollateralE8 = (debtE8 * BigInt(Math.round(multiple * 1000))) / 1000n;
+      const priceE8 = (wantCollateralE8 * ethers.WeiPerEther) / loan.collateral;
+      await vault.setPrices(ONE_USD_E8, priceE8);
+    }
+
+    it("returns leftover collateral when a liquidation clears the whole debt", async function () {
+      await attestHistory(borrower.address, 200_000, 20);
+      await vault.connect(borrower).openLoan(WETH(10), USDC(12_000));
+      await markForResidue();
+
+      const hf = await vault.healthFactorOf(borrower.address);
+      expect(hf).to.be.lessThan(ethers.parseEther("1")); // liquidatable
+      expect(hf).to.be.greaterThan(ethers.parseEther("0.9")); // but not wiped out
+
+      const debt = await vault.debtOf(borrower.address);
+      const collateralBefore = await collateral.balanceOf(borrower.address);
+
+      await expect(vault.connect(liquidator).liquidate(borrower.address, debt + USDC(100))).to.emit(
+        vault,
+        "ResidualCollateralReturned"
+      );
+
+      const loan = await vault.loanOf(borrower.address);
+      expect(loan.active).to.equal(false);
+      expect(loan.collateral).to.equal(0);
+
+      // The borrower keeps what the liquidator was not entitled to.
+      const returned = (await collateral.balanceOf(borrower.address)) - collateralBefore;
+      expect(returned).to.be.greaterThan(0);
+    });
+
+    it("leaves no collateral stranded in the vault after a full liquidation", async function () {
+      await attestHistory(borrower.address, 200_000, 20);
+      await vault.connect(borrower).openLoan(WETH(10), USDC(12_000));
+      await markForResidue();
+
+      const debt = await vault.debtOf(borrower.address);
+      await vault.connect(liquidator).liquidate(borrower.address, debt + USDC(100));
+
+      // Every unit posted went either to the liquidator or back to the borrower.
+      expect(await collateral.balanceOf(await vault.getAddress())).to.equal(0);
     });
   });
 
