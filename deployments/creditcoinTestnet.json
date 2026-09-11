@@ -90,5 +90,24 @@
       "resultingScore": 497
     }
   },
-  "deployedAtBlock": 5469007
+  "deployedAtBlock": 5469007,
+  "restructurings": [
+    {
+      "borrower": "0x27e7c47fA9ac6b957DFD4a473aF5510Cba391384",
+      "healthFactorBefore": 1.07,
+      "healthFactorAfter": 1.35,
+      "debtRetiredUsd": 1722.48,
+      "collateralSeized": 0,
+      "tx": "0x45f9963cd6dc535dfb7fb8670ecc9e5b2b329a6c7edac19df538dddadcb25be6"
+    },
+    {
+      "borrower": "0xc5818BFBD7e95325bB491c3e445A017348061240",
+      "healthFactorBefore": 1.07,
+      "healthFactorAfter": 1.35,
+      "debtRetiredUsd": 717.7,
+      "collateralSeized": 0,
+      "tx": "0x48a4e760b25de14b577bc57bfd8aea6addf8f2b33daef84798dc8db200cbaf5d"
+    }
+  ],
+  "note": "Restructurings were produced by agents/underwriter.py acting autonomously. The collateral mark-down that created the distress was an admin action through PRICE_ROLE \u2014 a documented governance input \u2014 not a market event. Everything downstream of it is genuine on-chain state."
 }
