@@ -14,6 +14,7 @@ const fs = require("fs");
 const path = require("path");
 const { ethers, network } = require("hardhat");
 const { AAVE_V3_EVENTS, deploymentsFor } = require("./sourceSchemas");
+const { verifyCatalogue } = require("./verifyChainKeys");
 
 const PRECOMPILE = "0x0000000000000000000000000000000000000FD2";
 const ONE_USD_E8 = 100_000_000n;
@@ -162,10 +163,19 @@ async function main() {
   // Mainnet Creditcoin reads mainnet source history; testnet reads testnet. Registering
   // Sepolia pools on mainnet would score borrowers on activity that costs nothing to fake.
   const catalogue = deploymentsFor(net.chainId);
-  log(`      catalogue: ${isMainnet ? "mainnet" : "testnet"} source chains`);
+  log(`      catalogue: ${catalogue.length} source chain(s) for Creditcoin ${net.chainId}`);
+
+  // A wrong chainKey is silent: proofs simply never match and no history ever lands. Check the
+  // catalogue against the chain's own ChainInfo registry before writing any of it on-chain.
+  const check = await verifyCatalogue(ethers.provider, net.chainId);
+  if (check.ok === false) {
+    throw new Error(
+      "chainKey mismatch against the on-chain registry:\n  " + check.problems.join("\n  ")
+    );
+  }
+  log(`      chainKeys: ${check.ok === null ? "no registry on this network (local)" : "verified against 0x…0FD3"}`);
   const registered = [];
-  for (const dep of catalogue) {
-    const c = dep.chain;
+  for (const c of catalogue) {
     await (
       await attestor.configureSourceChain(
         c.chainKey,
@@ -175,24 +185,25 @@ async function main() {
         true
       )
     ).wait();
-    log(`      chain  ${c.name} (key ${c.chainKey})`);
+    log(`      chain  ${c.name} (chainKey ${c.chainKey}, EVM ${c.evmChainId})`);
 
-    for (const a of dep.assets) {
+    for (const a of c.assets) {
       await (await attestor.configureAsset(c.chainKey, a.address, a.decimals, a.priceE8)).wait();
       log(`        asset  ${a.symbol.padEnd(5)} ${a.address}`);
     }
 
     for (const [name, evt] of Object.entries(AAVE_V3_EVENTS)) {
-      await (await attestor.registerSchema(c.chainKey, dep.pool, evt.topic0, evt.schema)).wait();
+      await (await attestor.registerSchema(c.chainKey, c.pool, evt.topic0, evt.schema)).wait();
       log(`        event  ${name.padEnd(11)} ${evt.signature}`);
     }
 
     registered.push({
       chainKey: c.chainKey.toString(),
       name: c.name,
-      protocol: dep.protocol,
-      pool: dep.pool,
-      assets: dep.assets.map((a) => ({ ...a, priceE8: a.priceE8.toString() })),
+      evmChainId: c.evmChainId,
+      protocol: c.protocol,
+      pool: c.pool,
+      assets: c.assets.map((a) => ({ ...a, priceE8: a.priceE8.toString() })),
     });
   }
 
@@ -201,6 +212,10 @@ async function main() {
     network: network.name,
     chainId: net.chainId.toString(),
     deployedAt: new Date().toISOString(),
+    // Where log scans should start. Public RPCs cap eth_getLogs ranges, so scanning from
+    // genesis on a live chain fails — and fails *silently*, leaving the agent and the
+    // dashboard convinced the book is empty.
+    deployedAtBlock: await ethers.provider.getBlockNumber(),
     deployer: deployer.address,
     riskAgent: agentAddress,
     attestcoinPrecompile: PRECOMPILE,
