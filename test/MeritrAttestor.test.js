@@ -8,9 +8,9 @@ const {
   installMockPrecompile,
   proofArgs,
 } = require("./helpers");
-const { ACTION, CHAINS, AAVE_V3_EVENTS } = require("../scripts/sourceSchemas");
+const { ACTION, TEST_CHAINS, AAVE_V3_EVENTS } = require("../scripts/sourceSchemas");
 
-const CHAIN = CHAINS.ETHEREUM_SEPOLIA;
+const CHAIN = TEST_CHAINS.SEPOLIA;
 const AAVE_POOL = "0x6Ae43d3271ff6888e7Fc43Fd7321a503ff738951";
 const USDC = "0x94a9D9AC8a22534E3FaCa9F4e7F2E2cf85d5E4C8";
 const ONE_USD_E8 = 100_000_000n;
@@ -236,17 +236,17 @@ describe("MeritrAttestor — Attestcoin cross-chain ingestion", function () {
   });
 
   it("rewards credit proven across multiple chains", async function () {
-    const base = CHAINS.BASE_SEPOLIA;
+    const second = TEST_CHAINS.ETHEREUM;
     await attestor.configureSourceChain(
-      base.chainKey,
-      base.name,
-      base.genesisTimestamp,
-      base.blockTimeSeconds,
+      second.chainKey,
+      second.name,
+      second.genesisTimestamp,
+      second.blockTimeSeconds,
       true
     );
-    await attestor.configureAsset(base.chainKey, USDC, 6, ONE_USD_E8);
+    await attestor.configureAsset(second.chainKey, USDC, 6, ONE_USD_E8);
     await attestor.registerSchema(
-      base.chainKey,
+      second.chainKey,
       AAVE_POOL,
       AAVE_V3_EVENTS.REPAY.topic0,
       AAVE_V3_EVENTS.REPAY.schema
@@ -258,7 +258,7 @@ describe("MeritrAttestor — Attestcoin cross-chain ingestion", function () {
     const p = proofArgs(13);
     await attestor.ingest(
       ACTION.REPAYMENT,
-      base.chainKey,
+      second.chainKey,
       9_000_000n,
       encodeProvenTx({
         from: borrower.address,

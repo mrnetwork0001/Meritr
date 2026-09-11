@@ -11,7 +11,7 @@
 const fs = require("fs");
 const path = require("path");
 const { ethers, network } = require("hardhat");
-const { ACTION, CHAINS, AAVE_V3_EVENTS } = require("./sourceSchemas");
+const { ACTION, TEST_CHAINS, AAVE_V3_EVENTS } = require("./sourceSchemas");
 
 const PRECOMPILE = "0x0000000000000000000000000000000000000FD2";
 const ONE_USD_E8 = 100_000_000n;
@@ -104,7 +104,7 @@ async function main() {
           .connect(keeper)
           .ingest(
             ACTION.REPAYMENT,
-            CHAINS.ETHEREUM_SEPOLIA.chainKey,
+            TEST_CHAINS.SEPOLIA.chainKey,
             e.height,
             encodeTx({ from: who, to: AAVE_SEPOLIA, logs: [log] }),
             e.merkleRoot,
