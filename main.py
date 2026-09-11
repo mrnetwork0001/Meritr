@@ -50,7 +50,7 @@ def header(title: str) -> None:
 def main() -> int:
     print("=" * 78)
     print("  MERITR — Autonomous DeAI Debt Restructuring & Credit Risk Memory OS")
-    print("  Creditcoin EVM mainnet (chain 102030) + Attestcoin Protocol (precompile 0xFD2)")
+    print("  Creditcoin EVM testnet (chain 102031) + Attestcoin Protocol (precompile 0xFD2)")
     print("=" * 78)
 
     # ---------------------------------------------------------------- toolchain
@@ -110,7 +110,7 @@ def main() -> int:
             WARN,
             "Deployment address book",
             "none found",
-            "npx hardhat run scripts/deploy.js --network creditcoinMainnet",
+            "npx hardhat run scripts/deploy.js --network creditcoinTestnet",
         )
     for b in books:
         try:

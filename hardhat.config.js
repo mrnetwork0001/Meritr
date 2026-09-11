@@ -4,9 +4,14 @@ require("dotenv").config();
 /**
  * Meritr — Creditcoin EVM.
  *
- * Primary target is Creditcoin Mainnet (Chain ID 102030). Testnet is 102031 and devnet is
- * 102032; all three were verified live against their public RPC endpoints, because an earlier
- * revision of this file had 102030 mislabelled as devnet.
+ * Primary target is Creditcoin **Testnet** (Chain ID 102031): the hackathon requires a testnet
+ * deployment, the Attestcoin proof-builder service is only publicly reachable there, and testnet
+ * attests Ethereum *mainnet* under chainKey 3 — so a testnet deployment still scores borrowers
+ * on real Ethereum credit history.
+ *
+ * Mainnet is 102030 and devnet is 102032. All three chain ids were verified live against their
+ * public RPC endpoints, because an earlier revision of this file had 102030 mislabelled as
+ * devnet.
  *
  * The Attestcoin native query verifier lives at the precompile address
  * 0x0000000000000000000000000000000000000FD2 on all three. Local runs substitute a mock at that
