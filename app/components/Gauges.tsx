@@ -1,6 +1,6 @@
 "use client";
 
-import { band, bandColor, bandLabel, tierColor } from "../lib/format";
+import { band, bandColor, bandLabel, tierColor, formatHf } from "../lib/format";
 
 /**
  * Credit-score arc, 300-900.
@@ -76,7 +76,7 @@ export function HealthBar({ hf }: { hf: number | null }) {
     <div>
       <div className="flex items-baseline justify-between">
         <span className="mono text-[28px] font-bold leading-none" style={{ color }}>
-          {hf >= 100 ? "∞" : hf.toFixed(3)}
+          {formatHf(hf)}
         </span>
         <span
           className="rounded border px-2 py-0.5 font-mono text-[10px] uppercase tracking-wider"

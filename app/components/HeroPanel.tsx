@@ -1,5 +1,6 @@
 "use client";
 
+import { formatHf } from "../lib/format";
 import { useEffect, useState } from "react";
 import { api, type Health, type Portfolio, type ProtocolStats } from "../lib/api";
 
@@ -103,7 +104,7 @@ export function HeroPanel() {
                   <span
                     className={`mono w-14 shrink-0 text-[12.5px] ${distressed ? "text-down" : "text-up"}`}
                   >
-                    {hf === null ? "∞" : hf.toFixed(3)}
+                    {formatHf(hf)}
                   </span>
                   <span className="mono w-10 shrink-0 text-[11.5px] text-gray-400">{p.score}</span>
                   <span

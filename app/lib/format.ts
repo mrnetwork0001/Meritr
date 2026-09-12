@@ -55,3 +55,23 @@ export const relTime = (unix: number) => {
   if (days < 365) return `${Math.floor(days / 30)}mo ago`;
   return `${(days / 365).toFixed(1)}y ago`;
 };
+
+/**
+ * Render a health factor for a fixed-width column.
+ *
+ * A position with no debt has no meaningful health factor - the contract returns a number near
+ * the top of uint256 and the API narrows it to something like 31,638,659.737, which is not a
+ * ratio anyone should read. Printed with toFixed(3) it also overflows its column and collides
+ * with the score beside it, which is how this was noticed.
+ *
+ * Anything above this bound is a debt-free position rather than an extraordinarily safe one:
+ * the vault caps LTV at 69.5% for the best score, so a real open loan cannot reach a health
+ * factor in the hundreds, let alone the millions.
+ */
+const HF_EFFECTIVELY_INFINITE = 1_000;
+
+export const formatHf = (hf: number | null | undefined): string => {
+  if (hf === null || hf === undefined || !Number.isFinite(hf)) return "∞";
+  if (hf >= HF_EFFECTIVELY_INFINITE) return "∞";
+  return hf.toFixed(3);
+};

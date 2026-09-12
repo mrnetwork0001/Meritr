@@ -93,10 +93,17 @@ class Position:
             restructurable=bool(view[9]),
         )
 
+    #: Above this, a position has no meaningful health factor rather than an extraordinary one.
+    #: The vault caps LTV at 69.5% for the best score, so a real open loan cannot reach a health
+    #: factor in the hundreds. Anything higher is a closed position, or one left holding a few
+    #: wei of dust after a full repayment - which produces an enormous but finite number that
+    #: the old 10**30 cutoff let through, and which then overflowed its column in the console.
+    HF_EFFECTIVELY_INFINITE = 1_000
+
     @property
     def hf(self) -> float:
         """Health factor as a float, for display only - never for decisions."""
-        if self.health_factor > 10**30:
+        if self.health_factor / WAD > self.HF_EFFECTIVELY_INFINITE:
             return float("inf")
         return self.health_factor / WAD
 
@@ -122,7 +129,7 @@ class Assessment:
         return {
             "borrower": self.position.borrower,
             "state": self.state.value,
-            "healthFactor": round(self.position.hf, 4),
+            "healthFactor": None if self.position.hf == float("inf") else round(self.position.hf, 4),
             "score": self.position.score,
             "tier": scoring.tier_of(self.position.score),
             "rateBps": self.position.rate_bps,

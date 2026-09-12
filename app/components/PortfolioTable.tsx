@@ -1,7 +1,7 @@
 "use client";
 
 import type { Assessment } from "../lib/api";
-import { band, bandColor, bandLabel, pct, short, usd } from "../lib/format";
+import { band, bandColor, bandLabel, pct, short, usd, formatHf } from "../lib/format";
 
 /**
  * The agent's working set, ordered the way it actually works the queue.
@@ -60,7 +60,7 @@ export function PortfolioTable({
                       {short(p.borrower)}
                     </span>
                     <span className="mono w-[4.5rem] shrink-0 text-[13px] font-semibold" style={{ color }}>
-                      {p.healthFactor === null ? "∞" : p.healthFactor.toFixed(3)}
+                      {formatHf(p.healthFactor)}
                     </span>
                     <span className="mono w-[5.5rem] shrink-0 text-[12px] text-gray-300">
                       {p.score}
