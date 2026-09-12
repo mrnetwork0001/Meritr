@@ -1,6 +1,14 @@
 "use client";
 
-import { Contract, JsonRpcSigner, MaxUint256, formatUnits, parseUnits } from "ethers";
+import {
+  Contract,
+  JsonRpcProvider,
+  JsonRpcSigner,
+  MaxUint256,
+  formatUnits,
+  parseUnits,
+} from "ethers";
+import { CHAINS } from "./chains";
 
 /**
  * Contract bindings for the browser.
@@ -94,6 +102,46 @@ export const attestor = (address: string, signer: JsonRpcSigner) =>
  * Approves the exact amount rather than MaxUint256: silently opting someone into an unlimited
  * allowance on unaudited contracts is not a defensible default.
  */
+
+/**
+ * Run a write call read-only first, so a refusal arrives decoded.
+ *
+ * MetaMask estimates gas before sending, and when that estimation reverts it hands ethers a
+ * CALL_EXCEPTION with no `data`. Ethers can only report "missing revert data" - the least
+ * useful string the UI is capable of showing, and the one a reviewer would have seen when
+ * minting a passport without attestations.
+ *
+ * The chain is not the problem: an `eth_call` against a plain JSON-RPC provider returns the
+ * selector and arguments intact, and with the error fragments in the ABI ethers decodes them
+ * into `err.revert.name`. So every write is rehearsed against that provider first. If the
+ * rehearsal reverts, the caller gets the real custom error; if it passes, the transaction is
+ * sent through the wallet as normal.
+ *
+ * Read-only and free - `eth_call` executes nothing and costs no gas. The cost is one extra
+ * round trip before each write, which is worth paying to never show a hex selector again.
+ */
+export async function preflight(
+  address: string,
+  abi: readonly string[],
+  method: string,
+  args: unknown[],
+  from: string,
+  chainId: number | null
+): Promise<void> {
+  const rpc = chainId !== null ? CHAINS[chainId]?.rpcUrls?.[0] : undefined;
+  if (!rpc) return; // unknown network: let the wallet try, rather than block a real action
+  try {
+    const reader = new JsonRpcProvider(rpc);
+    const probe = new Contract(address, abi, reader);
+    await probe[method].staticCall(...args, { from });
+  } catch (err: any) {
+    // A decoded revert is the whole point of this rehearsal; rethrow it for the modal.
+    if (err?.revert?.name || err?.data) throw err;
+    // Anything else - the read RPC being unreachable, a transport hiccup - must not block a
+    // transaction that would have succeeded. Fall through and let the wallet decide.
+  }
+}
+
 export async function ensureAllowance(
   tokenAddress: string,
   spender: string,

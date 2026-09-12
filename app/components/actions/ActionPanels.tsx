@@ -4,10 +4,13 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import { api, type FaucetStatus, type MeritrConfig } from "../../lib/api";
 import { useWallet } from "../../lib/wallet";
 import {
+  PASSPORT_ABI,
+  VAULT_ABI,
   ensureAllowance,
   erc20,
   fromUnits,
   passport as passportAt,
+  preflight,
   toUnits,
   vault as vaultAt,
 } from "../../lib/contracts";
@@ -175,7 +178,7 @@ export function ActionPanels({ config }: { config: MeritrConfig | null }) {
  * server and talk to a bot before they can sign a single thing here.
  */
 function GasFaucet({ onDone }: { onDone: () => void }) {
-  const { account, getSigner } = useWallet();
+  const { account, chainId, getSigner } = useWallet();
   const tx = useTx();
   const [state, setState] = useState<FaucetStatus | null>(null);
 
@@ -291,7 +294,7 @@ function FaucetPanel({
   cDec: number;
   onDone: () => void;
 }) {
-  const { account, getSigner } = useWallet();
+  const { account, chainId, getSigner } = useWallet();
   const tx = useTx();
 
   const mint = (label: string, token: string, decimals: number, amount: string, symbol: string) =>
@@ -379,7 +382,7 @@ function LendPanel({
   aDec: number;
   onDone: () => void;
 }) {
-  const { getSigner } = useWallet();
+  const { account, chainId, getSigner } = useWallet();
   const tx = useTx();
   const [supply, setSupply] = useState("");
   const [reserve, setReserve] = useState("");
@@ -409,7 +412,9 @@ function LendPanel({
         {
           label: fn === "deposit" ? "Deposit into the vault" : "Transfer into the reserve",
           run: async () => {
-            const v = vaultAt(config.contracts.MeritrVault, await getSigner());
+            const signer = await getSigner();
+            await preflight(config.contracts.MeritrVault, VAULT_ABI, fn, [amt], account!, chainId);
+            const v = vaultAt(config.contracts.MeritrVault, signer);
             const sent = fn === "deposit" ? await v.deposit(amt) : await v.fundReserve(amt);
             await sent.wait();
             return sent.hash as string;
@@ -437,6 +442,7 @@ function LendPanel({
             const v = vaultAt(config.contracts.MeritrVault, signer);
             const shares = await v.sharesOf(await signer.getAddress());
             if (shares === 0n) throw new Error("No shares to withdraw");
+            await preflight(config.contracts.MeritrVault, VAULT_ABI, "withdraw", [shares], account!, chainId);
             const sent = await v.withdraw(shares);
             await sent.wait();
             return sent.hash as string;
@@ -515,7 +521,7 @@ function BorrowPanel({
   cDec: number;
   onDone: () => void;
 }) {
-  const { account, getSigner } = useWallet();
+  const { account, chainId, getSigner } = useWallet();
   const tx = useTx();
   const [coll, setColl] = useState("");
   const [draw, setDraw] = useState("");
@@ -551,7 +557,9 @@ function BorrowPanel({
         {
           label: "Post collateral and draw",
           run: async () => {
-            const v = vaultAt(config.contracts.MeritrVault, await getSigner());
+            const signer = await getSigner();
+            await preflight(config.contracts.MeritrVault, VAULT_ABI, "openLoan", [c, d], account!, chainId);
+            const v = vaultAt(config.contracts.MeritrVault, signer);
             const sent = await v.openLoan(c, d);
             await sent.wait();
             return sent.hash as string;
@@ -595,7 +603,9 @@ function BorrowPanel({
         {
           label: "Post collateral",
           run: async () => {
-            const v = vaultAt(config.contracts.MeritrVault, await getSigner());
+            const signer = await getSigner();
+            await preflight(config.contracts.MeritrVault, VAULT_ABI, "addCollateral", [amt], account!, chainId);
+            const v = vaultAt(config.contracts.MeritrVault, signer);
             const sent = await v.addCollateral(amt);
             await sent.wait();
             return sent.hash as string;
@@ -627,7 +637,9 @@ function BorrowPanel({
         {
           label: "Repay",
           run: async () => {
-            const v = vaultAt(config.contracts.MeritrVault, await getSigner());
+            const signer = await getSigner();
+            await preflight(config.contracts.MeritrVault, VAULT_ABI, "repay", [amt], account!, chainId);
+            const v = vaultAt(config.contracts.MeritrVault, signer);
             const sent = await v.repay(amt);
             await sent.wait();
             return sent.hash as string;
@@ -654,7 +666,13 @@ function BorrowPanel({
         {
           label: "Mint passport",
           run: async () => {
-            const p = passportAt(config.contracts.MeritrPassport, await getSigner());
+            const signer = await getSigner();
+            // Rehearse read-only: MetaMask strips revert data during gas estimation, so
+            // without this a wallet with no attestations sees "missing revert data".
+            await preflight(
+              config.contracts.MeritrPassport, PASSPORT_ABI, "mint", [], account!, chainId
+            );
+            const p = passportAt(config.contracts.MeritrPassport, signer);
             const sent = await p.mint();
             await sent.wait();
             return sent.hash as string;
@@ -785,7 +803,7 @@ function KeeperPanel({
   aDec: number;
   onDone: () => void;
 }) {
-  const { getSigner } = useWallet();
+  const { account, chainId, getSigner } = useWallet();
   const tx = useTx();
   const [target, setTarget] = useState("");
   const [liqAmt, setLiqAmt] = useState("");
@@ -809,7 +827,9 @@ function KeeperPanel({
         {
           label: fn === "flagStress" ? "Flag stress" : "Restructure",
           run: async () => {
-            const v = vaultAt(config.contracts.MeritrVault, await getSigner());
+            const signer = await getSigner();
+            await preflight(config.contracts.MeritrVault, VAULT_ABI, fn, [target.trim()], account!, chainId);
+            const v = vaultAt(config.contracts.MeritrVault, signer);
             const sent =
               fn === "flagStress" ? await v.flagStress(target.trim()) : await v.restructure(target.trim());
             await sent.wait();
@@ -840,7 +860,9 @@ function KeeperPanel({
         {
           label: "Liquidate",
           run: async () => {
-            const v = vaultAt(config.contracts.MeritrVault, await getSigner());
+            const signer = await getSigner();
+            await preflight(config.contracts.MeritrVault, VAULT_ABI, "liquidate", [target.trim(), amt], account!, chainId);
+            const v = vaultAt(config.contracts.MeritrVault, signer);
             const sent = await v.liquidate(target.trim(), amt);
             await sent.wait();
             return sent.hash as string;
