@@ -1,14 +1,14 @@
 {
-  "cycles": 68,
-  "lastScannedEthBlock": 25950627,
-  "attestedHeight": 25959950,
-  "ethHead": 25959989,
-  "lastCycleAt": "2026-09-12T08:00:15.846Z",
-  "totalIngested": 127,
+  "cycles": 69,
+  "lastScannedEthBlock": 25950578,
+  "attestedHeight": 25959970,
+  "ethHead": 25960013,
+  "lastCycleAt": "2026-09-12T08:04:48.116Z",
+  "totalIngested": 129,
   "intervalSeconds": 240,
   "relayer": "0x3110C60D98d17cA8dCf4dDf6C2D4Bb2f9262c4E3",
   "lastError": null,
-  "updatedAt": "2026-09-12T08:00:15.846Z",
-  "lastIngestAt": "2026-09-12T08:00:15.844Z",
-  "lastIngestTx": "0x3273173ba11849cc600f6cde64d9840b774d17b5dc32723da0dede8da5c8fad1"
+  "updatedAt": "2026-09-12T08:04:48.116Z",
+  "lastIngestAt": "2026-09-12T08:04:48.115Z",
+  "lastIngestTx": "0x829eef20ec0240fc605b155da4f4b519268d013e0be00c8e91a49a924ae77329"
 }
