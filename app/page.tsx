@@ -108,17 +108,8 @@ export default function Landing() {
         <header className="border-b border-[var(--color-line)]">
           <div className="wrap grid items-center gap-12 py-20 sm:py-28 lg:grid-cols-[1.1fr_1fr]">
             <div>
-              <div className="anim-rise flex flex-wrap gap-2">
-                <span className="chip">
-                  <span className="h-1.5 w-1.5 rounded-full bg-up anim-breathe" />
-                  Live on Creditcoin testnet · 102031
-                </span>
-                <span className="chip">Attestcoin · 0x…0FD2</span>
-              </div>
-
               <h1
-                className="anim-rise mt-7 max-w-2xl text-[40px] font-semibold leading-[1.04] text-balance text-[#f7f8fb] sm:text-[58px]"
-                style={{ animationDelay: "60ms" }}
+                className="anim-rise max-w-2xl text-[40px] font-semibold leading-[1.04] text-balance text-[#f7f8fb] sm:text-[58px]"
               >
                 Prove the history.
                 <br />
