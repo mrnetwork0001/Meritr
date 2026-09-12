@@ -54,11 +54,46 @@ export function useTx(): Ctx {
   return v;
 }
 
+/**
+ * Contract refusals, in the words of someone who did not write the contract.
+ *
+ * Every one of these is a deliberate guard rather than a fault, so the message says what the
+ * protocol decided and what would change it. The raw selector name is kept as a fallback: a
+ * reader who knows Solidity loses nothing, and one who does not is no longer told
+ * "NoAttestationsYet" and left to guess.
+ */
+const REFUSALS: Record<string, string> = {
+  NoAttestationsYet:
+    "This wallet has no Attestcoin-proven credit history yet, so there is nothing for a passport to carry. Credit facts arrive by proof, not by request.",
+  PassportAlreadyIssued: "This wallet already holds a passport. Each address can mint one.",
+  NoPassport: "This wallet has no passport to refresh.",
+  SoulboundTransferDisabled:
+    "Passports cannot be transferred. A tradeable credit score would be farmed on a clean wallet and sold.",
+  ExceedsMaxLtv:
+    "That draw exceeds the loan-to-value your score permits. Post more collateral or borrow less.",
+  InsufficientLiquidity: "The pool does not hold enough idle liquidity for that amount right now.",
+  InsufficientShares: "You are trying to redeem more shares than you hold.",
+  LoanAlreadyOpen: "This wallet already has an open loan. Repay it before opening another.",
+  NoActiveLoan: "This wallet has no open loan.",
+  NotStressed: "That position is healthy, so there is nothing to flag.",
+  NotLiquidatable:
+    "That position is above a health factor of 1. Liquidation is only available below it - restructuring is the path here.",
+  CooldownActive: "This position was restructured recently. Interventions are rate-limited.",
+  RestructureLimitReached:
+    "This loan has already been restructured the maximum number of times. Forbearance cannot run forever.",
+  NotAuthorizedYet:
+    "The agent's grace period has not elapsed, so this intervention is not open to the public yet.",
+  PriceNotSet: "No price is configured for that asset.",
+  ZeroAmount: "Enter an amount above zero.",
+};
+
 /** Pull the most useful sentence out of an ethers/provider error. */
 function readableError(e: any): string | null {
   if (e?.code === 4001 || e?.code === "ACTION_REJECTED") return null; // user declined
+  const name = e?.revert?.name;
+  if (name && REFUSALS[name]) return REFUSALS[name];
   return String(
-    e?.revert?.name ??
+    name ??
       e?.reason ??
       e?.shortMessage ??
       e?.info?.error?.message ??

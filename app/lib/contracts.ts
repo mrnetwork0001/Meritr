@@ -33,12 +33,32 @@ export const VAULT_ABI = [
   // wiring
   "function ASSET() view returns (address)",
   "function COLLATERAL() view returns (address)",
+  // Custom errors. Without these fragments ethers cannot decode a revert and every failure
+  // reaches the user as "execution reverted (unknown custom error)", which is the least
+  // actionable message the UI is capable of producing.
+  "error ZeroAmount()",
+  "error InsufficientShares()",
+  "error InsufficientLiquidity(uint256 requested, uint256 available)",
+  "error LoanAlreadyOpen(address borrower)",
+  "error NoActiveLoan(address borrower)",
+  "error ExceedsMaxLtv(uint256 requestedLtvBps, uint256 maxLtvBps)",
+  "error NotStressed(uint256 healthFactor)",
+  "error NotLiquidatable(uint256 healthFactor)",
+  "error CooldownActive(uint64 readyAt)",
+  "error RestructureLimitReached()",
+  "error NotAuthorizedYet(uint64 openAt)",
+  "error PriceNotSet()",
 ] as const;
 
 export const PASSPORT_ABI = [
   "function mint() returns (uint256)",
   "function refresh(address holder) returns (uint16)",
   "function passportOf(address) view returns (uint256)",
+  // See the note on VAULT_ABI: these make a refusal readable.
+  "error NoAttestationsYet(address holder)",
+  "error PassportAlreadyIssued(address holder)",
+  "error NoPassport(address holder)",
+  "error SoulboundTransferDisabled()",
 ] as const;
 
 export const ERC20_ABI = [
