@@ -18,7 +18,11 @@ REMOTE_DIR="${MERITR_REMOTE_DIR:-/opt/meritr}"
 echo "==> Building the frontend against https://${MERITR_HOST}"
 # NEXT_PUBLIC_MERITR_API is inlined at build time. Changing the hostname later is a rebuild,
 # not a restart - get it right here or judges see the "Risk API unavailable" panel.
-NEXT_PUBLIC_MERITR_API="https://${MERITR_HOST}" npx next build
+if pgrep -f "next dev" >/dev/null 2>&1; then
+  echo "    (a next dev server is running - building into .next-deploy so it is not clobbered)"
+fi
+NEXT_DIST_DIR=.next-deploy \
+  NEXT_PUBLIC_MERITR_API="https://${MERITR_HOST}" npx next build
 
 echo "==> Compiling contracts (for the ABIs the agent and API load at startup)"
 npx hardhat compile
@@ -29,6 +33,9 @@ rsync -az --delete \
   --exclude .git \
   --exclude .env \
   --exclude .next-build \
+  --exclude .next \
+  --exclude .next-probe \
+  --exclude .venv \
   --exclude var \
   --exclude cache \
   ./ "${MERITR_SSH}:${REMOTE_DIR}/"
