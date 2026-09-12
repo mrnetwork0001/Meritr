@@ -504,6 +504,9 @@ const SignedBy: React.FC<{ total: number }> = ({ total }) => {
             <p style={{ fontFamily: MONO, fontSize: 17, color: DIM, margin: '14px 0 0' }}>
               holds RISK_AGENT_ROLE · and no other role on any Meritr contract
             </p>
+            <p style={{ fontFamily: MONO, fontSize: 15, color: UP, margin: '10px 0 0' }}>
+              every contract source-verified on Blockscout - read the code, not the bytecode
+            </p>
           </div>
           <div style={{ display: 'flex', gap: 22, marginTop: 26 }}>
             {[['1.079 → 1.350', 'health factor', UP], [STATS.topRetiredUsd, 'debt retired', TEXT], ['$0', 'collateral seized', UP]].map(([a, b, c], i) => {
@@ -612,7 +615,7 @@ const Close: React.FC<{ total: number }> = ({ total }) => {
             usemeritr.vercel.app
           </p>
           <p style={{ fontFamily: MONO, fontSize: 15, color: DIM, marginTop: 16, letterSpacing: 1.4, opacity: rise(frame, 40) }}>
-            CREDITCOIN TESTNET · ATTESTCOIN 0x…0FD2 · APACHE 2.0
+            CREDITCOIN TESTNET · ALL CONTRACTS SOURCE-VERIFIED · APACHE 2.0
           </p>
         </div>
       </AbsoluteFill>
@@ -726,7 +729,7 @@ const buildCuts = (): Cut[] => {
     </>,
   );
   add(s(11.8), <NeverSeized total={s(11.8)} />, 'v12');
-  add(s(8.5), <Close total={s(8.5)} />, 'v13');
+  add(s(9.7), <Close total={s(9.7)} />, 'v13');
 
   return cuts;
 };

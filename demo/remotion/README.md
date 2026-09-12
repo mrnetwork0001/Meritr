@@ -91,9 +91,9 @@ Fourteen cuts. The argument runs problem → proof → evidence → mechanism �
 | 12 | **explorer.mp4** or the signed-by graphic | 14.6 | v11 |
 | 13 | **console.mp4** — the public record | 4 | — |
 | 14 | Never seized | 11.8 | v12 |
-| 15 | Close — the wordmark again | 8.5 | v13 |
+| 15 | Close — the wordmark again | 9.7 | v13 |
 
-Fifteen cuts, 177.8 seconds. `npm run check` verifies every scene is at least as long as the
+Fifteen cuts, 179.0 seconds. `npm run check` verifies every scene is at least as long as the
 narration it carries and that the total stays under three minutes; it runs before every render.
 
 **One thing to know before re-cutting.** Scenes 11 and 12 name the agent address

@@ -241,6 +241,10 @@ Aave V3 liquidation                     ▼  and continuity
                 ["Live console", <A href="/app">/app</A>],
                 ["Source", <A href={REPO}>mrnetwork0001/Meritr</A>],
                 ["Creditcoin docs", <A href="https://docs.creditcoin.org">docs.creditcoin.org</A>],
+                [
+                  "Source verification",
+                  <>every contract above is source-verified on Blockscout - the links open the code, not the bytecode</>,
+                ],
               ]}
             />
 

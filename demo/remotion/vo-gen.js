@@ -23,7 +23,7 @@ const SECTIONS = [
   ['10', "This is the agent running unattended on its own polling cycle. It found two stressed positions, ranked them by the loss each intervention would avert, and took the larger one first."],
   ['11', "Both were signed by a key holding the risk agent role and nothing else. Health factor one point zero seven nine, to one point three five. Thirteen hundred dollars of debt retired, then five hundred and fifty. Check triggered-by on either one."],
   ['12', "And no collateral moved. Restructuring has no code path that touches it. This vault has never emitted a liquidation event, and the borrowers kept every unit of what they posted."],
-  ['13', "Meritr. Cross-chain credit that a chain can verify, and distress a borrower can survive. Live on Creditcoin testnet."],
+  ['13', "Meritr. Cross-chain credit a chain can verify, and distress a borrower can survive. Every contract source-verified on Creditcoin testnet."],
 ];
 
 const total = SECTIONS.reduce((n, s) => n + s[1].length, 0);

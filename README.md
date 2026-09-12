@@ -36,11 +36,20 @@ count below moves on its own - reload it.
 
 **Live on Creditcoin CC3 Testnet (chain 102031).** Credit history is read from Aave V3 on **Ethereum mainnet** via Attestcoin `chainKey 3`.
 
-| Contract | Address |
-|---|---|
-| MeritrAttestor | [`0xB462C2772b8003e3c511C373dDC5715642B34D4c`](https://creditcoin-testnet.blockscout.com/address/0xB462C2772b8003e3c511C373dDC5715642B34D4c) |
-| MeritrVault | [`0x233D2aE279230fBFFbe61e6dF2A9DC6bF6ff3e84`](https://creditcoin-testnet.blockscout.com/address/0x233D2aE279230fBFFbe61e6dF2A9DC6bF6ff3e84) |
-| MeritrPassport | [`0xAdd2C477A101250C8A3e6Fe26a642143F610A601`](https://creditcoin-testnet.blockscout.com/address/0xAdd2C477A101250C8A3e6Fe26a642143F610A601) |
+**Every contract is source-verified on Blockscout.** The links below open the source, not the
+bytecode - the whole protocol is readable without cloning anything, and the code on chain is
+provably the code in this repository.
+
+| Contract | Address | |
+|---|---|---|
+| MeritrAttestor | [`0xB462C2772b8003e3c511C373dDC5715642B34D4c`](https://creditcoin-testnet.blockscout.com/address/0xB462C2772b8003e3c511C373dDC5715642B34D4c#code) | verified |
+| MeritrVault | [`0x233D2aE279230fBFFbe61e6dF2A9DC6bF6ff3e84`](https://creditcoin-testnet.blockscout.com/address/0x233D2aE279230fBFFbe61e6dF2A9DC6bF6ff3e84#code) | verified |
+| MeritrPassport | [`0xAdd2C477A101250C8A3e6Fe26a642143F610A601`](https://creditcoin-testnet.blockscout.com/address/0xAdd2C477A101250C8A3e6Fe26a642143F610A601#code) | verified |
+| mUSD (demo asset) | [`0xd3291cF85D4f9CD4f2dF77Fcbc4E89B806A39981`](https://creditcoin-testnet.blockscout.com/address/0xd3291cF85D4f9CD4f2dF77Fcbc4E89B806A39981#code) | verified |
+| mWETH (demo collateral) | [`0x53653C7005c0b3406d42Af27570F63D28C4EB7f7`](https://creditcoin-testnet.blockscout.com/address/0x53653C7005c0b3406d42Af27570F63D28C4EB7f7#code) | verified |
+
+Solidity 0.8.28, optimizer on, viaIR. The demo tokens are verified too, so the open `mint()`
+disclosed further down is checkable rather than merely admitted.
 
 **210+ real Attestcoin proofs are ingested and still climbing** - a roleless relayer daemon
 continuously proves fresh Ethereum Aave activity into this deployment. At the time of writing
@@ -80,6 +89,7 @@ depends on trusting this repository.
 | Claim | How to check it yourself |
 |---|---|
 | Attestcoin really verified these proofs | Open [MeritrAttestor on Blockscout](https://creditcoin-testnet.blockscout.com/address/0xB462C2772b8003e3c511C373dDC5715642B34D4c) and read the `CreditFactAttested` logs. Each one exists only because the `0x…0FD2` precompile accepted a Merkle-inclusion proof; the contract has no path that writes a fact without one. |
+| The deployed code is the code in this repo | Every contract is source-verified on Blockscout. Open any address above and read `#code` - including the demo tokens, so the open mint is inspectable rather than taken on trust. |
 | The **agent itself** restructured, unattended | [Restructuring tx](https://creditcoin-testnet.blockscout.com/tx/0xfc72b3449fd384a331bf6e689bf8eca13abeedd2e9d224919bca8f5f8a8a0858) - `triggeredBy` is `0xC06B6015…`, which holds `RISK_AGENT_ROLE` and no other role. Health factor 1.079 → 1.350. |
 | Nothing was seized doing it | The vault has never emitted a `Liquidated` event. Check the logs on [MeritrVault](https://creditcoin-testnet.blockscout.com/address/0x233D2aE279230fBFFbe61e6dF2A9DC6bF6ff3e84). |
 | The source data is real Ethereum activity | Take any `queryId` from a `CreditFactAttested` log and find the same Aave V3 event on [Etherscan](https://etherscan.io). The borrower, asset and amount match because they were proven, not copied. |
