@@ -18,7 +18,6 @@ import { BorrowerPanel } from "../components/BorrowerPanel";
 import { AgentFeed } from "../components/AgentFeed";
 import { AttestationFlow } from "../components/AttestationFlow";
 import { ActionPanels } from "../components/actions/ActionPanels";
-import { ConnectButton } from "../components/ConnectButton";
 
 const REFRESH_MS = 12_000;
 
@@ -112,7 +111,6 @@ export default function Console() {
             <p className="mt-1 max-w-2xl text-sm leading-relaxed text-gray-400">{heading.lede}</p>
           </div>
           <div className="flex flex-wrap items-end gap-5">
-            <ConnectButton expectedChainId={config?.chainId ?? null} compact />
           {portfolio && (
             <div className="flex gap-6">
               <div className="text-right">

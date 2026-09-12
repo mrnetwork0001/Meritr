@@ -15,7 +15,7 @@ import {
   X,
 } from "lucide-react";
 import { useWallet } from "../lib/wallet";
-import { chainName } from "../lib/chains";
+import { CHAINS, chainName } from "../lib/chains";
 import type { Health } from "../lib/api";
 
 export type ViewId =
@@ -67,7 +67,8 @@ export function AppRail({
   expectedChainId: number | null;
   children: React.ReactNode;
 }) {
-  const { account, chainId, connect, disconnect, available, connecting } = useWallet();
+  const { account, chainId, connect, disconnect, available, connecting, error, ensureChain } =
+    useWallet();
   const [collapsed, setCollapsed] = useState(false);
   const [drawer, setDrawer] = useState(false);
 
@@ -279,6 +280,23 @@ export function AppRail({
               </div>
             )}
 
+            {/* Wrong network is the one wallet state a warning alone cannot resolve, so the rail
+                offers the switch rather than only colouring the row red. */}
+            {!collapsed && account && expectedChainId !== null && chainId !== expectedChainId && (
+              <div className="border-t border-[var(--color-line)] px-3 py-2.5">
+                <button
+                  type="button"
+                  onClick={() => ensureChain(expectedChainId)}
+                  className="w-full rounded border border-down/40 bg-down/10 px-3 py-1.5 font-mono text-[11.5px] font-semibold text-down transition hover:bg-down/20"
+                  title={`Connected to ${chainName(chainId)} - Meritr is deployed on ${
+                    CHAINS[expectedChainId]?.name ?? expectedChainId
+                  }`}
+                >
+                  Switch to {CHAINS[expectedChainId]?.name ?? `chain ${expectedChainId}`}
+                </button>
+              </div>
+            )}
+
             {!collapsed && !account && (
               <div className="border-t border-[var(--color-line)] px-3 py-2.5">
                 <button
@@ -295,6 +313,21 @@ export function AppRail({
                         ? "Connecting…"
                         : "Connect wallet"}
                 </button>
+                {error && (
+                  <p className="mt-1.5 font-mono text-[9.5px] leading-relaxed text-down">
+                    {error.slice(0, 90)}
+                  </p>
+                )}
+                {available === false && (
+                  <a
+                    href="https://metamask.io/download/"
+                    target="_blank"
+                    rel="noreferrer"
+                    className="mt-1.5 block text-center font-mono text-[9.5px] text-model hover:underline"
+                  >
+                    Get a wallet
+                  </a>
+                )}
               </div>
             )}
           </div>
