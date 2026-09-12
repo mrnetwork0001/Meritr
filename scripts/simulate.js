@@ -211,7 +211,7 @@ async function main() {
   bullet("elsewhere. Meritr's job is to make that history portable — and provable.");
 
   // =========================================================================
-  act("II", "Attestcoin proves the borrower's history on Ethereum and Base");
+  act("II", "Attestcoin proves the borrower's history on Ethereum and Sepolia");
 
   async function ingestRepayFor(who, chainKey, pool, usdc, amount, label) {
     const env = proofEnvelope();
@@ -257,7 +257,7 @@ async function main() {
     await ingestRepay(E, AAVE_SEPOLIA, USDC_SEPOLIA, USDC(14_000), "Aave V3 / Ethereum");
   }
   for (let i = 0; i < 7; i++) {
-    await ingestRepay(B, AAVE_BASE, USDC_BASE, USDC(11_000), "Aave V3 / Base    ");
+    await ingestRepay(B, AAVE_BASE, USDC_BASE, USDC(11_000), "Aave V3 / Sepolia ");
   }
   await ingestSupply(E, AAVE_SEPOLIA, USDC_SEPOLIA, USDC(120_000), "Aave V3 / Ethereum");
 
@@ -328,11 +328,11 @@ async function main() {
   // because those repayments are provable — which is what makes credit *memory* rather
   // than a snapshot.
   for (let i = 0; i < 5; i++) {
-    await ingestRepay(B, AAVE_BASE, USDC_BASE, USDC(9_000), "Aave V3 / Base    ");
+    await ingestRepay(B, AAVE_BASE, USDC_BASE, USDC(9_000), "Aave V3 / Sepolia ");
   }
   const b2 = await attestor.scoreOf(borrower.address);
   console.log("");
-  bullet(`Score through the downturn : ${b1.score} -> ${b2.score} (still repaying on Base)`);
+  bullet(`Score through the downturn : ${b1.score} -> ${b2.score} (still repaying on Sepolia)`);
   console.log("");
 
   pos = await vault.positionOf(borrower.address);
