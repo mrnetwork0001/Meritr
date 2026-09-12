@@ -67,6 +67,28 @@ class ChainClient:
     def block_number(self) -> int:
         return self.w3.eth.block_number
 
+    def risk_agent_authorised(self) -> bool:
+        """Whether the expected risk-agent address actually holds ``RISK_AGENT_ROLE`` on chain.
+
+        Asked of the chain rather than of this process's own configuration, because the API is
+        deliberately keyless: the agent runs as a separate hardened unit and the two never share
+        a key. Reporting "is a key loaded here" instead told readers the agent was unconfigured
+        on a deployment where it was running and authorised.
+
+        Returns False rather than raising when the address is unset or the call fails - health
+        is the endpoint that must answer while other things are broken.
+        """
+        addr = (self.cfg.risk_agent or "").strip()
+        if not addr:
+            return False
+        try:
+            role = self.vault.functions.RISK_AGENT_ROLE().call()
+            return bool(
+                self.vault.functions.hasRole(role, Web3.to_checksum_address(addr)).call()
+            )
+        except Exception:
+            return False
+
     def precompile_present(self) -> bool:
         """Whether an Attestcoin verifier is callable at ``0xFD2`` on this network.
 

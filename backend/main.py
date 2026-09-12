@@ -187,8 +187,12 @@ def health() -> dict:
         "blockNumber": c.block_number(),
         "attestcoinPrecompile": config.ATTESTCOIN_PRECOMPILE,
         "attestcoinAvailable": c.precompile_present(),
-        "agentConfigured": c.account is not None,
-        "agentAddress": c.account.address if c.account else None,
+        # The agent runs as its own hardened process and this API deliberately holds no key,
+        # so "is a key loaded here" is the wrong question - answering it made the console
+        # report "risk agent not configured" on a deployment where the agent was running
+        # perfectly well. Ask the chain instead: does the expected address hold the role?
+        "agentConfigured": c.risk_agent_authorised(),
+        "agentAddress": c.account.address if c.account else (cfg.risk_agent or None),
     }
 
 
