@@ -2,6 +2,7 @@ import Link from "next/link";
 import SiteHeader from "./components/SiteHeader";
 import SiteFooter from "./components/SiteFooter";
 import { HeroPanel } from "./components/HeroPanel";
+import { HeroStats } from "./components/HeroStats";
 import { Reveal } from "./components/Reveal";
 import { BandsDiagram, LeversDiagram, ProofDiagram, ScoreDiagram } from "./components/Diagrams";
 import { LiveStats } from "./components/LiveStats";
@@ -143,6 +144,11 @@ export default function Landing() {
             </div>
           </div>
         </header>
+
+        {/* ── Outcome strip ──────────────────────────────────────────── */}
+        <section className="border-b border-[var(--color-line)]">
+          <HeroStats />
+        </section>
 
         {/* ── Problem ────────────────────────────────────────────────── */}
         <Section
