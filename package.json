@@ -25,7 +25,7 @@
     "preflight": "hardhat run scripts/preflight.js --network creditcoinTestnet",
     "verify:proof": "hardhat run scripts/attestcoin/verifyProof.js --network creditcoinTestnet",
     "build:check": "NEXT_DIST_DIR=.next-build next build",
-    "deck": "node deck/build.js"
+    "deck": "node deck/build.js && .venv/bin/python deck/build_pptx.py"
   },
   "dependencies": {
     "@gluwa/asc-contracts": "^0.2.1",

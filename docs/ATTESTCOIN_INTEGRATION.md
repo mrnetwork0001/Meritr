@@ -92,7 +92,7 @@ amount   67,465.398756 USDT
 
 | Step | Result |
 |---|---|
-| Proof Builder returned an envelope for `chainKey 3` | 10,208-byte `txBytes`, real Merkle root, **7 siblings**, **4 continuity roots** |
+| Proof Builder returned an envelope for `chainKey 3` | 10,208-byte `txBytes`, real Merkle root, **7 Merkle siblings** and a continuity chain - 14 roots at the time of writing, and it lengthens as the attested height advances past the transaction's block |
 | **Live `0x…0FD2` on Creditcoin testnet** `verify()` | **ACCEPTED** |
 | Same proof with one sibling hash tampered | **REJECTED** |
 | Meritr's decoder on the real payload | borrower `0x76f30e…`, reserve USDT, **$67,465.40** |
@@ -146,6 +146,25 @@ function restructure(address borrower) external returns (uint256, uint256, uint2
 **One argument.** No rate, no amount, no score. The vault re-reads the borrower's Attestcoin-derived score and recomputes every term onchain. The agent decides *whom and when*; the chain decides *how much*. A fully compromised agent key can only trigger restructurings the protocol would already have approved.
 
 To make that claim checkable rather than asserted, the agent's Python scoring model mirrors the Solidity library exactly - integer truncation included - and **168 vectors generated from the deployed contract** assert every component of every score matches ([`tests/test_parity.py`](../tests/test_parity.py)).
+
+---
+
+## Checkable without cloning anything
+
+Two of the claims above are runnable rather than asserted.
+
+`npm run verify:proof` fetches a genuine Aave V3 proof, asks the live precompile at `0x…0FD2`
+to judge it, then flips a single byte inside the proven transaction and asks again. It is a
+view call, so it needs no gas, no wallet and no funded account:
+
+```
+genuine proof      -> ACCEPTED
+one byte altered   -> REJECTED (Merkle proof validation failed)
+```
+
+And every contract is source-verified on Blockscout, so the ingestion path can be read on chain
+rather than taken from this document:
+[MeritrAttestor](https://creditcoin-testnet.blockscout.com/address/0xB462C2772b8003e3c511C373dDC5715642B34D4c#code).
 
 ---
 
