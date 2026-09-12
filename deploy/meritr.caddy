@@ -29,7 +29,12 @@ meritr.38.49.216.120.sslip.io {
 
 	# API surface
 	handle /api/* {
-		reverse_proxy 127.0.0.1:8611
+		reverse_proxy 127.0.0.1:8611 {
+			# Overwrite rather than append. Caddy appends to a client-supplied
+			# X-Forwarded-For by default, so without this a caller could forge the header
+			# and walk past the faucet's per-IP limit by sending a new value each time.
+			header_up X-Forwarded-For {remote_host}
+		}
 	}
 	handle /health {
 		reverse_proxy 127.0.0.1:8611

@@ -20,7 +20,7 @@ import os
 from contextlib import asynccontextmanager
 from typing import Any
 
-from fastapi import APIRouter, FastAPI, HTTPException
+from fastapi import APIRouter, FastAPI, HTTPException, Request
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel, Field
 
@@ -422,12 +422,22 @@ def faucet_status(address: str | None = None) -> dict:
 
 
 @api.post("/faucet/claim", tags=["faucet"])
-def faucet_claim(body: FaucetClaim) -> dict:
-    """Send 0.1 CTC to a wallet that proved control of itself with a signed message."""
+def faucet_claim(body: FaucetClaim, request: Request) -> dict:
+    """Send 1 CTC to a wallet that proved control of itself with a signed message."""
     c = client()
+    # Caddy overwrites X-Forwarded-For with the real peer (see deploy/meritr.caddy), so the
+    # last element is trustworthy; without that overwrite a client could forge the header and
+    # walk straight past the per-IP limit.
+    fwd = request.headers.get("x-forwarded-for", "")
+    ip = fwd.split(",")[-1].strip() or (request.client.host if request.client else None)
     try:
         return faucet_mod.claim(
-            c.w3, os.getenv("FAUCET_PRIVATE_KEY"), body.address, body.issuedAt, body.signature
+            c.w3,
+            os.getenv("FAUCET_PRIVATE_KEY"),
+            body.address,
+            body.issuedAt,
+            body.signature,
+            client_ip=ip,
         )
     except faucet_mod.FaucetError as exc:
         raise HTTPException(status_code=429, detail=str(exc)) from exc

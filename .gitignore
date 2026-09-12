@@ -27,3 +27,7 @@ tsconfig.tsbuildinfo
 # Local probe/scratch artifacts
 .next-probe*
 *_tmp.js
+
+# Runtime state: relayer cursor, faucet claim book. Machine-written, not source.
+var/*.json
+!var/relayer-state.json

@@ -39,6 +39,15 @@ SIGNATURE_TTL_SECONDS = 300
 #: Leave enough behind to notice the faucet is nearly dry before it starts failing mid-demo.
 RESERVE_WEI = Web3.to_wei(5, "ether")
 
+#: Limits a sybil cannot simply opt out of by making a new keypair. The per-address cooldown
+#: below is honest-user hygiene; these two are what actually bound the loss, because addresses
+#: are free and the signature check proves only that the claimant made the key they are
+#: claiming to. The daily cap is the load-bearing one: even against a proxy pool it bounds a
+#: day's worst case, so the faucet cannot be emptied in a single pass and the console stays
+#: usable for the next reviewer.
+PER_IP_COOLDOWN_SECONDS = 6 * 60 * 60
+GLOBAL_DAILY_CAP_WEI = Web3.to_wei(25, "ether")
+
 STATE = Path(os.getenv("MERITR_FAUCET_STATE", "var/faucet.json"))
 _LOCK = threading.Lock()
 
@@ -70,10 +79,25 @@ def message_for_raw(address: str, issued_at: int) -> str:
 
 
 def _load() -> dict:
+    """Read the claim book, migrating the original flat {address: timestamp} form.
+
+    A read error used to return {} and silently reset every cooldown - failing open on the one
+    file whose whole job is to say no. A corrupt or unreadable book now raises, and claim()
+    turns that into a refusal rather than a free round for everyone.
+    """
     try:
-        return json.loads(STATE.read_text())
-    except (OSError, ValueError):
-        return {}
+        raw = json.loads(STATE.read_text())
+    except FileNotFoundError:
+        raw = {}
+    except (OSError, ValueError) as exc:
+        raise FaucetError("The faucet's claim record is unreadable, so it is refusing to pay.") from exc
+
+    if raw and "addresses" not in raw:  # migrate the flat form written by earlier versions
+        raw = {"addresses": raw, "ips": {}, "spend": {"day": 0, "wei": 0}}
+    raw.setdefault("addresses", {})
+    raw.setdefault("ips", {})
+    raw.setdefault("spend", {"day": 0, "wei": 0})
+    return raw
 
 
 def _save(data: dict) -> None:
@@ -104,7 +128,7 @@ def status(w3: Web3, faucet_address: str | None, address: str | None = None) -> 
     if address:
         addr = Web3.to_checksum_address(address)
         bal = w3.eth.get_balance(addr)
-        last = _load().get(addr.lower(), 0)
+        last = _load()["addresses"].get(addr.lower(), 0)
         waited = time.time() - last
         out["yourBalanceCtc"] = float(Web3.from_wei(bal, "ether"))
         out["eligible"] = (
@@ -120,7 +144,14 @@ def status(w3: Web3, faucet_address: str | None, address: str | None = None) -> 
     return out
 
 
-def claim(w3: Web3, faucet_key: str | None, address: str, issued_at: int, signature: str) -> dict:
+def claim(
+    w3: Web3,
+    faucet_key: str | None,
+    address: str,
+    issued_at: int,
+    signature: str,
+    client_ip: str | None = None,
+) -> dict:
     """Verify a signed request and send the claim. Raises FaucetError on any refusal."""
     if not faucet_key:
         raise FaucetError("No faucet key is configured on this deployment.")
@@ -159,11 +190,23 @@ def claim(w3: Web3, faucet_key: str | None, address: str, issued_at: int, signat
     account = Account.from_key(faucet_key)
     with _LOCK:
         book = _load()
-        last = book.get(addr.lower(), 0)
+        last = book["addresses"].get(addr.lower(), 0)
         if now - last < COOLDOWN_SECONDS:
             raise FaucetError(
                 f"Already claimed. Try again in {int((COOLDOWN_SECONDS - (now - last)) / 3600) + 1} hours."
             )
+
+        if client_ip:
+            ip_last = book["ips"].get(client_ip, 0)
+            if now - ip_last < PER_IP_COOLDOWN_SECONDS:
+                raise FaucetError("This network has claimed recently. Try again later.")
+
+        day = now // 86400
+        spend = book["spend"]
+        if spend.get("day") != day:
+            spend = {"day": day, "wei": 0}
+        if spend["wei"] + CLAIM_WEI > GLOBAL_DAILY_CAP_WEI:
+            raise FaucetError("The faucet has hit its daily limit. Try again tomorrow.")
 
         balance = w3.eth.get_balance(account.address)
         if balance < CLAIM_WEI + RESERVE_WEI:
@@ -190,7 +233,11 @@ def claim(w3: Web3, faucet_key: str | None, address: str, issued_at: int, signat
         #
         # Reserving first inverts the risk: the worst case becomes one address losing a single
         # day's claim, which costs nobody anything.
-        book[addr.lower()] = now
+        book["addresses"][addr.lower()] = now
+        if client_ip:
+            book["ips"][client_ip] = now
+        spend["wei"] += CLAIM_WEI
+        book["spend"] = spend
         _save(book)
 
         try:
@@ -198,7 +245,11 @@ def claim(w3: Web3, faucet_key: str | None, address: str, issued_at: int, signat
             raw = getattr(signed, "raw_transaction", None) or signed.rawTransaction
             tx_hash = w3.eth.send_raw_transaction(raw)
         except Exception:
-            book.pop(addr.lower(), None)   # nothing was sent, so release the slot
+            # Nothing was sent, so release every slot this attempt reserved.
+            book["addresses"].pop(addr.lower(), None)
+            if client_ip:
+                book["ips"].pop(client_ip, None)
+            book["spend"]["wei"] = max(0, book["spend"]["wei"] - CLAIM_WEI)
             _save(book)
             raise
 
