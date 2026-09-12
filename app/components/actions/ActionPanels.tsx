@@ -1,7 +1,7 @@
 "use client";
 
 import { useCallback, useEffect, useState } from "react";
-import type { MeritrConfig } from "../../lib/api";
+import { api, type FaucetStatus, type MeritrConfig } from "../../lib/api";
 import { useWallet } from "../../lib/wallet";
 import {
   ensureAllowance,
@@ -15,6 +15,8 @@ import { AmountField } from "../Field";
 import { useTx } from "../TxModal";
 import { ConnectButton } from "../ConnectButton";
 import { pct } from "../../lib/format";
+
+const EXPLORER = "https://creditcoin-testnet.blockscout.com";
 
 /**
  * Wallet-driven actions against the deployed contracts.
@@ -141,34 +143,120 @@ export function ActionPanels({ config }: { config: MeritrConfig | null }) {
       )}
 
       <div className="grid gap-4 md:grid-cols-2">
-        {bal && bal.gas === 0n && (
-          <div className="mb-4 rounded-[var(--radius-panel)] border border-warn/40 bg-warn/10 p-4">
-            <p className="text-[14px] font-semibold text-warn">
-              This wallet holds no CTC, so it cannot pay gas.
-            </p>
-            <p className="mt-1.5 text-[13.5px] leading-relaxed text-[#b8bfcd]">
-              Everything on this console is readable without one - the positions, the proven
-              credit facts and the agent's reasoning are all public. Only signing needs CTC.
-              Creditcoin testnet has no web faucet; tokens come from the{" "}
-              <code className="mono text-[12.5px] text-[#d5d9e2]">#token-faucet</code> channel on
-              the Creditcoin Discord.
-            </p>
-            <a
-              href="https://docs.creditcoin.org/wallets/using-testnet-faucet"
-              target="_blank"
-              rel="noreferrer"
-              className="mt-2.5 inline-block font-mono text-[12px] text-model hover:underline"
-            >
-              How to use the testnet faucet →
-            </a>
-          </div>
-        )}
+        {bal && bal.gas === 0n && <GasFaucet onDone={load} />}
 
         <FaucetPanel config={config} bal={bal} aDec={aDec} cDec={cDec} onDone={load} />
         <LendPanel config={config} bal={bal} aDec={aDec} onDone={load} />
         <BorrowPanel config={config} bal={bal} aDec={aDec} cDec={cDec} onDone={load} />
         <KeeperPanel config={config} aDec={aDec} onDone={load} />
       </div>
+    </div>
+  );
+}
+
+
+/* ── Native CTC faucet ───────────────────────────────────────────────────── */
+
+/**
+ * Gives an empty wallet the gas to try anything at all.
+ *
+ * Gasless by necessity rather than preference: a wallet holding zero CTC cannot pay for a
+ * transaction, so it cannot ask for one either. The visitor signs a *message* - free, off-chain,
+ * moves nothing - and the backend, which holds a key with no roles on any Meritr contract, pays
+ * the gas to send 0.1 CTC.
+ *
+ * Creditcoin's own testnet faucet is a Discord bot, so without this a reviewer must join a
+ * server and talk to a bot before they can sign a single thing here.
+ */
+function GasFaucet({ onDone }: { onDone: () => void }) {
+  const { account, getSigner } = useWallet();
+  const [state, setState] = useState<FaucetStatus | null>(null);
+  const [busy, setBusy] = useState(false);
+  const [msg, setMsg] = useState<string | null>(null);
+  const [hash, setHash] = useState<string | null>(null);
+
+  useEffect(() => {
+    if (!account) return;
+    let dead = false;
+    api.faucet(account).then((s) => !dead && setState(s)).catch(() => {});
+    return () => { dead = true; };
+  }, [account]);
+
+  const claim = async () => {
+    if (!account) return;
+    setBusy(true); setMsg(null); setHash(null);
+    try {
+      const signer = await getSigner();
+      const issuedAt = Math.floor(Date.now() / 1000);
+      // Must match backend/faucet.py:message_for byte for byte.
+      const text =
+        `Meritr testnet faucet\n` +
+        `Address: ${account}\n` +
+        `Issued: ${issuedAt}\n\n` +
+        `Signing this proves you control this address. It is not a transaction, ` +
+        `costs no gas, and moves nothing.`;
+      const signature = await signer.signMessage(text);
+      const res = await api.faucetClaim({ address: account, issuedAt, signature });
+      setHash(res.txHash);
+      setMsg(`Sent ${res.amountCtc} CTC. It may take a few seconds to appear.`);
+      setTimeout(onDone, 4000);
+    } catch (e: any) {
+      setMsg(e?.shortMessage ?? e?.message ?? "The faucet could not serve that request.");
+    } finally {
+      setBusy(false);
+    }
+  };
+
+  const blocked = state && state.available === false;
+
+  return (
+    <div className="mb-4 rounded-[var(--radius-panel)] border border-warn/40 bg-warn/10 p-4">
+      <p className="text-[14px] font-semibold text-warn">
+        This wallet holds no CTC, so it cannot pay gas.
+      </p>
+      <p className="mt-1.5 text-[13.5px] leading-relaxed text-[#b8bfcd]">
+        Everything on this console is readable without gas - the positions, the proven credit
+        facts and the agent&apos;s reasoning are all public. Only signing needs CTC, and
+        Creditcoin testnet has no web faucet of its own.
+      </p>
+
+      {!blocked && (
+        <button
+          type="button"
+          onClick={claim}
+          disabled={busy}
+          className="mt-3 rounded bg-warn px-3.5 py-2 font-mono text-[12px] font-bold text-ink-950 transition hover:bg-warn/90 disabled:cursor-not-allowed disabled:opacity-50"
+        >
+          {busy ? "Sending…" : "Request 0.1 CTC"}
+        </button>
+      )}
+
+      <p className="mt-2 font-mono text-[10.5px] leading-relaxed text-[#8b93a5]">
+        You sign a message, not a transaction - it costs nothing. One claim per address every 24
+        hours, for wallets holding under 0.1 CTC.
+      </p>
+
+      {msg && <p className="mt-2 text-[12.5px] text-[#d5d9e2]">{msg}</p>}
+      {hash && (
+        <a
+          href={`${EXPLORER}/tx/${hash}`}
+          target="_blank"
+          rel="noreferrer"
+          className="mono mt-1 block text-[11px] text-model hover:underline"
+        >
+          {hash.slice(0, 22)}… ↗
+        </a>
+      )}
+      {blocked && (
+        <a
+          href="https://docs.creditcoin.org/wallets/using-testnet-faucet"
+          target="_blank"
+          rel="noreferrer"
+          className="mt-2 inline-block font-mono text-[12px] text-model hover:underline"
+        >
+          Get CTC from the Creditcoin Discord faucet →
+        </a>
+      )}
     </div>
   );
 }

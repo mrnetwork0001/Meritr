@@ -104,6 +104,21 @@ export type RestructureEvent = {
   txHash: string;
 };
 
+
+export type FaucetStatus = {
+  available: boolean;
+  claimCtc: number;
+  cooldownSeconds: number;
+  eligibilityCeilingCtc: number;
+  faucetAddress?: string;
+  faucetBalanceCtc?: number;
+  dry?: boolean;
+  yourBalanceCtc?: number;
+  eligible?: boolean;
+  reason?: string;
+  retryInSeconds?: number;
+};
+
 export type MeritrConfig = {
   network: string;
   chainId: number;
@@ -128,6 +143,20 @@ async function get<T>(path: string): Promise<T> {
   return res.json() as Promise<T>;
 }
 
+async function post<T>(path: string, body: unknown): Promise<T> {
+  const res = await fetch(`${BASE}${path}`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(body),
+    cache: "no-store",
+  });
+  const text = await res.text();
+  let parsed: any = null;
+  try { parsed = text ? JSON.parse(text) : null; } catch { /* non-JSON error body */ }
+  if (!res.ok) throw new Error(parsed?.detail ?? `${res.status} ${path}`);
+  return parsed as T;
+}
+
 export const api = {
   health: () => get<Health>("/health"),
   config: () => get<MeritrConfig>("/api/config"),
@@ -135,6 +164,10 @@ export const api = {
   portfolio: () => get<Portfolio>("/api/portfolio"),
   attestations: () => get<Attestations>("/api/attestations"),
   restructurings: () => get<{ count: number; events: RestructureEvent[] }>("/api/restructurings"),
+  faucet: (address?: string) =>
+    get<FaucetStatus>(`/api/faucet${address ? `?address=${address}` : ""}`),
+  faucetClaim: (body: { address: string; issuedAt: number; signature: string }) =>
+    post<{ txHash: string; amountCtc: number; to: string }>("/api/faucet/claim", body),
   borrower: (addr: string) =>
     get<{ credit: CreditProfile; position: any; assessment: Assessment }>(`/api/borrower/${addr}`),
   score: (addr: string) => get<CreditProfile>(`/api/borrower/${addr}/score`),

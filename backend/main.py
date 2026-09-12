@@ -25,6 +25,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel, Field
 
 from agents import config, scoring
+from . import faucet as faucet_mod
 from agents.chain import ChainClient
 from agents.risk import assess, triage
 
@@ -400,6 +401,36 @@ def attestations() -> dict:
     }
     _ATTEST_CACHE.update({"at": now, "value": value})
     return value
+
+
+# ── Faucet ──────────────────────────────────────────────────────────────────
+# Creditcoin's testnet faucet is a Discord bot, so a reviewer cannot sign anything here without
+# first joining a server. These two routes remove that detour for empty wallets only.
+
+
+class FaucetClaim(BaseModel):
+    address: str
+    issuedAt: int
+    signature: str
+
+
+@api.get("/faucet", tags=["faucet"])
+def faucet_status(address: str | None = None) -> dict:
+    """Whether the faucet can serve this address, and why not when it cannot."""
+    c = client()
+    return faucet_mod.status(c.w3, os.getenv("FAUCET_ADDRESS"), address)
+
+
+@api.post("/faucet/claim", tags=["faucet"])
+def faucet_claim(body: FaucetClaim) -> dict:
+    """Send 0.1 CTC to a wallet that proved control of itself with a signed message."""
+    c = client()
+    try:
+        return faucet_mod.claim(
+            c.w3, os.getenv("FAUCET_PRIVATE_KEY"), body.address, body.issuedAt, body.signature
+        )
+    except faucet_mod.FaucetError as exc:
+        raise HTTPException(status_code=429, detail=str(exc)) from exc
 
 
 @api.get("/restructurings", tags=["protocol"])
