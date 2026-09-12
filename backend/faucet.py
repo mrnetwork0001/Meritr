@@ -56,6 +56,17 @@ def message_for(address: str, issued_at: int) -> str:
     )
 
 
+def message_for_raw(address: str, issued_at: int) -> str:
+    """`message_for` without re-checksumming, for a client that signed the address as it had it."""
+    return (
+        "Meritr testnet faucet\n"
+        f"Address: {address}\n"
+        f"Issued: {issued_at}\n\n"
+        "Signing this proves you control this address. It is not a transaction, "
+        "costs no gas, and moves nothing."
+    )
+
+
 def _load() -> dict:
     try:
         return json.loads(STATE.read_text())
@@ -117,13 +128,25 @@ def claim(w3: Web3, faucet_key: str | None, address: str, issued_at: int, signat
     if abs(now - issued_at) > SIGNATURE_TTL_SECONDS:
         raise FaucetError("That request has expired. Sign a fresh one.")
 
-    try:
-        recovered = Account.recover_message(
-            encode_defunct(text=message_for(addr, issued_at)), signature=signature
-        )
-    except Exception as exc:  # noqa: BLE001 - any failure here is the same refusal
-        raise FaucetError("That signature could not be read.") from exc
-    if Web3.to_checksum_address(recovered) != addr:
+    # Wallets disagree about address casing - MetaMask hands back lowercase from eth_accounts -
+    # and the signed payload embeds whichever form the client used. Verifying only against the
+    # checksummed form rejected every genuine claim from a wallet that had not normalised, so
+    # both renderings are accepted. This weakens nothing: the signature must still recover to
+    # this address either way.
+    candidates = {message_for(addr, issued_at)}
+    if address != addr:
+        candidates.add(message_for_raw(address, issued_at))
+
+    recovered = None
+    for text in candidates:
+        try:
+            got = Account.recover_message(encode_defunct(text=text), signature=signature)
+        except Exception:  # noqa: BLE001 - a malformed signature is just a refusal
+            continue
+        if Web3.to_checksum_address(got) == addr:
+            recovered = got
+            break
+    if recovered is None:
         raise FaucetError("That signature was not produced by this address.")
 
     if w3.eth.get_balance(addr) > ELIGIBILITY_CEILING_WEI:
@@ -147,7 +170,11 @@ def claim(w3: Web3, faucet_key: str | None, address: str, issued_at: int, signat
         tx = {
             "to": addr,
             "value": CLAIM_WEI,
-            "nonce": w3.eth.get_transaction_count(account.address),
+            # "pending", not the default "latest": two claims arriving within a block would
+            # otherwise read the same nonce and the second is rejected as a replacement
+            # transaction underpriced. Judges clicking at the same moment is the expected case,
+            # not an edge one.
+            "nonce": w3.eth.get_transaction_count(account.address, "pending"),
             "gas": 21000,
             "gasPrice": w3.eth.gas_price,
             "chainId": w3.eth.chain_id,

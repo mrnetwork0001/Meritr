@@ -1,6 +1,6 @@
 "use client";
 
-import { BrowserProvider, JsonRpcSigner } from "ethers";
+import { BrowserProvider, JsonRpcSigner, getAddress } from "ethers";
 import { createContext, useCallback, useContext, useEffect, useMemo, useState } from "react";
 import { CHAINS, type ChainDef } from "./chains";
 
@@ -46,6 +46,24 @@ type WalletState = {
 
 const Ctx = createContext<WalletState | null>(null);
 
+
+/**
+ * EIP-55 checksum an address from the wallet, tolerating anything unparseable.
+ *
+ * MetaMask returns lowercase addresses from eth_accounts. Anything that rebuilds an address
+ * server-side gets the checksummed form back, so a message signed with one and verified against
+ * the other produces two different payloads and a signature that recovers to neither - which is
+ * exactly how the faucet refused every genuine claim.
+ */
+function normalise(addr: string | null | undefined): string | null {
+  if (!addr) return null;
+  try {
+    return getAddress(addr);
+  } catch {
+    return addr;
+  }
+}
+
 export function WalletProvider({ children }: { children: React.ReactNode }) {
   // Tri-state on purpose. `window.ethereum` cannot be read during SSR or before hydration, and
   // rendering "No wallet found" to someone who *has* a wallet - even for one frame - is worse
@@ -75,14 +93,14 @@ export function WalletProvider({ children }: { children: React.ReactNode }) {
         const accts: string[] = await eth.request({ method: "eth_accounts" });
         const cid: string = await eth.request({ method: "eth_chainId" });
         if (dead) return;
-        if (accts?.length) setAccount(accts[0]);
+        if (accts?.length) setAccount(normalise(accts[0]));
         setChainId(parseInt(cid, 16));
       } catch {
         /* wallet locked or refusing; the connect button still works */
       }
     })();
 
-    const onAccounts = (accts: string[]) => setAccount(accts?.[0] ?? null);
+    const onAccounts = (accts: string[]) => setAccount(normalise(accts?.[0]) ?? null);
     const onChain = (cid: string) => setChainId(parseInt(cid, 16));
 
     eth.on?.("accountsChanged", onAccounts);
@@ -105,7 +123,7 @@ export function WalletProvider({ children }: { children: React.ReactNode }) {
     try {
       const accts: string[] = await eth.request({ method: "eth_requestAccounts" });
       const cid: string = await eth.request({ method: "eth_chainId" });
-      setAccount(accts?.[0] ?? null);
+      setAccount(normalise(accts?.[0]) ?? null);
       setChainId(parseInt(cid, 16));
     } catch (e: any) {
       // 4001 is the user declining, which is not an error worth shouting about.
