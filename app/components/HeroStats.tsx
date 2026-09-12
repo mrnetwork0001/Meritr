@@ -58,18 +58,18 @@ export function HeroStats() {
   ];
 
   return (
-    <div className="wrap py-10">
-      <div className="stagger grid grid-cols-2 gap-4 sm:grid-cols-4">
+    <div className="wrap py-5">
+      <div className="stagger grid grid-cols-2 gap-3 sm:grid-cols-4">
         {cells.map(([n, l, tone], i) => (
           <div key={l} style={{ ["--n" as string]: i }}>
-            <div className="panel panel-hover h-full p-5 text-center">
-              <p className={`mono text-[26px] font-semibold ${tone}`}>{n}</p>
-              <p className="eyebrow mt-2 text-[9.5px]">{l}</p>
+            <div className="panel panel-hover h-full px-3 py-3.5 text-center">
+              <p className={`mono text-[18px] font-semibold leading-none ${tone}`}>{n}</p>
+              <p className="eyebrow mt-1.5 text-[8.5px]">{l}</p>
             </div>
           </div>
         ))}
       </div>
-      <p className="mono mt-3 text-center text-[10.5px] text-[#5d6474]">
+      <p className="mono mt-2.5 text-center text-[10px] text-[#5d6474]">
         {live ? (
           <>
             <span className="mr-1.5 inline-block h-1.5 w-1.5 rounded-full bg-up align-middle anim-breathe" />
