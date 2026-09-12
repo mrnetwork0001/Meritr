@@ -63,6 +63,11 @@ app = FastAPI(
         "(0xFD2); every figure served here is derived from chain state at request time."
     ),
     lifespan=lifespan,
+    # Swagger lives under /api so the public proxy can route it with the rest of the API.
+    # The default of /docs would shadow the console's own documentation page.
+    docs_url="/api/docs",
+    openapi_url="/api/openapi.json",
+    redoc_url=None,
 )
 
 # Any localhost port, because `next dev` reassigns the port whenever 3000 is taken and a

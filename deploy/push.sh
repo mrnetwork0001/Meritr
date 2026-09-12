@@ -15,6 +15,18 @@ set -euo pipefail
 : "${MERITR_SSH:?set MERITR_SSH to user@host for ssh/rsync}"
 REMOTE_DIR="${MERITR_REMOTE_DIR:-/opt/meritr}"
 
+# This box runs other applications and the sync below uses --delete, which removes anything in
+# the destination that is not in the source. A mistyped REMOTE_DIR would therefore empty a
+# neighbour's directory. Refuse anything that is not a dedicated, deep-enough Meritr path.
+case "$REMOTE_DIR" in
+  /|/root|/home|/opt|/srv|/var|/etc|/usr|"") 
+    echo "refusing to sync to '$REMOTE_DIR' - that is a shared system directory" >&2; exit 1 ;;
+esac
+case "$REMOTE_DIR" in
+  *meritr*) ;;
+  *) echo "refusing to sync to '$REMOTE_DIR' - path must contain 'meritr'" >&2; exit 1 ;;
+esac
+
 echo "==> Building the frontend against https://${MERITR_HOST}"
 # NEXT_PUBLIC_MERITR_API is inlined at build time. Changing the hostname later is a rebuild,
 # not a restart - get it right here or judges see the "Risk API unavailable" panel.
@@ -51,7 +63,9 @@ python3 -m venv .venv 2>/dev/null || true
 mkdir -p var
 REMOTE
 
-echo "==> Restarting services"
+echo "==> Restarting Meritr's units only"
+# Named explicitly. Nothing else on this box is touched, and the proxy is never restarted -
+# its config did not change here, and a restart would drop the other sites it serves.
 ssh "${MERITR_SSH}" 'sudo systemctl restart meritr-api meritr-web meritr-agent meritr-relayer'
 
 echo "==> Health check"

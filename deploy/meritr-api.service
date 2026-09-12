@@ -8,9 +8,13 @@ Type=simple
 User=meritr
 WorkingDirectory=/opt/meritr
 EnvironmentFile=/etc/meritr/api.env
-# Bound to loopback: Caddy is the only thing that should reach it, and --reload must never
-# be used here - it is the reflex from the local `npm run backend` script.
-ExecStart=/opt/meritr/.venv/bin/uvicorn backend.main:app --host 127.0.0.1 --port 8000
+# Bound to loopback: the proxy is the only thing that should reach it, and --reload must
+# never be used here - it is the reflex from the local `npm run backend` script.
+#
+# The port is deliberately unusual and overridable from /etc/meritr/api.env, because this box
+# runs other applications and 8000 is the first port anything else will have taken.
+Environment=MERITR_API_PORT=8787
+ExecStart=/opt/meritr/.venv/bin/uvicorn backend.main:app --host 127.0.0.1 --port ${MERITR_API_PORT}
 Restart=always
 RestartSec=10
 StandardOutput=journal

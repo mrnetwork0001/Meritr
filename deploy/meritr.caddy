@@ -1,0 +1,44 @@
+# Meritr - ONE SITE BLOCK, to be imported alongside whatever this box already serves.
+#
+# This is NOT a replacement /etc/caddy/Caddyfile. This box runs other applications, and
+# overwriting the main Caddyfile would take them offline. Install it as a drop-in:
+#
+#   sudo install -m 644 meritr.caddy /etc/caddy/Caddyfile.d/meritr.caddy
+#   grep -q 'Caddyfile.d' /etc/caddy/Caddyfile || \
+#     echo 'import /etc/caddy/Caddyfile.d/*.caddy' | sudo tee -a /etc/caddy/Caddyfile
+#   sudo caddy validate --config /etc/caddy/Caddyfile   # MUST pass before reloading
+#   sudo systemctl reload caddy                          # reload, never restart
+#
+# `reload` is deliberate: it swaps config without dropping connections, so the other sites
+# on this box keep serving. `restart` would briefly 502 all of them.
+#
+# If this box runs nginx rather than Caddy, do not install Caddy at all - both want :80 and
+# :443 and the loser fails to start. Use the nginx server block in SETUP.md instead.
+#
+# Replace MERITR_HOSTNAME before building the frontend: NEXT_PUBLIC_MERITR_API is inlined at
+# build time, not read at runtime.
+#
+# Ports match meritr-api.service (8787) and meritr-web.service (3787). Both are loopback-only
+# and chosen to avoid the 3000/8000 range other applications occupy.
+
+MERITR_HOSTNAME {
+	encode zstd gzip
+
+	# API surface
+	handle /api/* {
+		reverse_proxy 127.0.0.1:8787
+	}
+	handle /health {
+		reverse_proxy 127.0.0.1:8787
+	}
+	# Everything else is the Next.js console, /docs included.
+	handle {
+		reverse_proxy 127.0.0.1:3787
+	}
+
+	header {
+		X-Content-Type-Options nosniff
+		X-Frame-Options DENY
+		Referrer-Policy strict-origin-when-cross-origin
+	}
+}
