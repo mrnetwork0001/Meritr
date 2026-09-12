@@ -24,7 +24,8 @@
     "proof:decode": "hardhat run scripts/attestcoin/decodeCheck.js",
     "preflight": "hardhat run scripts/preflight.js --network creditcoinTestnet",
     "verify:proof": "hardhat run scripts/attestcoin/verifyProof.js --network creditcoinTestnet",
-    "build:check": "NEXT_DIST_DIR=.next-build next build"
+    "build:check": "NEXT_DIST_DIR=.next-build next build",
+    "deck": "node deck/build.js"
   },
   "dependencies": {
     "@gluwa/asc-contracts": "^0.2.1",

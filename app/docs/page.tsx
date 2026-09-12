@@ -240,6 +240,7 @@ Aave V3 liquidation                     ▼  and continuity
                 ["Source chain", <>Ethereum mainnet, Aave V3 - <Mono>chainKey 3</Mono></>],
                 ["Live console", <A href="/app">/app</A>],
                 ["Source", <A href={REPO}>mrnetwork0001/Meritr</A>],
+                ["Project deck", <A href="/deck.pdf">deck.pdf</A>],
                 ["Creditcoin docs", <A href="https://docs.creditcoin.org">docs.creditcoin.org</A>],
                 [
                   "Source verification",

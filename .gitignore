@@ -31,3 +31,6 @@ tsconfig.tsbuildinfo
 # Runtime state: relayer cursor, faucet claim book. Machine-written, not source.
 var/*.json
 !var/relayer-state.json
+
+# Deck: the PDF ships, the intermediate HTML does not.
+deck/deck.html

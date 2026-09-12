@@ -10,6 +10,7 @@ Built for the [BUIDL CTC 2026 Fall Hackathon](https://dorahacks.io/hackathon/bui
 |---|---|
 | **Console** | **https://usemeritr.vercel.app** |
 | Documentation | https://usemeritr.vercel.app/docs |
+| Project deck | **https://usemeritr.vercel.app/deck.pdf** |
 | Risk API | https://meritr.38.49.216.120.sslip.io/api/attestations |
 | Swagger | https://meritr.38.49.216.120.sslip.io/api/docs |
 
