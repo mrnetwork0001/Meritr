@@ -270,6 +270,11 @@ def assess(pos: Position) -> Assessment:
         )
     elif state is RiskState.NO_LOAN:
         rationale = "No active loan."
+    elif pos.hf == float("inf"):
+        # A position carrying no debt has no health factor to report. Formatting it anyway
+        # printed "Health factor inf is comfortably healthy", which reads as a bug to anyone
+        # who sees it - and it is the sentence shown under a borrower's own position.
+        rationale = "Collateral posted with nothing drawn against it. No debt, so no risk to assess."
     else:
         rationale = (
             f"Health factor {pos.hf:.3f} is comfortably healthy "

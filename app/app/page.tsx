@@ -14,6 +14,7 @@ import { pct, usd } from "../lib/format";
 import { AppRail, type ViewId } from "../components/AppRail";
 import { ProtocolPanel } from "../components/ProtocolPanel";
 import { PortfolioTable } from "../components/PortfolioTable";
+import { BorrowerLookup } from "../components/BorrowerLookup";
 import { BorrowerPanel } from "../components/BorrowerPanel";
 import { AgentFeed } from "../components/AgentFeed";
 import { AttestationFlow } from "../components/AttestationFlow";
@@ -163,13 +164,14 @@ MERITR_NETWORK=localhost npm run backend                 # terminal 3`}
 
         {view === "positions" && (
           <div className="grid gap-4 lg:grid-cols-12">
-            <div className="lg:col-span-5">
+            <div className="space-y-4 lg:col-span-5">
               <PortfolioTable
                 positions={portfolio?.positions ?? []}
                 actionQueue={portfolio?.actionQueue ?? []}
                 onSelect={setSelected}
                 selected={selected}
               />
+              <BorrowerLookup selected={selected} onSelect={setSelected} />
             </div>
             <div className="lg:col-span-7">
               <BorrowerPanel address={selected} />
