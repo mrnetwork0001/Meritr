@@ -69,12 +69,23 @@ const Stage: React.FC<{ children: React.ReactNode; total: number }> = ({ childre
  */
 const Footage: React.FC<{
   src: string; total: number; label: string; note: string; playbackRate?: number;
-}> = ({ src, total, label, note, playbackRate = 1 }) => {
+  /**
+   * Rendered instead of the "record this" card when the clip is absent.
+   *
+   * Some scenes recreate something that exists for real - the agent's terminal, the explorer
+   * page showing who signed a transaction. Real footage of those is strictly more convincing
+   * than a rebuilt version, but a rebuilt version is much better than a placeholder. So the
+   * clip wins when it exists and the graphic carries the scene when it does not.
+   */
+  fallback?: React.ReactNode;
+}> = ({ src, total, label, note, playbackRate = 1, fallback }) => {
   const frame = useCurrentFrame();
   const o = hold(frame, total, 10, 10);
   // Asked of a generated manifest rather than caught at runtime: OffthreadVideo throws inside
   // the compositor when a source 404s, which no onError handler can intercept.
   const missing = !PRESENT_CLIPS.includes(src);
+
+  if (missing && fallback) return <>{fallback}</>;
 
   if (missing) {
     return (
@@ -148,8 +159,10 @@ const Title: React.FC<{ total: number }> = ({ total }) => {
     <Stage total={total}>
       <AbsoluteFill style={{ alignItems: 'center', justifyContent: 'center' }}>
         <div style={{ textAlign: 'center', transform: `scale(${0.94 + s * 0.06})`, opacity: s }}>
-          <p style={{ fontSize: 86, fontWeight: 700, color: TEXT, margin: 0, letterSpacing: -2 }}>Meritr</p>
-          <p style={{ fontSize: 40, color: MUTED, margin: '26px 0 0', fontWeight: 400 }}>
+          {/* The shipped wordmark, not typeset text - the video and the site should be the
+              same brand, and a near-miss reads worse than no logo at all. */}
+          <Img src={staticFile('brand/meritr-header.png')} style={{ width: 520, height: 'auto' }} />
+          <p style={{ fontSize: 40, color: MUTED, margin: '30px 0 0', fontWeight: 400 }}>
             Prove the <span style={{ color: MODEL, fontWeight: 600 }}>history</span>.{' '}
             Keep the <span style={{ color: UP, fontWeight: 600 }}>collateral</span>.
           </p>
@@ -336,47 +349,6 @@ const Tamper: React.FC<{ total: number }> = ({ total }) => {
           <Row label="ONE BYTE ALTERED" hexA="02f8b30182…a9f7c4" hexB="1a" verdict="REJECTED" color={DOWN} op={bad} alt />
           <p style={{ fontFamily: MONO, fontSize: 17, color: MUTED, marginTop: 14, opacity: rise(frame, 76) }}>
             npm run verify:proof · a view call · no gas, no wallet, anyone can run it
-          </p>
-        </div>
-      </AbsoluteFill>
-    </Stage>
-  );
-};
-
-/** Live evidence counters. */
-const Evidence: React.FC<{ total: number }> = ({ total }) => {
-  const frame = useCurrentFrame();
-  const cells: Array<[string, string, string]> = [
-    [STATS.facts, 'credit facts proven', TEXT],
-    [STATS.borrowers, 'real Ethereum borrowers', TEXT],
-    [STATS.valueProven, 'of Aave activity', TEXT],
-    ['0', 'oracle operators', UP],
-  ];
-  return (
-    <Stage total={total}>
-      <AbsoluteFill style={{ alignItems: 'center', justifyContent: 'center' }}>
-        <div style={{ width: 1400, opacity: rise(frame, 3) }}>
-          <Eyebrow>counted live from chain logs</Eyebrow>
-          <p style={{ fontSize: 48, fontWeight: 600, color: TEXT, margin: '16px 0 52px' }}>
-            Not a fixture. Real borrowers, proven.
-          </p>
-          <div style={{ display: 'flex', gap: 22 }}>
-            {cells.map(([n, l, c], i) => {
-              const r = rise(frame, 16 + i * 12, 16);
-              return (
-                <div key={l} style={{
-                  flex: 1, border: `1px solid ${LINE}`, borderRadius: 16, padding: '38px 26px',
-                  background: INK_800, textAlign: 'center',
-                  opacity: r, transform: `translateY(${(1 - r) * 20}px)`,
-                }}>
-                  <p style={{ fontFamily: MONO, fontSize: 52, fontWeight: 600, color: c, margin: 0 }}>{n}</p>
-                  <p style={{ fontFamily: MONO, fontSize: 13, letterSpacing: 1.6, textTransform: 'uppercase', color: DIM, margin: '14px 0 0' }}>{l}</p>
-                </div>
-              );
-            })}
-          </div>
-          <p style={{ fontSize: 22, color: MUTED, marginTop: 46, opacity: rise(frame, 72) }}>
-            A relayer holding no roles adds to this every four minutes, whether anyone is watching or not.
           </p>
         </div>
       </AbsoluteFill>
@@ -632,8 +604,8 @@ const Close: React.FC<{ total: number }> = ({ total }) => {
     <Stage total={total}>
       <AbsoluteFill style={{ alignItems: 'center', justifyContent: 'center' }}>
         <div style={{ textAlign: 'center', opacity: r }}>
-          <p style={{ fontSize: 74, fontWeight: 700, color: TEXT, margin: 0, letterSpacing: -1.5 }}>Meritr</p>
-          <p style={{ fontSize: 30, color: MUTED, margin: '22px 0 0' }}>
+          <Img src={staticFile('brand/meritr-header.png')} style={{ width: 440, height: 'auto' }} />
+          <p style={{ fontSize: 30, color: MUTED, margin: '26px 0 0' }}>
             Cross-chain credit a chain can verify. Distress a borrower can survive.
           </p>
           <p style={{ fontFamily: MONO, fontSize: 21, color: MODEL, marginTop: 40, opacity: rise(frame, 30) }}>
@@ -689,7 +661,20 @@ const buildCuts = (): Cut[] => {
     </>,
     'v04',
   );
-  add(s(15.3), <Evidence total={s(15.3)} />, 'v05');
+  // The landing page already renders these counters live, so show the real thing rather than
+  // a rebuilt copy of it - and it is the one screen a reviewer will actually land on.
+  add(
+    s(15.3),
+    <>
+      <Footage
+        src="clips/landing.mp4" total={s(15.3)} playbackRate={1.3}
+        label="Landing page: scroll it"
+        note="usemeritr.vercel.app - scroll from the hero through the evidence counters to the honest-limitations section. Slow and even; it plays at 1.3x."
+      />
+      <Caption kicker="Counted live from chain" line="Not a fixture. Real borrowers, proven." />
+    </>,
+    'v05',
+  );
   add(s(15.8), <ScoreTerms total={s(15.8)} />, 'v06');
 
   // YOU RECORD: connect wallet, claim gas, open a loan.
@@ -707,8 +692,26 @@ const buildCuts = (): Cut[] => {
   );
   add(s(17.1), <Signature total={s(17.1)} />, 'v08');
   add(s(11.3), <Safety total={s(11.3)} />, 'v09');
-  add(s(11), <AgentLog total={s(11)} />, 'v10');
-  add(s(14.6), <SignedBy total={s(14.6)} />, 'v11');
+  add(
+    s(11),
+    <Footage
+      src="clips/agent.mp4" total={s(11)} playbackRate={1.4}
+      label="Terminal: the agent's own log"
+      note="ssh the VPS and run: journalctl -u meritr-agent -n 40 --no-pager. Show the triage and the two Confirmed lines. Falls back to the recreated log if you skip it."
+      fallback={<AgentLog total={s(11)} />}
+    />,
+    'v10',
+  );
+  add(
+    s(14.6),
+    <Footage
+      src="clips/explorer.mp4" total={s(14.6)} playbackRate={1.2}
+      label="Blockscout: who signed it"
+      note="Open tx 0xfc72b344… on creditcoin-testnet.blockscout.com and show the From address 0xC06B6015…. Falls back to the graphic if you skip it."
+      fallback={<SignedBy total={s(14.6)} />}
+    />,
+    'v11',
+  );
 
   // YOU RECORD: the console showing the restructurings.
   add(

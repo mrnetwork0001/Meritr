@@ -9,31 +9,22 @@ worth reading: the composition, the narration script, and the manifest.
 
 ## What you record
 
-Three clips. Everything else is motion graphics and renders without you.
+Six clips. Everything else is motion graphics and renders without you.
 
 Until a clip exists the composition draws a labelled placeholder of exactly the right length,
-so the video always renders — you can watch the whole thing before recording anything, and
-drop the captures in as you make them.
+so the video always renders - you can watch the whole thing before recording anything, and drop
+the captures in as you make them. The last two are different: if you skip them, a motion-graphic
+recreation carries the scene instead. Real footage is simply more convincing where the real
+thing exists.
 
-| clip | length | what to capture |
+| clip | slot | what to capture |
 | --- | --- | --- |
-| `verify.mp4` | 11s | A terminal in the repo root running `npm run verify:proof`. Start on the command; end on the `ACCEPTED` / `REJECTED` lines. |
-| `wallet.mp4` | 13s | `usemeritr.vercel.app/app` — connect MetaMask, request 1 CTC from the faucet, mint demo tokens, then post 5 mWETH and draw 3,000 mUSD. Rendered at 1.6x, so work at a natural pace. |
-| `console.mp4` | 9s | The Agent view of the console, showing the four restructurings and the agent's reasoning. Rendered at 1.2x. |
-
-**Record at Retina resolution, not 1920x1080.** The composition renders at 1.5x or 2x (below),
-which sharpens every vector scene - but footage can only be as sharp as its source, so a 1080p
-capture is the one thing that would look soft in a 1440p or 4K master. macOS captures a Retina
-display at 2x natively; keep that and scale down at cut time rather than recording small.
-
-One continuous capture is easiest; cut it afterwards. Match the master you intend to render:
-
-```bash
-# for the 1440p master
-ffmpeg -ss <from> -i capture.mov -t <seconds> \
-  -vf "scale=2880:1620:flags=lanczos,fps=30" -an \
-  -c:v libx264 -crf 16 -pix_fmt yuv420p public/clips/<name>.mp4
-```
+| `landing.mp4` | 15.3s | `usemeritr.vercel.app` - scroll from the hero through the evidence counters to the honest-limitations section. Slow and even; plays at 1.3x, so about 20s of capture. |
+| `verify.mp4` | 12.5s | A terminal in the repo root running `npm run verify:proof`. Start on the command; end on the `ACCEPTED` / `REJECTED` lines. |
+| `wallet.mp4` | 8.5s | `usemeritr.vercel.app/app` - connect MetaMask, request 1 CTC from the faucet, mint demo tokens, then post 5 mWETH and draw 3,000 mUSD. Plays at 2.2x, so about 19s of capture. |
+| `console.mp4` | 4s | The Agent view of the console, showing the restructurings. Plays at 2x. |
+| `agent.mp4` | 11s | *optional* - `journalctl -u meritr-agent -n 40 --no-pager` on the VPS, showing the triage and the two `Confirmed` lines. Falls back to a recreated log. |
+| `explorer.mp4` | 14.6s | *optional* - tx `0xfc72b344…` on Blockscout, showing the From address `0xC06B6015…`. Falls back to a graphic. |
 
 Put them in `public/clips/`. `sync-clips.js` runs before every render and picks them up.
 
@@ -86,20 +77,24 @@ Fourteen cuts. The argument runs problem → proof → evidence → mechanism �
 
 | # | scene | s | vo |
 | --- | --- | --- | --- |
-| 1 | Title | 5.5 | v00 |
-| 2 | Amnesiac — history does not travel | 15 | v01 |
-| 3 | Brutal — one answer, everywhere | 12 | v02 |
+| 1 | Title — the wordmark | 3.7 | v00 |
+| 2 | Amnesiac — history does not travel | 15.1 | v01 |
+| 3 | Brutal — one answer, everywhere | 13.6 | v02 |
 | 4 | Proof pipeline — how a fact gets in | 15 | v03 |
-| 5 | **verify.mp4** — accepted, then refused | 11 | v04 |
-| 6 | Evidence — live counters | 13 | v05 |
-| 7 | Score sets the terms — 300 against 774 | 13 | v06 |
-| 8 | **wallet.mp4** — a borrower opens a line | 13 | v07 |
-| 9 | The signature — one argument | 16 | v08 |
-| 10 | Safety — assume the key is stolen | 11 | v09 |
-| 11 | Agent log — nobody pressed anything | 15 | v10 |
-| 12 | Signed by — check `triggeredBy` | 14 | v11 |
-| 13 | **console.mp4** — the public record | 9 | — |
-| 14 | Never seized, then close | 22 | v12, v13 |
+| 5 | **verify.mp4** — accepted, then refused | 12.5 | v04 |
+| 6 | **landing.mp4** — the page, counting live | 15.3 | v05 |
+| 7 | Score sets the terms — 300 against 774 | 15.8 | v06 |
+| 8 | **wallet.mp4** — a borrower opens a line | 8.5 | v07 |
+| 9 | The signature — one argument | 17.1 | v08 |
+| 10 | Safety — assume the key is stolen | 11.3 | v09 |
+| 11 | **agent.mp4** or the recreated log | 11 | v10 |
+| 12 | **explorer.mp4** or the signed-by graphic | 14.6 | v11 |
+| 13 | **console.mp4** — the public record | 4 | — |
+| 14 | Never seized | 11.8 | v12 |
+| 15 | Close — the wordmark again | 8.5 | v13 |
+
+Fifteen cuts, 177.8 seconds. `npm run check` verifies every scene is at least as long as the
+narration it carries and that the total stays under three minutes; it runs before every render.
 
 **One thing to know before re-cutting.** Scenes 11 and 12 name the agent address
 `0xC06B6015…` and the two transactions it signed. Those are real and checkable — a judge who
