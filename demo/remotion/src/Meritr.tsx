@@ -655,7 +655,15 @@ type Cut = { from: number; dur: number; el: React.ReactNode; vo?: string };
 const F = 30;
 const s = (n: number) => Math.round(n * F);
 
-export const Meritr: React.FC = () => {
+/**
+ * The cut list, built once and used for both the render and the duration.
+ *
+ * These were two separate things - a sequence of add() calls, and a hand-summed constant - and
+ * the constant silently lost a thirteen-second scene, which truncated the video without any
+ * error. Deriving the length from the same list it renders makes that class of mistake
+ * impossible rather than merely unlikely.
+ */
+const buildCuts = (): Cut[] => {
   let t = 0;
   const cuts: Cut[] = [];
   const add = (dur: number, el: React.ReactNode, vo?: string) => {
@@ -663,17 +671,17 @@ export const Meritr: React.FC = () => {
     t += dur;
   };
 
-  add(s(5.5), <Title total={s(5.5)} />, 'v00');
-  add(s(15), <Amnesiac total={s(15)} />, 'v01');
-  add(s(12), <Brutal total={s(12)} />, 'v02');
+  add(s(3.7), <Title total={s(3.7)} />, 'v00');
+  add(s(15.1), <Amnesiac total={s(15.1)} />, 'v01');
+  add(s(13.6), <Brutal total={s(13.6)} />, 'v02');
   add(s(15), <ProofPipeline total={s(15)} />, 'v03');
 
   // YOU RECORD: the terminal running `npm run verify:proof`.
   add(
-    s(11),
+    s(12.5),
     <>
       <Footage
-        src="clips/verify.mp4" total={s(11)}
+        src="clips/verify.mp4" total={s(12.5)}
         label="Terminal: npm run verify:proof"
         note="Run it in the Meritr repo. Capture from the command to the ACCEPTED / REJECTED lines."
       />
@@ -681,15 +689,15 @@ export const Meritr: React.FC = () => {
     </>,
     'v04',
   );
-  add(s(13), <Evidence total={s(13)} />, 'v05');
-  add(s(13), <ScoreTerms total={s(13)} />, 'v06');
+  add(s(15.3), <Evidence total={s(15.3)} />, 'v05');
+  add(s(15.8), <ScoreTerms total={s(15.8)} />, 'v06');
 
   // YOU RECORD: connect wallet, claim gas, open a loan.
   add(
-    s(13),
+    s(8.5),
     <>
       <Footage
-        src="clips/wallet.mp4" total={s(13)} playbackRate={1.6}
+        src="clips/wallet.mp4" total={s(8.5)} playbackRate={2.2}
         label="Wallet: connect → faucet → open a loan"
         note="usemeritr.vercel.app/app — connect MetaMask, request 1 CTC, mint demo tokens, then post 5 mWETH and draw 3,000 mUSD."
       />
@@ -697,40 +705,42 @@ export const Meritr: React.FC = () => {
     </>,
     'v07',
   );
-  add(s(16), <Signature total={s(16)} />, 'v08');
-  add(s(11), <Safety total={s(11)} />, 'v09');
-  add(s(15), <AgentLog total={s(15)} />, 'v10');
-  add(s(14), <SignedBy total={s(14)} />, 'v11');
+  add(s(17.1), <Signature total={s(17.1)} />, 'v08');
+  add(s(11.3), <Safety total={s(11.3)} />, 'v09');
+  add(s(11), <AgentLog total={s(11)} />, 'v10');
+  add(s(14.6), <SignedBy total={s(14.6)} />, 'v11');
 
   // YOU RECORD: the console showing the restructurings.
   add(
-    s(9),
+    s(4),
     <>
       <Footage
-        src="clips/console.mp4" total={s(9)} playbackRate={1.2}
+        src="clips/console.mp4" total={s(4)} playbackRate={2}
         label="Console: the agent's record"
         note="usemeritr.vercel.app/app — the Agent view, showing the restructurings and the reasoning."
       />
       <Caption kicker="The public record" line="Four interventions. Zero seizures." />
     </>,
   );
-  add(s(12), <NeverSeized total={s(12)} />, 'v12');
-  add(s(10), <Close total={s(10)} />, 'v13');
+  add(s(11.8), <NeverSeized total={s(11.8)} />, 'v12');
+  add(s(8.5), <Close total={s(8.5)} />, 'v13');
 
-  return (
-    <AbsoluteFill style={{ backgroundColor: INK }}>
-      {cuts.map((c, i) => (
-        <Sequence key={i} from={c.from} durationInFrames={c.dur}>
-          {c.el}
-          {c.vo && PRESENT_VO.includes(`vo/${c.vo}.mp3`) ? (
-            <Audio src={staticFile(`vo/${c.vo}.mp3`)} />
-          ) : null}
-        </Sequence>
-      ))}
-    </AbsoluteFill>
-  );
+  return cuts;
 };
 
-export const MERITR_DURATION = s(
-  5.5 + 15 + 12 + 15 + 11 + 13 + 13 + 16 + 11 + 15 + 14 + 9 + 12 + 10,
+const CUTS = buildCuts();
+
+export const MERITR_DURATION = CUTS.reduce((n, c) => n + c.dur, 0);
+
+export const Meritr: React.FC = () => (
+  <AbsoluteFill style={{ backgroundColor: INK }}>
+    {CUTS.map((c, i) => (
+      <Sequence key={i} from={c.from} durationInFrames={c.dur}>
+        {c.el}
+        {c.vo && PRESENT_VO.includes(`vo/${c.vo}.mp3`) ? (
+          <Audio src={staticFile(`vo/${c.vo}.mp3`)} />
+        ) : null}
+      </Sequence>
+    ))}
+  </AbsoluteFill>
 );
