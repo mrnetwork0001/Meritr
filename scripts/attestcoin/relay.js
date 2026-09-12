@@ -6,14 +6,14 @@
  *   node scripts/attestcoin/relay.js --once
  *
  * Watches Ethereum mainnet for real Aave V3 activity, fetches a real Attestcoin proof for each
- * transaction, and ingests it into MeritrAttestor on Creditcoin — forever, unattended.
+ * transaction, and ingests it into MeritrAttestor on Creditcoin - forever, unattended.
  *
  * Why this exists: "autonomous" is easy to claim and hard to believe. Run for a day, this
  * leaves a public trail of CreditFactAttested events on Blockscout, minutes apart, built from
  * real Ethereum credit activity. That is a claim a reviewer can check instead of take.
  *
- * It runs under a key holding ZERO roles. `MeritrAttestor.ingest` has no `onlyRole` — the proof
- * is self-validating and the borrower credited is decoded out of the proven log — so a roleless
+ * It runs under a key holding ZERO roles. `MeritrAttestor.ingest` has no `onlyRole` - the proof
+ * is self-validating and the borrower credited is decoded out of the proven log - so a roleless
  * key is genuinely sufficient. That is the permissionlessness claim demonstrated rather than
  * asserted, and it means a stolen relayer key can do nothing but pay gas to tell the truth.
  *
@@ -93,7 +93,7 @@ function writeState(patch) {
  *
  * Probing with `getBlockNumber` is not enough and was the original bug: several providers
  * answer it happily and then reject `eth_getLogs` outright, so the relayer selected a node it
- * could not use and reported "0 candidates" — a silent failure that looks exactly like "no
+ * could not use and reported "0 candidates" - a silent failure that looks exactly like "no
  * Aave activity". The probe is now the real call, and the working span is discovered rather
  * than assumed.
  */
@@ -277,7 +277,7 @@ async function main() {
   log(`  network   ${NETWORK} (${book.chainId})`);
   log(`  attestor  ${book.contracts.MeritrAttestor}`);
   log(`  relayer   ${signer.address}  (holds no roles)`);
-  log(`  source    ${ethereum.protocol} ${ethereum.pool} — chainKey ${ethereum.chainKey}`);
+  log(`  source    ${ethereum.protocol} ${ethereum.pool} - chainKey ${ethereum.chainKey}`);
   log(`  interval  ${INTERVAL}s · max ${MAX_PER_CYCLE}/cycle`);
   log("=".repeat(70));
 

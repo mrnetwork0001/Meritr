@@ -7,7 +7,7 @@ import { api, type Health, type Portfolio, type ProtocolStats } from "../lib/api
  * Live protocol panel beside the hero headline.
  *
  * Mirrors the risk book the dashboard shows, so the landing page proves the thing it claims
- * rather than only describing it. Falls back to a quiet offline state — a hero that collapses
+ * rather than only describing it. Falls back to a quiet offline state - a hero that collapses
  * because an RPC is slow is worse than one that shows less.
  */
 

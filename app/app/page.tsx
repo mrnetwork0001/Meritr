@@ -45,7 +45,7 @@ const HEADINGS: Record<ViewId, { title: string; lede: string }> = {
   },
   model: {
     title: "Model",
-    lede: "The scoring components and the pricing curve they feed. Deterministic and public — same facts in, same terms out, on-chain and off.",
+    lede: "The scoring components and the pricing curve they feed. Deterministic and public - same facts in, same terms out, onchain and off.",
   },
 };
 
@@ -191,12 +191,12 @@ MERITR_NETWORK=localhost npm run backend                 # terminal 3`}
               </div>
               <ul className="divide-y divide-[var(--color-line)] text-[12px]">
                 {[
-                  ["network", config?.network ?? "—"],
-                  ["chain id", config ? String(config.chainId) : "—"],
-                  ["attestcoin precompile", config?.attestcoinPrecompile ?? "—"],
-                  ["MeritrAttestor", config?.contracts.MeritrAttestor ?? "—"],
-                  ["MeritrVault", config?.contracts.MeritrVault ?? "—"],
-                  ["MeritrPassport", config?.contracts.MeritrPassport ?? "—"],
+                  ["network", config?.network ?? "-"],
+                  ["chain id", config ? String(config.chainId) : "-"],
+                  ["attestcoin precompile", config?.attestcoinPrecompile ?? "-"],
+                  ["MeritrAttestor", config?.contracts.MeritrAttestor ?? "-"],
+                  ["MeritrVault", config?.contracts.MeritrVault ?? "-"],
+                  ["MeritrPassport", config?.contracts.MeritrPassport ?? "-"],
                 ].map(([k, v]) => (
                   <li key={k} className="flex flex-wrap items-baseline justify-between gap-2 px-5 py-2.5">
                     <span className="text-gray-500">{k}</span>
@@ -263,7 +263,7 @@ MERITR_NETWORK=localhost npm run backend                 # terminal 3`}
                 ))}
               </ul>
               <p className="border-t border-[var(--color-line)] px-5 py-3 font-mono text-[10.5px] leading-relaxed text-gray-600">
-                a wallet with zero proofs scores exactly 300 — safety is withheld until something
+                a wallet with zero proofs scores exactly 300 - safety is withheld until something
                 is proven, because no evidence is not proven safety
               </p>
             </div>
@@ -298,7 +298,7 @@ MERITR_NETWORK=localhost npm run backend                 # terminal 3`}
               </ul>
               <p className="border-t border-[var(--color-line)] px-5 py-3 font-mono text-[10.5px] leading-relaxed text-gray-600">
                 168 vectors generated from the deployed library assert the Python agent reproduces
-                this curve exactly — integer truncation included
+                this curve exactly - integer truncation included
               </p>
             </div>
           </div>

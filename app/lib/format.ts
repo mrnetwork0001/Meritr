@@ -1,4 +1,4 @@
-/** Shared display helpers. Presentation only — never used in a decision path. */
+/** Shared display helpers. Presentation only - never used in a decision path. */
 
 export const usd = (n: number, digits = 0) =>
   `$${n.toLocaleString("en-US", { minimumFractionDigits: digits, maximumFractionDigits: digits })}`;
@@ -48,7 +48,7 @@ export const tierColor: Record<string, string> = {
 };
 
 export const relTime = (unix: number) => {
-  if (!unix) return "—";
+  if (!unix) return "-";
   const days = Math.floor((Date.now() / 1000 - unix) / 86400);
   if (days < 1) return "today";
   if (days < 30) return `${days}d ago`;

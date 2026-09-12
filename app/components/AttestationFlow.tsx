@@ -5,15 +5,15 @@ import type { MeritrConfig } from "../lib/api";
 /**
  * The Attestcoin data path.
  *
- * Names the actual precompile and contracts rather than generic boxes — where the credit data
+ * Names the actual precompile and contracts rather than generic boxes - where the credit data
  * comes from, and why no oracle operator sits anywhere in it, is what a reviewer needs first.
  */
 export function AttestationFlow({ config }: { config: MeritrConfig | null }) {
   const stages = [
     ["01", "Source chain", "Aave V3 repayments, supplies and liquidations on Ethereum"],
-    ["02", "Attestcoin 0xFD2", "Native query verifier — Merkle inclusion + continuity, checked by the Creditcoin runtime"],
+    ["02", "Attestcoin 0xFD2", "Native query verifier - Merkle inclusion + continuity, checked by the Creditcoin runtime"],
     ["03", "MeritrAttestor", "Decodes proven logs against a registered event schema into cross-chain credit memory"],
-    ["04", "MeritrVault", "Recomputes rate, LTV and relief on-chain from the attested score"],
+    ["04", "MeritrVault", "Recomputes rate, LTV and relief onchain from the attested score"],
   ];
 
   return (

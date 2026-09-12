@@ -59,12 +59,12 @@ export function ScoreArc({ score, tier, size = 168 }: { score: number; tier: str
 /**
  * Health-factor bar with the vault's real thresholds marked.
  *
- * The band boundaries are drawn in because Meritr's entire thesis lives between them — a bare
+ * The band boundaries are drawn in because Meritr's entire thesis lives between them - a bare
  * number hides the mechanism that makes restructuring possible.
  */
 export function HealthBar({ hf }: { hf: number | null }) {
   if (hf === null) {
-    return <p className="font-mono text-[12px] text-gray-600">no debt — health factor undefined</p>;
+    return <p className="font-mono text-[12px] text-gray-600">no debt - health factor undefined</p>;
   }
 
   const MAXV = 2.0;

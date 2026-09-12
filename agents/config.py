@@ -99,7 +99,7 @@ def _load_book(network: str) -> dict:
 
     Caching this for the process lifetime is the obvious thing to do and it is wrong: a redeploy
     rewrites the file, and a long-lived API would keep serving the previous deployment's
-    addresses. Both sets of contracts exist on the chain, so nothing errors — the dashboard
+    addresses. Both sets of contracts exist on the chain, so nothing errors - the dashboard
     simply reports a different vault than the one you just deployed, which is an unpleasant
     thing to debug. Keying the cache on mtime keeps the read cheap and the answer current.
     """

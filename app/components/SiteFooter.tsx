@@ -24,7 +24,7 @@ const COLS = [
     ],
   },
   {
-    title: "On-chain",
+    title: "Onchain",
     links: [
       ["MeritrVault", `${EXPLORER}/address/${VAULT}`],
       ["MeritrAttestor", `${EXPLORER}/address/0xB462C2772b8003e3c511C373dDC5715642B34D4c`],

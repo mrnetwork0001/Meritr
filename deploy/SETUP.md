@@ -1,4 +1,4 @@
-# Meritr — VPS setup
+# Meritr - VPS setup
 
 Four processes, three identities, one origin. The box never holds the deployer key and never
 gets a build toolchain.
@@ -9,13 +9,13 @@ gets a build toolchain.
 | `meritr-agent` | discovers, triages and restructures distressed loans | `RISK_AGENT_ROLE` only |
 | `meritr-api` | FastAPI risk API on loopback | **none** |
 | `meritr-web` | Next.js console on loopback | **none** |
-| `caddy` | TLS, one origin, routes `/api` `/health` `/docs` to the API | — |
+| `caddy` | TLS, one origin, routes `/api` `/health` `/docs` to the API | - |
 
 ## Why the relayer matters
 
 "Autonomous" is easy to claim. Run for a day, the relayer leaves a public trail of
 `CreditFactAttested` events on Blockscout, minutes apart, built from real Ethereum credit
-activity — under a key that holds **no roles at all**. `MeritrAttestor.ingest` has no
+activity - under a key that holds **no roles at all**. `MeritrAttestor.ingest` has no
 `onlyRole`; the proof is self-validating and the borrower credited is decoded from the proven
 log. A roleless key being sufficient *is* the permissionlessness claim, demonstrated.
 
@@ -23,7 +23,7 @@ log. A roleless key being sufficient *is* the permissionlessness claim, demonstr
 
 `NEXT_PUBLIC_MERITR_API` is inlined into the frontend **at build time**. Point the DNS A record
 at the VPS and settle the hostname before building anything. Get it wrong and visitors see the
-console's "Risk API unavailable" panel printing local setup instructions — the worst possible
+console's "Risk API unavailable" panel printing local setup instructions - the worst possible
 artifact to put in front of a reviewer.
 
 ## 1. Prepare the box
@@ -71,7 +71,7 @@ sudo systemctl enable --now meritr-api meritr-web meritr-agent meritr-relayer ca
 MERITR_HOST=meritr.example.com MERITR_SSH=meritr@1.2.3.4 ./deploy/push.sh
 ```
 
-## 5. Verify — from a phone on mobile data, not the laptop
+## 5. Verify - from a phone on mobile data, not the laptop
 
 The laptop may resolve stale DNS or hit a cached build.
 

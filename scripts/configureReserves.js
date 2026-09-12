@@ -8,8 +8,8 @@
  * configured. This registers the reserves that carry most of Aave's Ethereum volume.
  *
  * Prices are read from Chainlink on Ethereum mainnet rather than hardcoded. They are still a
- * governance-fed input — that limitation is real and documented — but the number written
- * on-chain is a live market price with a verifiable source, not a guess. Chainlink reports USD
+ * governance-fed input - that limitation is real and documented - but the number written
+ * onchain is a live market price with a verifiable source, not a guess. Chainlink reports USD
  * pairs at 8 decimals, which is already Meritr's `priceE8` convention, so no rescaling is needed.
  *
  * Re-run whenever prices drift materially; `configureAsset` is idempotent.
@@ -51,7 +51,7 @@ async function main() {
   if (!ethereum) throw new Error("No Ethereum entry in this network's catalogue.");
 
   console.log("=".repeat(78));
-  console.log(`  Pricing Aave V3 Ethereum reserves — chainKey ${ethereum.chainKey}`);
+  console.log(`  Pricing Aave V3 Ethereum reserves - chainKey ${ethereum.chainKey}`);
   console.log("=".repeat(78));
 
   const eth = new ethers.JsonRpcProvider(ETH_RPC);
@@ -70,7 +70,7 @@ async function main() {
       // Normalise to 1e8 regardless of what the feed reports in.
       priceE8 = fd === 8 ? BigInt(answer) : (BigInt(answer) * 10n ** 8n) / 10n ** BigInt(fd);
     } catch (e) {
-      console.log(`   ${r.symbol.padEnd(7)} SKIPPED — feed unusable: ${String(e.message).slice(0, 50)}`);
+      console.log(`   ${r.symbol.padEnd(7)} SKIPPED - feed unusable: ${String(e.message).slice(0, 50)}`);
       continue;
     }
 

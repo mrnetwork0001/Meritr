@@ -4,12 +4,12 @@
  *   npx hardhat run scripts/preflight.js --network creditcoinTestnet
  *
  * Everything that must be true before `deploy.js` will succeed, checked in one pass and
- * reported together — a key that exists, a balance that can pay for six deployments plus a
+ * reported together - a key that exists, a balance that can pay for six deployments plus a
  * dozen registry writes, a reachable RPC, a live Attestcoin precompile, a proof-builder that
  * answers, and a source-chain catalogue whose chainKeys match the chain's own registry.
  *
  * Deploying is a multi-transaction sequence with no rollback: running out of gas halfway leaves
- * contracts on-chain that the address book never records. This is cheaper than that.
+ * contracts onchain that the address book never records. This is cheaper than that.
  */
 const { ethers, network } = require("hardhat");
 const { verifyCatalogue } = require("./verifyChainKeys");
@@ -34,7 +34,7 @@ function line(ok, label, detail, fix) {
 async function main() {
   const net = await ethers.provider.getNetwork();
   console.log("=".repeat(78));
-  console.log(`  MERITR PREFLIGHT — ${network.name} (chain ${net.chainId})`);
+  console.log(`  MERITR PREFLIGHT - ${network.name} (chain ${net.chainId})`);
   console.log("=".repeat(78));
 
   // --- RPC ------------------------------------------------------------------
@@ -82,7 +82,7 @@ async function main() {
     const r = await ethers.provider.call({ to: VERIFIER, data });
     line(r !== "0x", "BlockProver 0x…0FD2", r !== "0x" ? "responds to calls" : "returned 0x (absent)");
   } catch {
-    line(null, "BlockProver 0x…0FD2", "call reverted — precompile may still be present");
+    line(null, "BlockProver 0x…0FD2", "call reverted - precompile may still be present");
   }
 
   const chainInfoCode = await ethers.provider.getCode(CHAIN_INFO_PRECOMPILE);
@@ -95,7 +95,7 @@ async function main() {
 
   // --- chainKeys ------------------------------------------------------------
   if (check.ok === true) {
-    line(true, "chainKey catalogue", "matches the on-chain registry");
+    line(true, "chainKey catalogue", "matches the onchain registry");
     for (const c of deploymentsFor(net.chainId)) {
       console.log(`${" ".repeat(11)}   chainKey ${String(c.chainKey).padEnd(3)} ${c.name} (EVM ${c.evmChainId})`);
     }
@@ -110,7 +110,7 @@ async function main() {
     const url = proverUrlFor(net.chainId);
     const primary = deploymentsFor(net.chainId)[0];
     const h = await attestedHeight(net.chainId, Number(primary.chainKey));
-    line(true, "Proof builder", `${url.replace("https://", "")} — ${primary.name} attested to ${h.toLocaleString()}`);
+    line(true, "Proof builder", `${url.replace("https://", "")} - ${primary.name} attested to ${h.toLocaleString()}`);
   } catch (e) {
     line(null, "Proof builder", e.message.slice(0, 60), "real proofs will be unavailable");
   }

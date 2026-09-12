@@ -5,8 +5,8 @@
  *   npx hardhat run scripts/deploy.js --network localhost
  *   npx hardhat run scripts/seedLocal.js --network localhost
  *
- * Creates three borrowers in deliberately different conditions — healthy, stressed, and
- * near-liquidation — so the risk agent and the dashboard have something meaningful to show.
+ * Creates three borrowers in deliberately different conditions - healthy, stressed, and
+ * near-liquidation - so the risk agent and the dashboard have something meaningful to show.
  */
 const fs = require("fs");
 const path = require("path");

@@ -8,14 +8,14 @@ import { txUrl } from "../lib/chains";
 /**
  * Transaction modal.
  *
- * Every on-chain action in Meritr runs through here, and the reason is approvals: an ERC-20
+ * Every onchain action in Meritr runs through here, and the reason is approvals: an ERC-20
  * action is frequently *two* transactions, and the first one used to happen invisibly inside a
  * helper. A user signed twice, saw one confirmation, and had no hash for the other. Modelling a
  * run as an explicit list of steps makes that second transaction something the interface owes
  * the user rather than something it hides.
  *
- * Each step reports its own hash and explorer link, and the three states a user can act on —
- * waiting on your signature, waiting on the chain, settled — are kept distinct. Collapsing them
+ * Each step reports its own hash and explorer link, and the three states a user can act on -
+ * waiting on your signature, waiting on the chain, settled - are kept distinct. Collapsing them
  * into one spinner is how a wallet prompt behind the browser window becomes "it's frozen".
  */
 
@@ -29,7 +29,7 @@ export type TxStep = {
 
 export type TxRequest = {
   title: string;
-  /** Plain-language statement of what this does on-chain, and to whom. */
+  /** Plain-language statement of what this does onchain, and to whom. */
   description: string;
   steps: TxStep[];
   /** Rendered as a label/value table above the steps. */
@@ -254,8 +254,8 @@ export function TxProvider({ children }: { children: React.ReactNode }) {
             {/* Footer */}
             <div className="flex items-center justify-between gap-3 border-t border-[var(--color-line)] px-5 py-3.5">
               <span className="font-mono text-[11px]">
-                {busy && <span className="text-model">in progress — do not close</span>}
-                {finished === "ok" && <span className="text-up">confirmed on-chain</span>}
+                {busy && <span className="text-model">in progress - do not close</span>}
+                {finished === "ok" && <span className="text-up">confirmed onchain</span>}
                 {finished === "failed" && <span className="text-down">failed</span>}
                 {finished === "cancelled" && <span className="text-gray-500">cancelled in wallet</span>}
               </span>

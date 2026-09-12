@@ -28,7 +28,7 @@ import {IMeritrAttestor} from "./interfaces/IMeritrAttestor.sol";
  *      able to forge it.
  *
  *      What the contract *does* need governance for is knowing how to read a foreign
- *      protocol's logs. Rather than hard-coding Aave's ABI, Meritr keeps an on-chain
+ *      protocol's logs. Rather than hard-coding Aave's ABI, Meritr keeps an onchain
  *      **event schema registry**: an admin registers `(chainKey, emitter, topic0)` triples
  *      describing where in a log the borrower and the amount live. Supporting Compound,
  *      Morpho or a new Aave deployment is a registry write, not a redeploy. Crucially, an

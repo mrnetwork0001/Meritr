@@ -1,1 +1,1 @@
-"""Meritr — FastAPI risk and credit API."""
+"""Meritr - FastAPI risk and credit API."""

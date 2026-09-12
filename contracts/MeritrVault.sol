@@ -22,7 +22,7 @@ import {MeritrPassport} from "./MeritrPassport.sol";
  *      Creditcoin than an anonymous wallet - which is the entire point of a cross-chain credit
  *      memory.
  *
- *      **The restructuring thesis.** Every other on-chain lending market answers borrower
+ *      **The restructuring thesis.** Every other onchain lending market answers borrower
  *      distress with exactly one action: liquidation. That destroys borrower equity, dumps
  *      collateral into a falling market and permanently ends a paying customer relationship
  *      over what is often a temporary dip. Meritr inserts a *stress band* between healthy and

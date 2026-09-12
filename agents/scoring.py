@@ -1,9 +1,9 @@
 """
-Meritr ZK-Credit scoring — the Python mirror of ``contracts/libraries/CreditMath.sol``.
+Meritr ZK-Credit scoring - the Python mirror of ``contracts/libraries/CreditMath.sol``.
 
 Every constant, weight and rounding step below matches the Solidity library exactly, including
 its integer (floor) division. That parity is a design requirement, not a convenience:
-``MeritrVault.restructure`` re-derives each economic term on-chain from the borrower's attested
+``MeritrVault.restructure`` re-derives each economic term onchain from the borrower's attested
 score, so the agent can only usefully act if it predicts the chain's own arithmetic bit for bit.
 ``tests/test_parity.py`` asserts the two implementations agree across a randomised sweep, and CI
 should treat a divergence as a build failure rather than a rounding curiosity.
@@ -104,7 +104,7 @@ class ScoreBreakdown:
     safety_pts: int
 
     def explain(self) -> list[tuple[str, int, int]]:
-        """(component, points earned, points available) — drives the UI's score breakdown."""
+        """(component, points earned, points available) - drives the UI's score breakdown."""
         return [
             ("Repayment history", self.repayment_pts, W_REPAYMENT * SCORE_SPAN // BPS),
             ("Cross-chain collateral", self.collateral_pts, W_COLLATERAL * SCORE_SPAN // BPS),
@@ -188,7 +188,7 @@ def max_ltv_bps(s: int) -> int:
 
 
 def health_factor(collateral_e8: int, debt_e8: int, liq_threshold_bps: int) -> int:
-    """Health factor in WAD. Debt-free positions return the max sentinel, as on-chain."""
+    """Health factor in WAD. Debt-free positions return the max sentinel, as onchain."""
     if debt_e8 == 0:
         return 2**256 - 1
     return (collateral_e8 * liq_threshold_bps * WAD) // (debt_e8 * BPS)

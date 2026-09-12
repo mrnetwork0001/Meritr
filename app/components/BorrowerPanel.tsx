@@ -97,7 +97,7 @@ export function BorrowerPanel({ address }: { address: string | null }) {
         </ul>
 
         <p className="border-t border-[var(--color-line)] px-5 py-3 font-mono text-[10px] leading-relaxed text-gray-600">
-          every figure above originates from a transaction verified by the Attestcoin precompile —
+          every figure above originates from a transaction verified by the Attestcoin precompile -
           none of it is self-reported
         </p>
       </div>

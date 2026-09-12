@@ -16,7 +16,7 @@
  *      borrowers those events belong to.
  *
  * Ingestion is permissionless and credits the address decoded out of the proven log, so this
- * script builds other people's real credit history without being able to forge any of it —
+ * script builds other people's real credit history without being able to forge any of it -
  * which is the property the whole design rests on.
  */
 const fs = require("fs");
@@ -103,11 +103,11 @@ async function main() {
   if (!ethereum) throw new Error("No Ethereum entry in the catalogue for this network.");
 
   log("=".repeat(78));
-  log("  MERITR — seeding real cross-chain credit from Ethereum mainnet");
+  log("  MERITR - seeding real cross-chain credit from Ethereum mainnet");
   log("=".repeat(78));
   bullet(`Creditcoin   : ${network.name} (${net.chainId})`);
   bullet(`Attestor     : ${book.contracts.MeritrAttestor}`);
-  bullet(`Source       : ${ethereum.protocol} ${ethereum.pool} — chainKey ${ethereum.chainKey}`);
+  bullet(`Source       : ${ethereum.protocol} ${ethereum.pool} - chainKey ${ethereum.chainKey}`);
 
   const attested = await attestedHeight(net.chainId, Number(ethereum.chainKey));
   const { provider, url } = await ethProvider();
@@ -115,7 +115,7 @@ async function main() {
   // Stay clear of the attestation frontier; a block proven a moment ago may not be final.
   const ceiling = Math.min(head, attested) - 60;
   bullet(`Ethereum RPC : ${url.replace("https://", "")} (head ${head.toLocaleString()})`);
-  bullet(`Attested to  : ${attested.toLocaleString()} — scanning below ${ceiling.toLocaleString()}`);
+  bullet(`Attested to  : ${attested.toLocaleString()} - scanning below ${ceiling.toLocaleString()}`);
   log("");
 
   log("  [1/3] Finding real Aave V3 activity…");
@@ -137,7 +137,7 @@ async function main() {
     try {
       proof = await proofForTx(net.chainId, Number(ethereum.chainKey), e.txHash);
     } catch (err) {
-      bullet(`${tag}  proof unavailable — ${String(err.message).slice(0, 60)}`);
+      bullet(`${tag}  proof unavailable - ${String(err.message).slice(0, 60)}`);
       skipped++;
       continue;
     }
@@ -182,7 +182,7 @@ async function main() {
   }
 
   log("");
-  log("  [3/3] Resulting on-chain credit memory");
+  log("  [3/3] Resulting onchain credit memory");
   const rows = [];
   for (const b of borrowers) {
     const f = await attestor.factsOf(b);
@@ -203,7 +203,7 @@ async function main() {
   bullet(`${ok} proof(s) ingested, ${skipped} skipped, ${rows.length} borrower(s) scored`);
   bullet(`gas used: ${gasUsed.toLocaleString()}`);
   bullet("every fact above originates from a real Ethereum mainnet transaction,");
-  bullet("verified by the BlockProver precompile at 0x…0FD2 — no mock anywhere");
+  bullet("verified by the BlockProver precompile at 0x…0FD2 - no mock anywhere");
   log("=".repeat(78));
 }
 

@@ -8,7 +8,7 @@ Type=simple
 User=meritr
 WorkingDirectory=/opt/meritr
 Environment=NODE_ENV=production
-# Serves the .next build produced on the laptop and rsynced across — the box needs no
+# Serves the .next build produced on the laptop and rsynced across - the box needs no
 # build toolchain, and a small VPS will OOM on `next build` anyway.
 ExecStart=/usr/bin/npx next start -H 127.0.0.1 -p 3000
 Restart=always

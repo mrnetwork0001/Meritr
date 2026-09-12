@@ -47,7 +47,7 @@ export const ERC20_ABI = [
   "function balanceOf(address) view returns (uint256)",
   "function decimals() view returns (uint8)",
   "function symbol() view returns (string)",
-  // MockERC20 only — the demo tokens have an open mint so a reviewer can try the flows.
+  // MockERC20 only - the demo tokens have an open mint so a reviewer can try the flows.
   "function mint(address to, uint256 amount)",
 ] as const;
 
@@ -68,7 +68,7 @@ export const attestor = (address: string, signer: JsonRpcSigner) =>
  * Ensure `spender` may move `amount` of `token` on the owner's behalf.
  *
  * Returns the approval transaction hash when one was needed, or null when the existing
- * allowance already covers it — which the transaction modal renders as a skipped step rather
+ * allowance already covers it - which the transaction modal renders as a skipped step rather
  * than hiding. An approval is a real transaction the user signs; it should never be invisible.
  *
  * Approves the exact amount rather than MaxUint256: silently opting someone into an unlimited

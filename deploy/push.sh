@@ -17,7 +17,7 @@ REMOTE_DIR="${MERITR_REMOTE_DIR:-/opt/meritr}"
 
 echo "==> Building the frontend against https://${MERITR_HOST}"
 # NEXT_PUBLIC_MERITR_API is inlined at build time. Changing the hostname later is a rebuild,
-# not a restart — get it right here or judges see the "Risk API unavailable" panel.
+# not a restart - get it right here or judges see the "Risk API unavailable" panel.
 NEXT_PUBLIC_MERITR_API="https://${MERITR_HOST}" npx next build
 
 echo "==> Compiling contracts (for the ABIs the agent and API load at startup)"
@@ -49,7 +49,7 @@ ssh "${MERITR_SSH}" 'sudo systemctl restart meritr-api meritr-web meritr-agent m
 
 echo "==> Health check"
 sleep 5
-curl -fsS "https://${MERITR_HOST}/health" | head -c 300 || echo "  (health check failed — check journalctl)"
+curl -fsS "https://${MERITR_HOST}/health" | head -c 300 || echo "  (health check failed - check journalctl)"
 echo
 echo "Done. Watch the daemons with:"
 echo "  ssh ${MERITR_SSH} 'journalctl -u meritr-agent -u meritr-relayer -f'"

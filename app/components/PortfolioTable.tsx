@@ -8,7 +8,7 @@ import { band, bandColor, bandLabel, pct, short, usd } from "../lib/format";
  *
  * Positions the agent intends to act on are pinned to the top and carry their rationale, so the
  * dashboard shows not just what an autonomous system will do but why it picked that target
- * first — the only part of such a system a reviewer can meaningfully audit at a glance.
+ * first - the only part of such a system a reviewer can meaningfully audit at a glance.
  */
 export function PortfolioTable({
   positions,

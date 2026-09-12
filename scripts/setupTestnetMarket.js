@@ -3,13 +3,13 @@
  *
  *   npx hardhat run scripts/setupTestnetMarket.js --network creditcoinTestnet
  *
- * Creates real, separately-keyed actors — a lender and two borrowers, each funded with CTC for
- * their own gas — rather than doing everything from the deployer. They are distinct on-chain
+ * Creates real, separately-keyed actors - a lender and two borrowers, each funded with CTC for
+ * their own gas - rather than doing everything from the deployer. They are distinct onchain
  * participants whose transactions a reviewer can follow independently.
  *
  * The vault's collateral is marked from the live Chainlink ETH/USD feed, so the market value
  * driving every health factor is a real price with a verifiable source. Collateral pricing is
- * governance-fed — that limitation is real and documented — but the number written on-chain is
+ * governance-fed - that limitation is real and documented - but the number written onchain is
  * not invented.
  *
  * Wallets are derived deterministically from the deployer key so re-running reaches the same
@@ -48,7 +48,7 @@ async function main() {
   const COLL = (n) => ethers.parseUnits(String(n), cDec);
 
   console.log("=".repeat(78));
-  console.log(`  MERITR — market setup on ${network.name}`);
+  console.log(`  MERITR - market setup on ${network.name}`);
   console.log("=".repeat(78));
 
   // --- Real collateral mark from Chainlink ---------------------------------
@@ -103,7 +103,7 @@ async function main() {
     const w = wallets[p.role];
     const existing = await vault.loanOf(w.address);
     if (existing.active) {
-      bullet(`  ${p.role} already has an open loan — skipping`);
+      bullet(`  ${p.role} already has an open loan - skipping`);
       continue;
     }
     await (await collateral.mint(w.address, p.coll)).wait();
@@ -112,7 +112,7 @@ async function main() {
     await (await asset.connect(w).approve(book.contracts.MeritrVault, MAX)).wait();
 
     // Draw against what this wallet has actually earned. With no attested history that is the
-    // protocol's floor — which is the honest result, and exactly the point Meritr makes.
+    // protocol's floor - which is the honest result, and exactly the point Meritr makes.
     const q = await vault.quote(w.address);
     const collE8 = (p.coll * ethPriceE8) / 10n ** BigInt(cDec);
     const draw = (((collE8 * q.maxLtvBps) / 10_000n) * 94n) / 100n;

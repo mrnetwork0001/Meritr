@@ -5,12 +5,12 @@ import { compactUsd, usd } from "../lib/format";
 
 export function ProtocolPanel({ stats, health }: { stats: ProtocolStats | null; health: Health | null }) {
   const cells: Array<[string, string, boolean?]> = [
-    ["supplied", stats ? compactUsd(stats.totalSupplied) : "—"],
-    ["borrowed", stats ? compactUsd(stats.totalBorrowed) : "—"],
-    ["utilisation", stats ? `${stats.utilizationPct.toFixed(1)}%` : "—"],
-    ["reserve", stats ? compactUsd(stats.reserve) : "—", true],
-    ["passports", stats ? String(stats.passportsIssued) : "—"],
-    ["collateral mark", stats ? usd(stats.collateralPrice, 2) : "—"],
+    ["supplied", stats ? compactUsd(stats.totalSupplied) : "-"],
+    ["borrowed", stats ? compactUsd(stats.totalBorrowed) : "-"],
+    ["utilisation", stats ? `${stats.utilizationPct.toFixed(1)}%` : "-"],
+    ["reserve", stats ? compactUsd(stats.reserve) : "-", true],
+    ["passports", stats ? String(stats.passportsIssued) : "-"],
+    ["collateral mark", stats ? usd(stats.collateralPrice, 2) : "-"],
   ];
 
   return (

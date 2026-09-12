@@ -7,7 +7,7 @@ pragma solidity ^0.8.28;
  * @notice Deterministic, integer-only credit scoring and risk math shared by every Meritr
  *         component. The off-chain DeAI underwriting agent (`agents/scoring.py`) mirrors these
  *         formulas exactly, so any score or interest rate the agent proposes can be
- *         independently recomputed and enforced on-chain. The agent is therefore an
+ *         independently recomputed and enforced onchain. The agent is therefore an
  *         *optimizer*, never an oracle: it cannot assert a score the chain disagrees with.
  *
  * @dev All arithmetic is integer and rounding-stable. No floating point, no external calls.
@@ -99,7 +99,7 @@ library CreditMath {
     /**
      * @notice Compute the Meritr ZK-Credit score from attested cross-chain facts.
      * @param f    Attested credit facts for the borrower.
-     * @param nowTs Evaluation timestamp (block time on-chain; wall clock in the agent).
+     * @param nowTs Evaluation timestamp (block time onchain; wall clock in the agent).
      * @return b   Final score plus its per-component breakdown.
      *
      * @dev Each component is normalised to [0, BPS] then weighted. A borrower with no

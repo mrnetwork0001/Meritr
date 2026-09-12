@@ -50,7 +50,7 @@ async function verifyCatalogue(provider, creditcoinChainId) {
       const correct = live.find((c) => c.chainId === entry.evmChainId);
       problems.push(
         `${entry.name}: catalogue uses chainKey ${entry.chainKey}, which this network does not register` +
-          (correct ? ` — the correct key for EVM chain ${entry.evmChainId} is ${correct.chainKey}` : "")
+          (correct ? ` - the correct key for EVM chain ${entry.evmChainId} is ${correct.chainKey}` : "")
       );
       continue;
     }
@@ -67,18 +67,18 @@ async function verifyCatalogue(provider, creditcoinChainId) {
 async function main() {
   const net = await ethers.provider.getNetwork();
   console.log("=".repeat(74));
-  console.log(`  Attestcoin chainKey verification — ${network.name} (chain ${net.chainId})`);
+  console.log(`  Attestcoin chainKey verification - ${network.name} (chain ${net.chainId})`);
   console.log("=".repeat(74));
 
   const { ok, problems, live } = await verifyCatalogue(ethers.provider, net.chainId);
 
   if (live === null) {
     console.log(`  No ChainInfo precompile at ${CHAIN_INFO_PRECOMPILE} on this network.`);
-    console.log("  Nothing to verify — this is expected on a local chain.");
+    console.log("  Nothing to verify - this is expected on a local chain.");
     return;
   }
 
-  console.log("\n  Registered on-chain:");
+  console.log("\n  Registered onchain:");
   console.log("    chainKey  chainId    encoding  name");
   for (const c of live) {
     console.log(
@@ -98,11 +98,11 @@ async function main() {
 
   console.log("\n  Meritr catalogue:");
   for (const e of deploymentsFor(net.chainId)) {
-    console.log(`    chainKey ${String(e.chainKey).padEnd(4)} ${e.name} (EVM ${e.evmChainId}) — ${e.protocol} ${e.pool}`);
+    console.log(`    chainKey ${String(e.chainKey).padEnd(4)} ${e.name} (EVM ${e.evmChainId}) - ${e.protocol} ${e.pool}`);
   }
 
   if (ok) {
-    console.log("\n  ✓ Every catalogue entry matches the on-chain registry.");
+    console.log("\n  ✓ Every catalogue entry matches the onchain registry.");
   } else {
     console.log("\n  ✗ MISMATCH:");
     for (const p of problems) console.log(`    - ${p}`);

@@ -8,7 +8,7 @@ Meritr DeAI Risk & Underwriting Agent.
 
 The loop each cycle:
 
-    1. Discover every borrower from the vault's own ``LoanOpened`` logs — no external index, so
+    1. Discover every borrower from the vault's own ``LoanOpened`` logs - no external index, so
        a restarted agent rebuilds its complete working set from the chain alone.
     2. Read each position and score it against the cross-chain facts that MeritrAttestor has
        proven through the Attestcoin precompile.
@@ -18,8 +18,8 @@ The loop each cycle:
     5. Simulate, then broadcast ``restructure(borrower)``.
 
 The agent supplies no economic parameters. ``restructure`` takes an address and nothing else;
-the vault recomputes every rate, term and relief amount on-chain from the attested score. The
-agent decides *whom and when*, never *how much* — so the worst a stolen agent key can do is
+the vault recomputes every rate, term and relief amount onchain from the attested score. The
+agent decides *whom and when*, never *how much* - so the worst a stolen agent key can do is
 trigger restructurings the protocol would already have approved.
 """
 
@@ -84,7 +84,7 @@ class Underwriter:
             log.info("Attestcoin     : verifier available at %s", config.ATTESTCOIN_PRECOMPILE)
         else:
             log.warning(
-                "Attestcoin     : no verifier at %s on this network — existing attested facts "
+                "Attestcoin     : no verifier at %s on this network - existing attested facts "
                 "still score normally, but new proofs cannot be ingested.",
                 config.ATTESTCOIN_PRECOMPILE,
             )
@@ -116,7 +116,7 @@ class Underwriter:
         """Assess every borrower the vault knows about."""
         borrowers = self.client.discover_borrowers()
         if not borrowers:
-            log.info("No loans opened yet — nothing to underwrite.")
+            log.info("No loans opened yet - nothing to underwrite.")
             return []
 
         assessments: list[Assessment] = []
@@ -189,7 +189,7 @@ class Underwriter:
 
             simulated = self.client.simulate_restructure(borrower)
             if simulated is None:
-                log.info("  Skipping %s — the vault would reject this call.", borrower)
+                log.info("  Skipping %s - the vault would reject this call.", borrower)
                 continue
 
             hf_before, hf_after, debt_retired = simulated

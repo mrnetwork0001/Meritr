@@ -6,7 +6,7 @@ import {CreditMath} from "../libraries/CreditMath.sol";
 /**
  * @notice Test-only view harness exposing the internal `CreditMath` library.
  *
- * @dev Exists so the cross-language parity suite can call the *exact* on-chain implementation
+ * @dev Exists so the cross-language parity suite can call the *exact* onchain implementation
  *      and compare it against `agents/scoring.py`. The agent predicts terms the vault will
  *      derive independently, so a silent divergence between the two would make every agent
  *      decision unreliable while every individual test still passed.

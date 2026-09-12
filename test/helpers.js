@@ -1,5 +1,5 @@
 /**
- * Meritr test helpers — synthetic Attestcoin proof construction.
+ * Meritr test helpers - synthetic Attestcoin proof construction.
  *
  * The prover hands `ASCBase` a transaction as `abi.encode(uint8 txType, bytes[] chunks)`. These
  * helpers build that exact encoding so the tests drive Meritr through the real decoding path in
@@ -60,7 +60,7 @@ function packData(types, values) {
 
 /**
  * Build a Merkle proof whose `calculateTxIndex` differs per `txIndex`, so `ASCBase`'s query-id
- * dedupe treats distinct source transactions as distinct — exactly as it would on-chain.
+ * dedupe treats distinct source transactions as distinct - exactly as it would onchain.
  */
 function merkleProofForIndex(txIndex, depth = 8) {
   const siblings = [];

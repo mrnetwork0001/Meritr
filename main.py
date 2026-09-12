@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-Meritr — project doctor.
+Meritr - project doctor.
 
     python3 main.py
 
@@ -49,7 +49,7 @@ def header(title: str) -> None:
 
 def main() -> int:
     print("=" * 78)
-    print("  MERITR — Autonomous DeAI Debt Restructuring & Credit Risk Memory OS")
+    print("  MERITR - Autonomous DeAI Debt Restructuring & Credit Risk Memory OS")
     print("  Creditcoin EVM testnet (chain 102031) + Attestcoin Protocol (precompile 0xFD2)")
     print("=" * 78)
 

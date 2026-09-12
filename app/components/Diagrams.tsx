@@ -5,7 +5,7 @@
  * the real precompile addresses. A diagram that illustrates a generic "blockchain flow" is
  * decoration; these are the argument.
  *
- * Server components — no client JS. Motion is CSS-only and lives entirely inside the
+ * Server components - no client JS. Motion is CSS-only and lives entirely inside the
  * prefers-reduced-motion query, so a reader who has asked for less gets the identical static
  * drawing rather than a jumpier one.
  */
@@ -47,7 +47,7 @@ function Label({
 }
 
 /**
- * The Attestcoin path: a real Ethereum transaction becomes on-chain credit on Creditcoin,
+ * The Attestcoin path: a real Ethereum transaction becomes onchain credit on Creditcoin,
  * with no oracle anywhere between them.
  */
 export function ProofDiagram({ className = "" }: { className?: string }) {
@@ -177,7 +177,7 @@ export function ScoreDiagram({ className = "" }: { className?: string }) {
       })()}
       <line x1="12" y1="92" x2="408" y2="92" stroke={LINE} />
       <Label x={210} y={110} size={8.5}>
-        a wallet with nothing proven scores exactly 300 — safety is withheld, not assumed
+        a wallet with nothing proven scores exactly 300 - safety is withheld, not assumed
       </Label>
     </svg>
   );

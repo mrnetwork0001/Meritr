@@ -3,7 +3,7 @@
  *
  *   npx hardhat run scripts/generateParityVectors.js
  *
- * Evaluates the on-chain `CreditMath` library over a deterministic pseudo-random sweep and
+ * Evaluates the onchain `CreditMath` library over a deterministic pseudo-random sweep and
  * writes the results to `tests/fixtures/parity_vectors.json`. `tests/test_parity.py` then
  * asserts `agents/scoring.py` reproduces every one of them exactly.
  *
@@ -16,7 +16,7 @@ const { ethers } = require("hardhat");
 const E8 = 100_000_000n;
 const DAY = 24n * 3600n;
 
-/** Deterministic 32-bit LCG — reproducible across machines, unlike Math.random(). */
+/** Deterministic 32-bit LCG - reproducible across machines, unlike Math.random(). */
 function makeRng(seed) {
   let s = seed >>> 0;
   return () => {
@@ -136,7 +136,7 @@ async function main() {
 
   const out = {
     generatedBy: "scripts/generateParityVectors.js",
-    note: "On-chain CreditMath outputs. tests/test_parity.py asserts agents/scoring.py matches.",
+    note: "Onchain CreditMath outputs. tests/test_parity.py asserts agents/scoring.py matches.",
     scoreVectors: vectors,
     curve,
     risk,

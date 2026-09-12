@@ -1,12 +1,12 @@
 """
-Meritr DeAI risk engine — the decision layer of the autonomous underwriter.
+Meritr DeAI risk engine - the decision layer of the autonomous underwriter.
 
 This module holds the part of the agent that actually *thinks*: it turns a raw position into a
 risk classification, projects how long that position has before liquidation, estimates the loss
 a restructuring would avert, and ranks a portfolio so that a finite reserve is spent where it
 does the most good.
 
-Why the agent needs judgement at all, given the vault re-derives every economic term on-chain:
+Why the agent needs judgement at all, given the vault re-derives every economic term onchain:
 the contract answers "what relief is this borrower entitled to?", but it has no view of the
 portfolio and no memory of price dynamics. Choosing *whom to rescue first* when three positions
 are stressed and the reserve can only carry one is exactly the decision that belongs off-chain,
@@ -30,7 +30,7 @@ class RiskState(str, Enum):
     NO_LOAN = "no_loan"
     HEALTHY = "healthy"
     WATCH = "watch"          # above the stress band, but close enough to track
-    STRESSED = "stressed"    # inside [1.00, 1.15) — the restructuring window
+    STRESSED = "stressed"    # inside [1.00, 1.15) - the restructuring window
     LIQUIDATABLE = "liquidatable"
 
 
@@ -95,7 +95,7 @@ class Position:
 
     @property
     def hf(self) -> float:
-        """Health factor as a float, for display only — never for decisions."""
+        """Health factor as a float, for display only - never for decisions."""
         if self.health_factor > 10**30:
             return float("inf")
         return self.health_factor / WAD
@@ -180,7 +180,7 @@ def days_to_liquidation(pos: Position, annual_vol_bps: int = DEFAULT_ANNUAL_VOL_
 
     This is a triage heuristic that ranks positions, not a risk model that prices them. It
     deliberately ignores drift, fat tails and correlation; its only job is to answer "which of
-    these stressed borrowers runs out of room first?" — and for that, monotonicity in the buffer
+    these stressed borrowers runs out of room first?" - and for that, monotonicity in the buffer
     is the property that matters.
     """
     buffer = buffer_to_liquidation(pos)
@@ -200,7 +200,7 @@ def expected_loss_averted(pos: Position, state: RiskState) -> float:
 
     Losses from a liquidation are not the whole debt: the protocol recovers most of it by
     seizing collateral. What is actually destroyed is the liquidation bonus paid away to the
-    liquidator plus the borrower's forfeited equity — the part restructuring genuinely saves.
+    liquidator plus the borrower's forfeited equity - the part restructuring genuinely saves.
     Weighting that by the probability of reaching liquidation within the next week turns a
     dollar figure into a ranking signal.
     """
@@ -253,7 +253,7 @@ def assess(pos: Position) -> Assessment:
     elif state is RiskState.LIQUIDATABLE:
         rationale = (
             f"Health factor {pos.hf:.3f} is already below 1.0. Restructuring is deliberately "
-            "unavailable here — absorbing an underwater position would socialise bad debt into "
+            "unavailable here - absorbing an underwater position would socialise bad debt into "
             "the reserve. Liquidation is the correct path."
         )
     elif state is RiskState.WATCH:
@@ -285,8 +285,8 @@ def triage(assessments: list[Assessment]) -> list[Assessment]:
     """Order actionable positions by the value of acting on them.
 
     The restructuring reserve is finite and each intervention draws it down, so the order the
-    agent works the queue in changes the outcome. Ranking by expected loss averted — most
-    urgent and most valuable first — beats first-come ordering whenever the reserve binds.
+    agent works the queue in changes the outcome. Ranking by expected loss averted - most
+    urgent and most valuable first - beats first-come ordering whenever the reserve binds.
     """
     actionable = [a for a in assessments if a.should_restructure]
     return sorted(

@@ -41,7 +41,7 @@ def make_position(
 
     The health factor is converted through ``Decimal`` rather than binary float arithmetic:
     ``int(1.15 * 1e18)`` lands one wei *below* the exact stress threshold, which would make a
-    boundary test fail against correct code. On-chain the comparison is exact, so the fixture
+    boundary test fail against correct code. Onchain the comparison is exact, so the fixture
     has to be exact too.
     """
     hf_wad = int(Decimal(str(hf)) * WAD)
@@ -201,7 +201,7 @@ def test_triage_prioritises_larger_avertable_loss():
 
 
 def test_triage_breaks_ties_toward_the_most_urgent():
-    """Equal debt, different runway — the one closer to liquidation goes first."""
+    """Equal debt, different runway - the one closer to liquidation goes first."""
     urgent = assess(make_position(borrower="0x" + "aa" * 20, hf=1.01, debt_usd=10_000))
     calmer = assess(make_position(borrower="0x" + "bb" * 20, hf=1.14, debt_usd=10_000))
 

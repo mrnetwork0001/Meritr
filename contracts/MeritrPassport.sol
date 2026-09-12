@@ -15,12 +15,12 @@ import {IMeritrAttestor} from "./interfaces/IMeritrAttestor.sol";
  * @notice Subsystem 4 of 4 - the Soulbound Cross-Chain Credit Passport.
  *
  * @dev A non-transferable ERC-721 that carries a borrower's cross-chain credit memory as
- *      on-chain state. One passport per address, forever bound to it.
+ *      onchain state. One passport per address, forever bound to it.
  *
  *      **Why soulbound matters here, and not just as a buzzword:** a transferable credit NFT
  *      is a credit score with a market price. Anyone could farm a pristine score on a clean
  *      wallet and sell it to a defaulter, which is precisely the attack that makes
- *      collateral-free lending impossible on-chain today. Meritr enforces non-transferability
+ *      collateral-free lending impossible onchain today. Meritr enforces non-transferability
  *      at the `_update` hook, the single chokepoint every ERC-721 movement passes through, so
  *      mint and burn work while every transfer path - `transferFrom`, `safeTransferFrom`,
  *      operator or not - reverts.
@@ -39,7 +39,7 @@ contract MeritrPassport is ERC721, AccessControl {
 
     bytes32 public constant REFRESHER_ROLE = keccak256("REFRESHER_ROLE");
 
-    /// @notice On-chain credit memory carried by a passport.
+    /// @notice Onchain credit memory carried by a passport.
     struct PassportData {
         uint16 score;
         uint8 tier; // 0 Bronze .. 4 Diamond
@@ -227,7 +227,7 @@ contract MeritrPassport is ERC721, AccessControl {
     }
 
     /**
-     * @notice Fully on-chain metadata. No IPFS pin, no gateway, no server: a credit passport
+     * @notice Fully onchain metadata. No IPFS pin, no gateway, no server: a credit passport
      *         whose art disappears when a hackathon's hosting lapses is not a credit record.
      */
     function tokenURI(uint256 tokenId) public view override returns (string memory) {

@@ -6,7 +6,7 @@ Meritr risk API.
 A thin, read-mostly HTTP layer over the deployed contracts and the DeAI risk engine. It holds no
 database and no cached credit state: every score, position and assessment is derived from chain
 data on request, so the API can never disagree with the contracts it reports on. Restart it, move
-it, run ten copies — the answers are identical because the chain is the only source of truth.
+it, run ten copies - the answers are identical because the chain is the only source of truth.
 
 The one write endpoint (`/api/agent/simulate/{address}`) is a dry run that broadcasts nothing;
 restructuring is executed by `agents/underwriter.py` holding the risk-agent key, never by the
@@ -86,7 +86,7 @@ api = APIRouter(prefix="/api")
 def client() -> ChainClient:
     """Return a chain client bound to the *current* address book.
 
-    Re-reads the deployment on every call (cheap — `config.load` caches on file mtime) and
+    Re-reads the deployment on every call (cheap - `config.load` caches on file mtime) and
     rebuilds the client when the addresses have changed. Without this, deploying while the API
     is running leaves it serving the previous deployment's contracts until someone notices and
     restarts it.
@@ -176,7 +176,7 @@ def health() -> dict:
 
 @api.get("/config", tags=["meta"])
 def get_config() -> dict:
-    """Addresses and source-chain registry — the frontend's single bootstrap call."""
+    """Addresses and source-chain registry - the frontend's single bootstrap call."""
     cfg = state["config"]
     if cfg is None:
         raise HTTPException(status_code=503, detail=state["error"] or "Not configured.")
@@ -271,7 +271,7 @@ def borrower(address: str) -> dict:
 
 @api.get("/borrower/{address}/score", response_model=CreditProfile, tags=["borrower"])
 def borrower_score(address: str) -> CreditProfile:
-    """Credit profile alone — the explainable score breakdown."""
+    """Credit profile alone - the explainable score breakdown."""
     return _profile(client(), address)
 
 
@@ -350,7 +350,7 @@ _ATTEST_TTL = 90.0
 def attestations() -> dict:
     """Everything Attestcoin has proven into this deployment, counted from chain logs.
 
-    Read live rather than recorded, because a relayer is continuously adding to it — a figure
+    Read live rather than recorded, because a relayer is continuously adding to it - a figure
     hardcoded into the site would be stale within the hour and wrong by the time anyone read it.
     """
     import time
@@ -418,7 +418,7 @@ def simulate(address: str) -> dict:
     if result is None:
         return {
             "possible": False,
-            "reason": "The vault would reject this call — position not in the stress band, "
+            "reason": "The vault would reject this call - position not in the stress band, "
             "cooling down, or at its restructuring limit.",
         }
 

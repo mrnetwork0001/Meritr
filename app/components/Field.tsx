@@ -3,7 +3,7 @@
 /**
  * Labelled amount input with an optional max helper.
  *
- * Lives apart from the transaction machinery because it is pure presentation — every on-chain
+ * Lives apart from the transaction machinery because it is pure presentation - every onchain
  * action now runs through TxModal, which owns signing, confirmation and explorer links.
  */
 export function AmountField({

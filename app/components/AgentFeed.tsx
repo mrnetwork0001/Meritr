@@ -14,7 +14,7 @@ export function AgentFeed({ events }: { events: RestructureEvent[] }) {
     <div className="rounded-lg border border-[var(--color-line)] bg-ink-900/88">
       <div className="flex items-center justify-between border-b border-[var(--color-line)] px-5 py-3">
         <h2 className="text-[13px] font-semibold text-gray-200">Restructuring history</h2>
-        <span className="font-mono text-[10.5px] text-gray-600">on-chain audit trail</span>
+        <span className="font-mono text-[10.5px] text-gray-600">onchain audit trail</span>
       </div>
 
       {events.length === 0 ? (

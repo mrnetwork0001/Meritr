@@ -1,5 +1,5 @@
 /**
- * Meritr — one-command deployment.
+ * Meritr - one-command deployment.
  *
  *   npx hardhat run scripts/deploy.js --network creditcoinMainnet   # chain 102030
  *   npx hardhat run scripts/deploy.js --network creditcoinTestnet   # chain 102031
@@ -7,7 +7,7 @@
  * Deploys all four subsystems, wires their roles, and registers the source-chain event schemas
  * that teach MeritrAttestor how to read Aave V3 logs on its registered source chains. The resulting
  * address book is written to `deployments/<network>.json`, which the FastAPI backend, the DeAI
- * agent and the Next.js frontend all read — so a fresh deploy propagates everywhere with no
+ * agent and the Next.js frontend all read - so a fresh deploy propagates everywhere with no
  * hand-edited config.
  */
 const fs = require("fs");
@@ -36,7 +36,7 @@ async function main() {
   const balance = await ethers.provider.getBalance(deployer.address);
 
   log("=".repeat(78));
-  log("  MERITR — Autonomous DeAI Debt Restructuring & Cross-Chain Credit Risk Memory OS");
+  log("  MERITR - Autonomous DeAI Debt Restructuring & Cross-Chain Credit Risk Memory OS");
   log("=".repeat(78));
   log(`  Network      : ${network.name} (chainId ${net.chainId})`);
   log(`  Deployer     : ${deployer.address}`);
@@ -52,7 +52,7 @@ async function main() {
   } else if (precompileVisible) {
     log(`  Attestcoin   : mock verifier installed at ${PRECOMPILE}`);
   } else {
-    log(`  Attestcoin   : WARNING — no verifier at ${PRECOMPILE} on this network.`);
+    log(`  Attestcoin   : WARNING - no verifier at ${PRECOMPILE} on this network.`);
     log("                 Ingestion will revert until one exists. Deploy to a Creditcoin");
     log("                 network (102030/102031/102032), or run scripts/simulate.js locally.");
   }
@@ -82,7 +82,7 @@ async function main() {
   log("=".repeat(78));
 
   // --- 1. Attestcoin ingestion ---------------------------------------------
-  log("\n[1/4] MeritrAttestor — Attestcoin cross-chain ingestion");
+  log("\n[1/4] MeritrAttestor - Attestcoin cross-chain ingestion");
   const Attestor = await ethers.getContractFactory("MeritrAttestor");
   const attestor = await Attestor.deploy(deployer.address);
   await attestor.waitForDeployment();
@@ -90,7 +90,7 @@ async function main() {
   log(`      deployed -> ${attestorAddress}`);
 
   // --- 2. Soulbound passport ------------------------------------------------
-  log("\n[2/4] MeritrPassport — soulbound cross-chain credit passport");
+  log("\n[2/4] MeritrPassport - soulbound cross-chain credit passport");
   const Passport = await ethers.getContractFactory("MeritrPassport");
   const passport = await Passport.deploy(deployer.address, attestorAddress);
   await passport.waitForDeployment();
@@ -133,7 +133,7 @@ async function main() {
   }
 
   // --- 4. Vault -------------------------------------------------------------
-  log("\n[4/4] MeritrVault — autonomous restructuring credit vault");
+  log("\n[4/4] MeritrVault - autonomous restructuring credit vault");
   const Vault = await ethers.getContractFactory("MeritrVault");
   const vault = await Vault.deploy(
     deployer.address,
@@ -166,11 +166,11 @@ async function main() {
   log(`      catalogue: ${catalogue.length} source chain(s) for Creditcoin ${net.chainId}`);
 
   // A wrong chainKey is silent: proofs simply never match and no history ever lands. Check the
-  // catalogue against the chain's own ChainInfo registry before writing any of it on-chain.
+  // catalogue against the chain's own ChainInfo registry before writing any of it onchain.
   const check = await verifyCatalogue(ethers.provider, net.chainId);
   if (check.ok === false) {
     throw new Error(
-      "chainKey mismatch against the on-chain registry:\n  " + check.problems.join("\n  ")
+      "chainKey mismatch against the onchain registry:\n  " + check.problems.join("\n  ")
     );
   }
   log(`      chainKeys: ${check.ok === null ? "no registry on this network (local)" : "verified against 0x…0FD3"}`);
@@ -213,7 +213,7 @@ async function main() {
     chainId: net.chainId.toString(),
     deployedAt: new Date().toISOString(),
     // Where log scans should start. Public RPCs cap eth_getLogs ranges, so scanning from
-    // genesis on a live chain fails — and fails *silently*, leaving the agent and the
+    // genesis on a live chain fails - and fails *silently*, leaving the agent and the
     // dashboard convinced the book is empty.
     deployedAtBlock: await ethers.provider.getBlockNumber(),
     deployer: deployer.address,

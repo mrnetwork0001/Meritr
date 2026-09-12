@@ -13,8 +13,8 @@ const LINKS = [
  * Sticky header: logo left, navigation right.
  *
  * Spans wider than the content beneath it, so it reads as chrome framing the page rather than
- * as another column of it. The page carries two prominent Launch app calls already — in the
- * hero and the closing section — so the header stays text-only rather than competing with them.
+ * as another column of it. The page carries two prominent Launch app calls already - in the
+ * hero and the closing section - so the header stays text-only rather than competing with them.
  */
 export default function SiteHeader() {
   return (
@@ -46,7 +46,7 @@ export default function SiteHeader() {
 
         {/* Below md the links collapse; the hero's Launch app call is immediately below. */}
         <Link href="/app" className="navlink md:hidden">
-          App →
+          App
         </Link>
       </nav>
     </header>

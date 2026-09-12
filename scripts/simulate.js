@@ -1,17 +1,17 @@
 /**
- * Meritr — end-to-end scenario walkthrough.
+ * Meritr - end-to-end scenario walkthrough.
  *
  *   npx hardhat run scripts/simulate.js
  *
  * Runs the complete Meritr story against a live chain state, in order:
  *
- *   Act I   — an anonymous wallet is quoted the protocol's worst terms.
- *   Act II  — Attestcoin proofs of its Ethereum and Sepolia history are ingested through the
+ *   Act I   - an anonymous wallet is quoted the protocol's worst terms.
+ *   Act II  - Attestcoin proofs of its Ethereum and Sepolia history are ingested through the
  *             native query verifier precompile, and the terms improve on their own.
- *   Act III — a soulbound credit passport is minted, and refuses to be transferred.
- *   Act IV  — a loan is opened at the earned rate.
- *   Act V   — the collateral market falls and the position enters the stress band.
- *   Act VI  — the autonomous risk agent restructures instead of liquidating.
+ *   Act III - a soulbound credit passport is minted, and refuses to be transferred.
+ *   Act IV  - a loan is opened at the earned rate.
+ *   Act V   - the collateral market falls and the position enters the stress band.
+ *   Act VI  - the autonomous risk agent restructures instead of liquidating.
  *
  * This doubles as the demo-video script and as an integration test: every number printed is
  * read back from chain state, none are hardcoded.
@@ -24,7 +24,7 @@ const { ACTION, TEST_CHAINS, AAVE_V3_EVENTS } = require("./sourceSchemas");
 
 /**
  * Hardhat's well-known development mnemonic. Needed because the DeAI agent is a separate
- * Python process that has to sign for itself — it cannot borrow an ethers Signer from this
+ * Python process that has to sign for itself - it cannot borrow an ethers Signer from this
  * script, which is precisely the point: the agent is a real external actor, not a function call.
  */
 const DEV_MNEMONIC = "test test test test test test test test test test test junk";
@@ -48,7 +48,7 @@ const hr = (c = "-") => console.log(c.repeat(78));
 const act = (n, title) => {
   console.log("");
   hr("=");
-  console.log(`  ACT ${n} — ${title}`);
+  console.log(`  ACT ${n} - ${title}`);
   hr("=");
 };
 const bullet = (s) => console.log(`   ${s}`);
@@ -97,7 +97,7 @@ async function main() {
 
   console.log("");
   hr("=");
-  console.log("  MERITR — Autonomous DeAI Debt Restructuring on Creditcoin");
+  console.log("  MERITR - Autonomous DeAI Debt Restructuring on Creditcoin");
   console.log("  Attestcoin Protocol · native query verifier precompile 0xFD2");
   hr("=");
 
@@ -114,7 +114,7 @@ async function main() {
     ]);
     await Mock.attach(PRECOMPILE).setShouldVerify(true);
     bullet(`Local chain: mock verifier installed at ${PRECOMPILE}`);
-    bullet("On Creditcoin this is the node's own runtime precompile — same call, same encoding.");
+    bullet("On Creditcoin this is the node's own runtime precompile - same call, same encoding.");
   }
 
   // --- Deploy ---------------------------------------------------------------
@@ -140,7 +140,7 @@ async function main() {
   await vault.grantRole(await vault.RISK_AGENT_ROLE(), agent.address);
 
   // The agent is a separate process; it locates the deployment exactly as it would in
-  // production — by reading the address book, not by being handed contract objects.
+  // production - by reading the address book, not by being handed contract objects.
   const bookName = "simulation";
   const rpcUrl = network.config.url || null;
   const agentCanRun = Boolean(rpcUrl); // the in-process `hardhat` network has no RPC to dial
@@ -203,12 +203,12 @@ async function main() {
   const q0 = await vault.quote(borrower.address);
   bullet(`Borrower ${borrower.address}`);
   bullet(`Attested cross-chain history : none`);
-  bullet(`ZK-Credit score              : ${q0.score}  (floor — nothing proven)`);
+  bullet(`ZK-Credit score              : ${q0.score}  (floor - nothing proven)`);
   bullet(`Offered APR                  : ${pct(q0.rateBps)}`);
   bullet(`Maximum loan-to-value        : ${pct(q0.maxLtvBps)}`);
   console.log("");
   bullet("This is the status quo for every wallet new to a chain, regardless of its history");
-  bullet("elsewhere. Meritr's job is to make that history portable — and provable.");
+  bullet("elsewhere. Meritr's job is to make that history portable - and provable.");
 
   // =========================================================================
   act("II", "Attestcoin proves the borrower's history on Ethereum and Sepolia");
@@ -226,7 +226,7 @@ async function main() {
       env.merkleRoot, env.siblings, env.lowerEndpointDigest, env.continuityRoots
     );
     await tx.wait();
-    if (label) bullet(`proof accepted — ${label}: repaid ${money(amount)}`);
+    if (label) bullet(`proof accepted - ${label}: repaid ${money(amount)}`);
   }
 
   const ingestRepay = (chainKey, pool, usdc, amount, label) =>
@@ -244,11 +244,11 @@ async function main() {
       encodeProvenTx({ from: borrower.address, to: pool, logs: [log] }),
       env.merkleRoot, env.siblings, env.lowerEndpointDigest, env.continuityRoots
     )).wait();
-    bullet(`proof accepted — ${label}: supplied ${money(amount)} collateral`);
+    bullet(`proof accepted - ${label}: supplied ${money(amount)} collateral`);
   }
 
   bullet(`Proofs are submitted by ${keeper.address.slice(0, 10)}… (a relayer), not the borrower.`);
-  bullet("Credit still accrues to the address inside the proven log — forging is not possible.");
+  bullet("Credit still accrues to the address inside the proven log - forging is not possible.");
   console.log("");
 
   const E = TEST_CHAINS.SEPOLIA.chainKey;
@@ -288,11 +288,11 @@ async function main() {
   bullet(`Passport #${await passport.passportOf(borrower.address)} minted to ${borrower.address}`);
   bullet(`Score ${pdata.score} · tier ${tiers[pdata.tier]} · ${pdata.chainCount} chains · ${pdata.attestationCount} proofs`);
   bullet(`Facts commitment ${pdata.factsCommitment.slice(0, 26)}…`);
-  bullet("Metadata is fully on-chain — SVG and JSON, no IPFS pin to expire.");
+  bullet("Metadata is fully onchain - SVG and JSON, no IPFS pin to expire.");
 
   try {
     await passport.connect(borrower).transferFrom(borrower.address, lender.address, 1);
-    bullet("!! transfer succeeded — soulbinding is broken");
+    bullet("!! transfer succeeded - soulbinding is broken");
   } catch {
     bullet("Transfer attempt reverted: the passport cannot be sold to a defaulter.");
   }
@@ -325,7 +325,7 @@ async function main() {
   await (await vault.setPrices(ONE_USD_E8, newPrice)).wait();
 
   // The borrower keeps servicing debt elsewhere through the downturn. Meritr sees it,
-  // because those repayments are provable — which is what makes credit *memory* rather
+  // because those repayments are provable - which is what makes credit *memory* rather
   // than a snapshot.
   for (let i = 0; i < 5; i++) {
     await ingestRepay(B, AAVE_BASE, USDC_BASE, USDC(9_000), "Aave V3 / Sepolia ");
@@ -355,7 +355,7 @@ async function main() {
   const hfBefore = (await vault.positionOf(borrower.address)).healthFactor;
 
   if (agentCanRun) {
-    bullet("Handing the decision to agents/underwriter.py — a separate process, signing for");
+    bullet("Handing the decision to agents/underwriter.py - a separate process, signing for");
     bullet("itself, that discovers borrowers from chain logs and chooses whom to help.");
     console.log("");
 
@@ -384,7 +384,7 @@ async function main() {
     }
   } else {
     bullet("This network has no RPC endpoint, so the external agent process cannot dial in.");
-    bullet("Falling back to a direct contract call — NOTE: this is NOT the DeAI agent.");
+    bullet("Falling back to a direct contract call - NOTE: this is NOT the DeAI agent.");
     bullet("Run against a node to see the real thing:");
     bullet("   npx hardhat node  &&  npx hardhat run scripts/simulate.js --network localhost");
     console.log("");
@@ -400,13 +400,13 @@ async function main() {
   bullet(`Debt retired      : ${money(after.reliefGranted)}  (from reserve, not lender principal)`);
   bullet(`Reserve           : ${money(reserveBefore)}  ->  ${money(await vault.reserveBalance())}`);
   bullet(`Health factor     : ${hf(hfBefore)}  ->  ${hf(pos.healthFactor)}`);
-  bullet(`Collateral held   : ${ethers.formatUnits(after.collateral, 18)} mWETH — unchanged, none seized`);
+  bullet(`Collateral held   : ${ethers.formatUnits(after.collateral, 18)} mWETH - unchanged, none seized`);
   console.log("");
   bullet(`Liquidatable now  : ${pos.liquidatable}`);
   bullet(`Loan still active : ${after.active}`);
 
   // =========================================================================
-  act("VII", "Two borrowers in distress — which one does the agent help first?");
+  act("VII", "Two borrowers in distress - which one does the agent help first?");
 
   bullet("The vault answers \"what relief is this borrower entitled to?\". It has no view of the");
   bullet("book, so it cannot answer \"whom should we help first?\". That question only exists");
@@ -438,7 +438,7 @@ async function main() {
     await (await asset.mint(c.signer.address, USDC(80_000))).wait();
     await (await asset.connect(c.signer).approve(await vault.getAddress(), ethers.MaxUint256)).wait();
 
-    // Size against the CURRENT mark — the market already fell in Act V, so anything hardcoded
+    // Size against the CURRENT mark - the market already fell in Act V, so anything hardcoded
     // against the opening price would breach the borrower's earned limit.
     const q = await vault.quote(c.signer.address);
     const markE8 = await vault.collateralPriceE8();
@@ -453,7 +453,7 @@ async function main() {
     );
   }
 
-  // Solve for the collateral mark that lands both new positions at a health factor of 1.07 —
+  // Solve for the collateral mark that lands both new positions at a health factor of 1.07 -
   // inside the stress band. Equal LTV is what makes a single price work for both.
   const rivalLoan = await vault.loanOf(rival.address);
   const rivalDebtE8 = ((await vault.debtOf(rival.address)) * ONE_USD_E8) / USDC(1);
@@ -498,8 +498,8 @@ async function main() {
     }
     console.log("");
     bullet("Both sit at the same health factor, so urgency alone does not separate them. The");
-    bullet("agent ranked by the loss each rescue actually averts — the deadweight a liquidation");
-    bullet("would destroy — and went to the larger exposure first. That ordering is the whole");
+    bullet("agent ranked by the loss each rescue actually averts - the deadweight a liquidation");
+    bullet("would destroy - and went to the larger exposure first. That ordering is the whole");
     bullet("job: the contract decides how much, the agent decides who, and when.");
   } else {
     bullet("(run against a node to watch the agent triage this book)");
@@ -512,10 +512,10 @@ async function main() {
   bullet("The borrower kept every unit of collateral and their credit relationship.");
   bullet("Lenders were made whole: retired principal returned to the lendable pool.");
   bullet("Relief was funded by the interest-fed reserve, never by lender deposits.");
-  bullet("The agent supplied one argument — an address. Every rate, term and amount");
-  bullet("was recomputed on-chain from Attestcoin-proven facts, so a stolen agent key");
+  bullet("The agent supplied one argument - an address. Every rate, term and amount");
+  bullet("was recomputed onchain from Attestcoin-proven facts, so a stolen agent key");
   bullet("could not have extracted a single unit of value.");
-  bullet("And when the reserve could not save everyone, the agent — not the contract —");
+  bullet("And when the reserve could not save everyone, the agent - not the contract -");
   bullet("decided who went first.");
   hr("=");
   console.log("");

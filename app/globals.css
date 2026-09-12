@@ -6,9 +6,9 @@
 
    The palette is deliberately narrow. Surfaces are near-black with hairline
    borders; colour is reserved for meaning, never decoration:
-     model  — a value Meritr computed
-     up     — solvent, proven, healthy
-     down   — distressed, refused, liquidatable
+     model  - a value Meritr computed
+     up     - solvent, proven, healthy
+     down   - distressed, refused, liquidatable
    A reader should be able to tell a position's state without reading a number.
    ───────────────────────────────────────────────────────────────────────── */
 @theme {
@@ -92,7 +92,7 @@ body {
 
 /* ── Motion ───────────────────────────────────────────────────────────────
    Every animation lives inside the no-preference query, so a visitor with
-   Reduce Motion enabled gets the identical static page — the classes simply
+   Reduce Motion enabled gets the identical static page - the classes simply
    resolve to nothing rather than being overridden later. */
 @media (prefers-reduced-motion: no-preference) {
   @keyframes meritr-dash {
@@ -241,7 +241,7 @@ body {
 
 /* Header container. Same solve as .wrap but holding 50% of the original gutters:
    W' = 0.5V + 0.5W with W = 72rem gives calc(50vw + 36rem). The header spans wider than
-   the content below it on purpose — it reads as chrome framing the page rather than as
+   the content below it on purpose - it reads as chrome framing the page rather than as
    another column of it. */
 .wrap-header {
   margin-inline: auto;

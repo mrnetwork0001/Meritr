@@ -1,7 +1,7 @@
 /**
  * Client for the Meritr risk API (`backend/main.py`).
  *
- * Every figure the dashboard shows is derived from chain state by the backend at request time —
+ * Every figure the dashboard shows is derived from chain state by the backend at request time -
  * there is no cache to go stale and no second source of truth to disagree with the contracts.
  */
 
@@ -123,7 +123,7 @@ async function get<T>(path: string): Promise<T> {
   const res = await fetch(`${BASE}${path}`, { cache: "no-store" });
   if (!res.ok) {
     const body = await res.text().catch(() => "");
-    throw new Error(`${res.status} ${path}${body ? ` — ${body.slice(0, 160)}` : ""}`);
+    throw new Error(`${res.status} ${path}${body ? ` - ${body.slice(0, 160)}` : ""}`);
   }
   return res.json() as Promise<T>;
 }

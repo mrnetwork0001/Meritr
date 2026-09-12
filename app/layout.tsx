@@ -9,7 +9,7 @@ import { TxProvider } from "./components/TxModal";
  *
  * Meritr previously set monospace as the body face, which made a credit protocol read as a
  * terminal transcript. Hierarchy now comes from weight and tight tracking; mono is reserved
- * for figures, addresses and code — the places where character alignment actually matters.
+ * for figures, addresses and code - the places where character alignment actually matters.
  */
 const inter = Inter({
   subsets: ["latin"],
@@ -26,7 +26,7 @@ const jetbrains = JetBrains_Mono({
 export const metadata: Metadata = {
   metadataBase: new URL("https://meritr.app"),
   title: {
-    default: "Meritr — Cross-Chain Credit Risk Memory OS",
+    default: "Meritr - Cross-Chain Credit Risk Memory OS",
     template: "%s · Meritr",
   },
   description:
@@ -34,7 +34,7 @@ export const metadata: Metadata = {
     "through the Attestcoin verifier precompile, and distressed loans restructured before they " +
     "can be liquidated.",
   openGraph: {
-    title: "Meritr — Cross-Chain Credit Risk Memory OS",
+    title: "Meritr - Cross-Chain Credit Risk Memory OS",
     description:
       "Prove the history. Keep the collateral. Autonomous debt restructuring on Creditcoin.",
     type: "website",

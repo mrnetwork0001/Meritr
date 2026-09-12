@@ -1,5 +1,5 @@
 """
-Meritr chain client — a thin, typed wrapper over web3.py for the Creditcoin EVM network.
+Meritr chain client - a thin, typed wrapper over web3.py for the Creditcoin EVM network.
 
 Keeps every RPC detail (ABI loading, gas, nonce, receipt handling, POA middleware) in one place
 so ``underwriter.py`` reads as risk logic rather than plumbing.
@@ -156,8 +156,8 @@ class ChainClient:
     def simulate_restructure(self, borrower: str) -> tuple[int, int, int] | None:
         """Dry-run a restructuring. Returns ``(hf_before, hf_after, debt_retired)`` or ``None``.
 
-        Always run before broadcasting: it turns a would-be reverted transaction — and its
-        wasted gas — into a log line, and it gives the agent the projected health factor to
+        Always run before broadcasting: it turns a would-be reverted transaction - and its
+        wasted gas - into a log line, and it gives the agent the projected health factor to
         record alongside its decision.
         """
         # Read-only: simulated *as* the risk agent without needing its key, so the API can
@@ -247,7 +247,7 @@ class ChainClient:
     # ------------------------------------------------------------------
 
     def restructuring_history(self, from_block: int | None = None) -> Iterator[dict]:
-        """Every restructuring the protocol has performed — the agent's public audit trail."""
+        """Every restructuring the protocol has performed - the agent's public audit trail."""
         logs = self._scan_logs(self.vault.events.LoanRestructured, from_block)
 
         for entry in logs:

@@ -2,7 +2,7 @@
 Cross-language parity: ``agents/scoring.py`` must equal ``contracts/libraries/CreditMath.sol``.
 
 This is the suite that protects Meritr's central design claim. ``MeritrVault.restructure`` takes
-no economic parameters — it re-derives every rate, loan-to-value and relief amount on-chain from
+no economic parameters - it re-derives every rate, loan-to-value and relief amount onchain from
 the borrower's attested score. The off-chain agent is only useful if it can predict that
 derivation exactly, including integer-truncation behaviour. A one-wei divergence here would
 silently turn confident agent decisions into reverted transactions.
@@ -117,7 +117,7 @@ def test_interest_accrual_matches(vectors):
 
 
 # ---------------------------------------------------------------------------
-# Model invariants — properties that must hold regardless of the fixture
+# Model invariants - properties that must hold regardless of the fixture
 # ---------------------------------------------------------------------------
 
 
@@ -184,7 +184,7 @@ def test_liquidations_strictly_reduce_the_score():
 
 
 def test_more_proven_repayment_never_lowers_the_score():
-    """Monotonicity in repayment volume — the property borrowers are being asked to trust."""
+    """Monotonicity in repayment volume - the property borrowers are being asked to trust."""
     previous = 0
     for usd in range(0, 400_000, 10_000):
         s = scoring.score(

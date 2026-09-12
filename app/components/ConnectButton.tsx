@@ -8,7 +8,7 @@ import { short } from "../lib/format";
 /**
  * Connect / network control.
  *
- * Creditcoin ships in no wallet by default, so "connected" is not sufficient — the button walks
+ * Creditcoin ships in no wallet by default, so "connected" is not sufficient - the button walks
  * the reader all the way to the right chain, adding the network when the wallet has never heard
  * of it. Anything short of that leaves a judge stuck on Ethereum wondering why nothing works.
  */
@@ -62,7 +62,7 @@ export function ConnectButton({
         type="button"
         onClick={() => ensureChain(expectedChainId!)}
         className="rounded border border-down/40 bg-down/10 px-3 py-2 font-mono text-[12px] font-semibold text-down transition hover:bg-down/20"
-        title={`Connected to ${chainName(chainId)} — Meritr is deployed on ${target?.name ?? expectedChainId}`}
+        title={`Connected to ${chainName(chainId)} - Meritr is deployed on ${target?.name ?? expectedChainId}`}
       >
         Switch to {target?.name ?? `chain ${expectedChainId}`}
       </button>

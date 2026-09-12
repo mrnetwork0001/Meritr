@@ -2,8 +2,8 @@
  * Client for Creditcoin's Attestcoin proof-builder service.
  *
  * This is the piece that turns Meritr's Attestcoin integration from "correctly shaped" into
- * "actually exercised". The contract path was always real — MeritrAttestor inherits ASCBase and
- * calls the native query verifier at 0xFD2 — but every proof in the repo was previously built by
+ * "actually exercised". The contract path was always real - MeritrAttestor inherits ASCBase and
+ * calls the native query verifier at 0xFD2 - but every proof in the repo was previously built by
  * test fixtures. The proof-builder is the only thing that can produce an envelope the precompile
  * will accept: the Merkle root, sibling path and continuity chain all come from Creditcoin's own
  * attestation of the source chain, so they cannot be manufactured locally.

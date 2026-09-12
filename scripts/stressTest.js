@@ -4,7 +4,7 @@
  *   npx hardhat run scripts/stressTest.js --network creditcoinTestnet
  *
  * Meritr's central claim is that a distressed loan gets restructured rather than liquidated.
- * Until that has actually fired on-chain, the claim is only a description — a reviewer opening
+ * Until that has actually fired onchain, the claim is only a description - a reviewer opening
  * the contracts sees ingestion and lending, but no rescue.
  *
  * WHAT IS REAL HERE AND WHAT IS NOT, stated plainly:
@@ -13,7 +13,7 @@
  *     this script exercises it deliberately. Nothing pretends the market moved.
  *   - Everything downstream of the mark is real: the health factors, the agent's decision, the
  *     restructuring transaction, the rate relief, the term extension and the reserve drawdown
- *     are all genuine on-chain state produced by the deployed contracts.
+ *     are all genuine onchain state produced by the deployed contracts.
  *
  * The mark is restored to the live Chainlink ETH/USD price afterwards, so the book ends healthy
  * with a real LoanRestructured event in its audit trail.
@@ -43,14 +43,14 @@ async function main() {
   const aDec = book.decimals.asset;
 
   hr();
-  console.log("  MERITR — restructuring stress test on the live deployment");
+  console.log("  MERITR - restructuring stress test on the live deployment");
   hr();
   bullet(`Network : ${network.name} (${(await ethers.provider.getNetwork()).chainId})`);
   bullet(`Vault   : ${book.contracts.MeritrVault}`);
   console.log("");
   bullet("The collateral mark-down below is an ADMIN action through PRICE_ROLE, not a market");
-  bullet("event. Everything after it — health factors, the agent's choice, the restructuring");
-  bullet("transaction — is real on-chain state produced by the deployed contracts.");
+  bullet("event. Everything after it - health factors, the agent's choice, the restructuring");
+  bullet("transaction - is real onchain state produced by the deployed contracts.");
 
   // --- Who is in the book ---------------------------------------------------
   const head = await ethers.provider.getBlockNumber();
@@ -92,7 +92,7 @@ async function main() {
 
   const drawdown = 100 - (Number(stressMark) / Number(markBefore)) * 100;
   console.log("");
-  bullet(`Marking collateral to ${usd(stressMark, 8)} — a ${drawdown.toFixed(1)}% drawdown.`);
+  bullet(`Marking collateral to ${usd(stressMark, 8)} - a ${drawdown.toFixed(1)}% drawdown.`);
   bullet("For scale, ETH fell about 82% peak-to-trough during 2022, so this is severe but");
   bullet("well inside historical precedent for the asset being modelled.");
   await (await vault.setPrices(100_000_000n, stressMark)).wait();
@@ -108,7 +108,7 @@ async function main() {
   // --- Hand the decision to the real agent ----------------------------------
   console.log("");
   hr("-");
-  bullet("Handing the book to agents/underwriter.py — a separate process that signs for");
+  bullet("Handing the book to agents/underwriter.py - a separate process that signs for");
   bullet("itself, discovers borrowers from chain logs and chooses whom to help.");
   hr("-");
 
@@ -153,10 +153,10 @@ async function main() {
 
   console.log("");
   hr();
-  console.log("  ON-CHAIN EVIDENCE");
+  console.log("  ONCHAIN EVIDENCE");
   hr();
   if (events.length === 0) {
-    bullet("No LoanRestructured events found — the agent did not act.");
+    bullet("No LoanRestructured events found - the agent did not act.");
   } else {
     for (const e of events) {
       const a = e.args;

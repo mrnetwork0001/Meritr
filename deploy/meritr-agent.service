@@ -1,5 +1,5 @@
 [Unit]
-Description=Meritr DeAI underwriting agent — restructures distressed loans autonomously
+Description=Meritr DeAI underwriting agent - restructures distressed loans autonomously
 After=network-online.target
 Wants=network-online.target
 

@@ -1,6 +1,6 @@
 {
   "generatedBy": "scripts/generateParityVectors.js",
-  "note": "On-chain CreditMath outputs. tests/test_parity.py asserts agents/scoring.py matches.",
+  "note": "Onchain CreditMath outputs. tests/test_parity.py asserts agents/scoring.py matches.",
   "scoreVectors": [
     {
       "facts": {

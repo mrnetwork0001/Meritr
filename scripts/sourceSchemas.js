@@ -1,14 +1,14 @@
 /**
- * Meritr — source-chain event schema catalogue.
+ * Meritr - source-chain event schema catalogue.
  *
- * MeritrAttestor does not hard-code any lending protocol's ABI. It reads an on-chain registry of
+ * MeritrAttestor does not hard-code any lending protocol's ABI. It reads an onchain registry of
  * (chainKey, emitter, topic0) -> schema entries describing where the borrower and the amount sit
  * inside a log. This file is the human-readable catalogue the deploy script registers from, and
  * the same source of truth the tests build proofs against.
  *
  * ── The chainKey trap ────────────────────────────────────────────────────────────────────────
  * `chainKey` is the Attestcoin protocol's own identifier for a source chain. It is NOT the EVM
- * chain id, and — critically — the SAME source chain has a DIFFERENT chainKey depending on which
+ * chain id, and - critically - the SAME source chain has a DIFFERENT chainKey depending on which
  * Creditcoin network you are on:
  *
  *     source chain        Creditcoin mainnet (102030)   Creditcoin testnet (102031)
@@ -22,7 +22,7 @@
  */
 const { id: keccakId } = require("ethers");
 
-/** Action discriminators — must match the ACTION_* constants in MeritrAttestor.sol. */
+/** Action discriminators - must match the ACTION_* constants in MeritrAttestor.sol. */
 const ACTION = { REPAYMENT: 1, COLLATERAL: 2, LIQUIDATION: 3, BORROW: 4 };
 
 /** The ChainInfo precompile, sibling of the query verifier at 0xFD2. */
@@ -40,7 +40,7 @@ const AAVE_V3_EVENTS = {
   // Repay(address indexed reserve, address indexed user, address indexed repayer,
   //       uint256 amount, bool useATokens)
   //   topics: [sig, reserve, user, repayer]   data: [amount, useATokens]
-  //   subjectTopic 2 selects `user` — the borrower whose debt shrank, not the payer.
+  //   subjectTopic 2 selects `user` - the borrower whose debt shrank, not the payer.
   REPAY: {
     signature: "Repay(address,address,address,uint256,bool)",
     topic0: keccakId("Repay(address,address,address,uint256,bool)"),
@@ -74,7 +74,7 @@ const AAVE_V3_EVENTS = {
 
   // Borrow(address indexed reserve, address user, address indexed onBehalfOf, uint256 amount,
   //        DataTypes.InterestRateMode interestRateMode, uint256 borrowRate,
-  //        uint16 indexed referralCode)   — the enum hashes as uint8.
+  //        uint16 indexed referralCode)   - the enum hashes as uint8.
   //   topics: [sig, reserve, onBehalfOf, referralCode]
   //   data:   [user, amount, interestRateMode, borrowRate]
   BORROW: {
@@ -113,8 +113,8 @@ const AAVE_V3_EVENTS = {
 /**
  * Aave V3 deployments Meritr reads credit history from.
  *
- * Every address below was verified on-chain — contract code present, and ERC-20 `symbol()` /
- * `decimals()` read back — rather than copied from documentation. Only stablecoin reserves are
+ * Every address below was verified onchain - contract code present, and ERC-20 `symbol()` /
+ * `decimals()` read back - rather than copied from documentation. Only stablecoin reserves are
  * registered, pinned to $1.00; a volatile reserve needs a real feed first, and the attestor
  * deliberately records activity but zero dollar value for an asset nobody has priced.
  */
@@ -151,8 +151,8 @@ const AAVE_SEPOLIA = {
  * chainKey assignments per Creditcoin network, read from the ChainInfo precompile.
  *
  * Creditcoin testnet is Meritr's primary target: the hackathon requires a testnet deployment,
- * the Attestcoin proof-builder service is only publicly reachable there, and — the part that
- * matters most — testnet attests **Ethereum mainnet** under chainKey 3. So a testnet deployment
+ * the Attestcoin proof-builder service is only publicly reachable there, and - the part that
+ * matters most - testnet attests **Ethereum mainnet** under chainKey 3. So a testnet deployment
  * scores borrowers on real Ethereum economic history, not on throwaway Sepolia activity.
  */
 const CATALOGUES = {
@@ -189,7 +189,7 @@ function sourceChain(creditcoinChainId, evmChainId) {
  *
  * Local runs have no ChainInfo precompile, so there is no authoritative key to honour; these use
  * the Creditcoin *testnet* assignments so a test exercises the same keys the primary deployment
- * will. Never import these in deployment code — use `deploymentsFor(chainId)` so the key always
+ * will. Never import these in deployment code - use `deploymentsFor(chainId)` so the key always
  * matches the network being deployed to.
  */
 const TEST_CHAINS = {

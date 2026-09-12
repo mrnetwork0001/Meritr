@@ -1,5 +1,5 @@
 [Unit]
-Description=Meritr Attestcoin relayer — continuously ingests real Ethereum Aave activity
+Description=Meritr Attestcoin relayer - continuously ingests real Ethereum Aave activity
 After=network-online.target
 Wants=network-online.target
 

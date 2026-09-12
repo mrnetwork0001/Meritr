@@ -6,7 +6,7 @@ import { useEffect, useRef, useState } from "react";
  * Fades its children up once, the first time they scroll into view.
  *
  * Starts in the revealed state and only hides itself after mount, so a reader whose JavaScript
- * never runs — or who arrives before hydration — sees the content rather than an empty page.
+ * never runs - or who arrives before hydration - sees the content rather than an empty page.
  * That ordering is the whole point: a scroll animation must never be able to hide the copy.
  */
 export function Reveal({

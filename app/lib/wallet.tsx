@@ -8,7 +8,7 @@ import { CHAINS, type ChainDef } from "./chains";
  * Injected-wallet connection for Meritr.
  *
  * Deliberately thin: EIP-1193 against `window.ethereum` plus an ethers v6 signer. No WalletConnect
- * project id to register, no connector registry, no extra provider tree — the app needs one
+ * project id to register, no connector registry, no extra provider tree - the app needs one
  * signer against one uncommon chain, and every additional layer is somewhere the Creditcoin
  * network handling could go wrong.
  *
@@ -29,7 +29,7 @@ declare global {
 }
 
 type WalletState = {
-  /** null while detection is still pending — see the note in WalletProvider. */
+  /** null while detection is still pending - see the note in WalletProvider. */
   available: boolean | null;
   account: string | null;
   chainId: number | null;
@@ -48,7 +48,7 @@ const Ctx = createContext<WalletState | null>(null);
 
 export function WalletProvider({ children }: { children: React.ReactNode }) {
   // Tri-state on purpose. `window.ethereum` cannot be read during SSR or before hydration, and
-  // rendering "No wallet found" to someone who *has* a wallet — even for one frame — is worse
+  // rendering "No wallet found" to someone who *has* a wallet - even for one frame - is worse
   // than rendering nothing. Stays null until detection actually runs.
   const [available, setAvailable] = useState<boolean | null>(null);
   const [account, setAccount] = useState<string | null>(null);

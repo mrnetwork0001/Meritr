@@ -18,7 +18,7 @@ const ONE_USD_E8 = 100_000_000n;
 const USDC = (n) => ethers.parseUnits(n.toString(), 6);
 const WETH = (n) => ethers.parseUnits(n.toString(), 18);
 
-describe("MeritrVault — autonomous debt restructuring", function () {
+describe("MeritrVault - autonomous debt restructuring", function () {
   let vault, attestor, passport, asset, collateral;
   let admin, lender, borrower, agent, keeper, liquidator;
   let proofIndex = 100;
@@ -268,7 +268,7 @@ describe("MeritrVault — autonomous debt restructuring", function () {
       expect(loan.active).to.equal(true);
       expect(loan.restructureCount).to.equal(1);
       expect(loan.reliefGranted).to.be.greaterThan(0);
-      // Borrower keeps every unit of collateral — the whole point.
+      // Borrower keeps every unit of collateral - the whole point.
       expect(loan.collateral).to.equal(WETH(10));
     });
 
@@ -374,8 +374,8 @@ describe("MeritrVault — autonomous debt restructuring", function () {
       expect(fragment.inputs).to.have.lengthOf(1);
       expect(fragment.inputs[0].type).to.equal("address");
 
-      // The applied rate is exactly what CreditMath derives from the on-chain attested score,
-      // bounded by the relief floor — not anything the caller supplied.
+      // The applied rate is exactly what CreditMath derives from the onchain attested score,
+      // bounded by the relief floor - not anything the caller supplied.
       const score = (await attestor.scoreOf(borrower.address)).score;
       const expectedRate = 2400n - ((2400n - 400n) * (BigInt(score) - 300n)) / 600n;
 
@@ -415,7 +415,7 @@ describe("MeritrVault — autonomous debt restructuring", function () {
      * `debt / 0.825` = 1.212x debt, and the liquidator seizes 1.05x debt. So the collateral
      * must land between 1.05x and 1.212x for anything to be left over. Marking the position
      * far underwater (say 1.0x) means the liquidator takes every unit and the bug is invisible
-     * — which is exactly how it survived the original suite.
+     * - which is exactly how it survived the original suite.
      */
     async function markForResidue(multiple = 1.13) {
       const loan = await vault.loanOf(borrower.address);

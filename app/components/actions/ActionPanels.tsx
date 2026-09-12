@@ -167,11 +167,11 @@ function FaucetPanel({
       title: `Mint ${Number(amount).toLocaleString()} ${symbol}`,
       description:
         "These are Meritr's own demo tokens, not a Creditcoin asset. Their mint is open to " +
-        "anyone so the flows can be tried without asking for funds — they carry no value.",
+        "anyone so the flows can be tried without asking for funds - they carry no value.",
       facts: [
         ["Token", `${symbol} · ${token.slice(0, 10)}…`],
         ["Amount", `${Number(amount).toLocaleString()} ${symbol}`],
-        ["To", account ? `${account.slice(0, 10)}…${account.slice(-4)}` : "—"],
+        ["To", account ? `${account.slice(0, 10)}…${account.slice(-4)}` : "-"],
       ],
       steps: [
         {
@@ -196,7 +196,7 @@ function FaucetPanel({
       <div className="grid grid-cols-2 gap-3 rounded border border-[var(--color-line)] bg-ink-950 px-3 py-2.5">
         <div>
           <p className="mono text-[14px] text-gray-100">
-            {bal ? fromUnits(bal.asset, aDec, 2) : "—"}
+            {bal ? fromUnits(bal.asset, aDec, 2) : "-"}
           </p>
           <p className="font-mono text-[10px] uppercase tracking-wider text-gray-600">
             {bal?.assetSymbol ?? "asset"}
@@ -204,7 +204,7 @@ function FaucetPanel({
         </div>
         <div>
           <p className="mono text-[14px] text-gray-100">
-            {bal ? fromUnits(bal.collateral, cDec, 4) : "—"}
+            {bal ? fromUnits(bal.collateral, cDec, 4) : "-"}
           </p>
           <p className="font-mono text-[10px] uppercase tracking-wider text-gray-600">
             {bal?.collateralSymbol ?? "collateral"}
@@ -261,7 +261,7 @@ function LendPanel({
       description:
         fn === "deposit"
           ? "Supplies liquidity to the vault. You receive shares and earn interest paid by borrowers; the shares can be redeemed while the pool holds idle liquidity."
-          : "Capitalises the restructuring reserve. This is not lender equity and cannot be withdrawn — it is the buffer that retires debt for distressed borrowers.",
+          : "Capitalises the restructuring reserve. This is not lender equity and cannot be withdrawn - it is the buffer that retires debt for distressed borrowers.",
       facts: [
         ["Amount", `${Number(amount).toLocaleString()} ${sym}`],
         ["Vault", `${config.contracts.MeritrVault.slice(0, 12)}…`],
@@ -270,7 +270,7 @@ function LendPanel({
       steps: [
         {
           label: `Approve ${sym} for the vault`,
-          detail: "Exact amount only — never an unlimited allowance.",
+          detail: "Exact amount only - never an unlimited allowance.",
           run: async () =>
             ensureAllowance(config.contracts.asset, config.contracts.MeritrVault, amt, await getSigner()),
         },
@@ -296,7 +296,7 @@ function LendPanel({
       title: "Withdraw your full position",
       description:
         "Redeems all your shares for the underlying asset, including accrued interest. Limited by the liquidity currently idle in the pool.",
-      facts: [["Shares", bal ? fromUnits(bal.shares, aDec, 4) : "—"]],
+      facts: [["Shares", bal ? fromUnits(bal.shares, aDec, 4) : "-"]],
       steps: [
         {
           label: "Redeem shares",
@@ -317,7 +317,7 @@ function LendPanel({
   return (
     <Card
       title="Supply liquidity"
-      subtitle="Deposits earn interest from borrowers. Funding the reserve instead capitalises the buffer that pays for restructuring — it is never counted as lender equity."
+      subtitle="Deposits earn interest from borrowers. Funding the reserve instead capitalises the buffer that pays for restructuring - it is never counted as lender equity."
     >
       <AmountField
         label="deposit"
@@ -342,7 +342,7 @@ function LendPanel({
           value={reserve}
           onChange={setReserve}
           suffix={bal?.assetSymbol}
-          hint="open to anyone — grants, DAOs, sponsors"
+          hint="open to anyone - grants, DAOs, sponsors"
         />
         <button
           type="button"
@@ -357,7 +357,7 @@ function LendPanel({
       {bal && bal.shares > 0n && (
         <div className="!mt-4 border-t border-[var(--color-line)] pt-3">
           <p className="mb-2 font-mono text-[10px] uppercase tracking-wider text-gray-600">
-            your position — {fromUnits(bal.shares, aDec, 4)} shares
+            your position - {fromUnits(bal.shares, aDec, 4)} shares
           </p>
           <button type="button" className="btn-ghost w-full" onClick={withdrawAll}>
             Withdraw all
@@ -399,19 +399,19 @@ function BorrowPanel({
       title: `Open a credit line for ${draw} ${aSym}`,
       description:
         "Locks your collateral and draws against it. The rate and the borrowing cap are not set " +
-        "by governance — they are computed on-chain from the credit history this address has " +
+        "by governance - they are computed onchain from the credit history this address has " +
         "proven through Attestcoin.",
       facts: [
         ["Collateral posted", `${coll} ${cSym}`],
         ["Drawing", `${Number(draw).toLocaleString()} ${aSym}`],
-        ["Your score", bal ? String(bal.score) : "—"],
-        ["Rate you earned", bal ? pct(bal.rateBps) : "—"],
-        ["LTV cap", bal ? pct(bal.maxLtvBps) : "—"],
+        ["Your score", bal ? String(bal.score) : "-"],
+        ["Rate you earned", bal ? pct(bal.rateBps) : "-"],
+        ["LTV cap", bal ? pct(bal.maxLtvBps) : "-"],
       ],
       steps: [
         {
           label: `Approve ${cSym} for the vault`,
-          detail: "Exact amount only — never an unlimited allowance.",
+          detail: "Exact amount only - never an unlimited allowance.",
           run: async () =>
             ensureAllowance(config.contracts.collateral, config.contracts.MeritrVault, c, await getSigner()),
         },
@@ -442,7 +442,7 @@ function BorrowPanel({
         "releases all of your collateral in the same transaction.",
       facts: [
         ["Repaying", `${Number(repayAmt).toLocaleString()} ${aSym}`],
-        ["Outstanding", bal ? `${fromUnits(bal.debt, aDec, 2)} ${aSym}` : "—"],
+        ["Outstanding", bal ? `${fromUnits(bal.debt, aDec, 2)} ${aSym}` : "-"],
       ],
       steps: [
         {
@@ -469,11 +469,11 @@ function BorrowPanel({
       title: "Mint your credit passport",
       description:
         "Issues a soulbound ERC-721 carrying your cross-chain credit memory. It cannot be " +
-        "transferred or sold — a tradeable credit score would just be farmed on a clean wallet " +
+        "transferred or sold - a tradeable credit score would just be farmed on a clean wallet " +
         "and sold to a defaulter. Requires at least one Attestcoin-verified proof for this address.",
       facts: [
-        ["Holder", account ? `${account.slice(0, 10)}…${account.slice(-4)}` : "—"],
-        ["Score", bal ? String(bal.score) : "—"],
+        ["Holder", account ? `${account.slice(0, 10)}…${account.slice(-4)}` : "-"],
+        ["Score", bal ? String(bal.score) : "-"],
         ["Passport", `${config.contracts.MeritrPassport.slice(0, 12)}…`],
       ],
       steps: [
@@ -495,7 +495,7 @@ function BorrowPanel({
   return (
     <Card
       title="Borrow"
-      subtitle="Your rate and borrowing capacity come from your Attestcoin-verified credit score — not from a governance parameter."
+      subtitle="Your rate and borrowing capacity come from your Attestcoin-verified credit score - not from a governance parameter."
     >
       {bal && (
         <div className="grid grid-cols-3 gap-3 rounded border border-[var(--color-line)] bg-ink-950 px-3 py-2.5">
@@ -607,10 +607,10 @@ function KeeperPanel({
       title: fn === "flagStress" ? "Flag a stressed position" : "Restructure a position",
       description:
         fn === "flagStress"
-          ? "Records that this position has entered the stress band, which starts the six-hour clock after which anyone — not only the agent — may restructure it."
-          : "Cuts the rate toward what this borrower has earned, extends the term, and retires debt from the reserve until the position is healthy. You supply only an address: every amount is recomputed on-chain, so you cannot influence the terms.",
+          ? "Records that this position has entered the stress band, which starts the six-hour clock after which anyone - not only the agent - may restructure it."
+          : "Cuts the rate toward what this borrower has earned, extends the term, and retires debt from the reserve until the position is healthy. You supply only an address: every amount is recomputed onchain, so you cannot influence the terms.",
       facts: [
-        ["Borrower", valid ? short(target.trim()) : "—"],
+        ["Borrower", valid ? short(target.trim()) : "-"],
         ["Caller", "you"],
         ["Vault", `${config.contracts.MeritrVault.slice(0, 12)}…`],
       ],
@@ -637,7 +637,7 @@ function KeeperPanel({
       description:
         "Repays part of a borrower's debt and seizes collateral plus a 5% bonus. Only possible below a health factor of 1.00. Any collateral left over after the seizure is returned to the borrower.",
       facts: [
-        ["Borrower", valid ? short(target.trim()) : "—"],
+        ["Borrower", valid ? short(target.trim()) : "-"],
         ["Repaying", `${Number(liqAmt).toLocaleString()}`],
       ],
       steps: [
@@ -696,7 +696,7 @@ function KeeperPanel({
 
       <div className="!mt-4 border-t border-[var(--color-line)] pt-3">
         <AmountField
-          label="liquidate — repay amount"
+          label="liquidate - repay amount"
           value={liqAmt}
           onChange={setLiqAmt}
           hint="only possible below a health factor of 1.00"

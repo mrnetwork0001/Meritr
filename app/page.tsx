@@ -14,7 +14,7 @@ const RESTRUCTURE_TX = "0x45f9963cd6dc535dfb7fb8670ecc9e5b2b329a6c7edac19df538dd
 const PROBLEMS = [
   {
     title: "Your credit history does not travel",
-    text: "Three years of flawless Aave repayments on Ethereum are worth nothing the moment you arrive on another chain. The record is real and public — and unusable, because nothing there can verify it without trusting an oracle operator to report it honestly.",
+    text: "Three years of flawless Aave repayments on Ethereum are worth nothing the moment you arrive on another chain. The record is real and public - and unusable, because nothing there can verify it without trusting an oracle operator to report it honestly.",
   },
   {
     title: "Distress has exactly one answer",
@@ -25,7 +25,7 @@ const PROBLEMS = [
 const LIMITS = [
   {
     h: "The market's tokens are synthetic",
-    p: "Creditcoin testnet has no canonical stablecoin, so the vault trades a demo pair Meritr deployed with an open mint. They are worth nothing — and they cannot reach the credit data, which is checkable in one grep.",
+    p: "Creditcoin testnet has no canonical stablecoin, so the vault trades a demo pair Meritr deployed with an open mint. They are worth nothing - and they cannot reach the credit data, which is checkable in one grep.",
   },
   {
     h: "Collateral marks are governance-fed",
@@ -130,7 +130,7 @@ export default function Landing() {
                 style={{ animationDelay: "120ms" }}
               >
                 Meritr reads a borrower&apos;s real Aave repayment history off Ethereum through
-                Creditcoin&apos;s Attestcoin verifier — no oracle operator anywhere in the path —
+                Creditcoin&apos;s Attestcoin verifier - no oracle operator anywhere in the path -
                 and lets an autonomous agent restructure a stressed loan instead of liquidating it.
               </p>
 
@@ -139,7 +139,7 @@ export default function Landing() {
                 style={{ animationDelay: "180ms" }}
               >
                 <Link href="/app" className="btn-primary px-6 py-3 text-[14px]">
-                  Launch app →
+                  Launch app
                 </Link>
                 <a href="#evidence" className="btn-ghost px-6 py-3 text-[14px]">
                   Does it work?
@@ -157,7 +157,7 @@ export default function Landing() {
         <Section
           id="problem"
           eyebrow="the problem"
-          title="On-chain credit is amnesiac and brutal."
+          title="Onchain credit is amnesiac and brutal."
         >
           <Reveal>
             <div className="stagger grid gap-5 md:grid-cols-2">
@@ -177,8 +177,8 @@ export default function Landing() {
         <Section
           id="how"
           eyebrow="how it works"
-          title="A real Ethereum transaction becomes on-chain credit."
-          lede="The Creditcoin runtime validates the proof itself. A submission either carries Merkle inclusion and continuity the precompile accepts, or it reverts — there is nothing in between for an oracle to sit in."
+          title="A real Ethereum transaction becomes onchain credit."
+          lede="The Creditcoin runtime validates the proof itself. A submission either carries Merkle inclusion and continuity the precompile accepts, or it reverts - there is nothing in between for an oracle to sit in."
         >
           <div className="grid gap-5 lg:grid-cols-[1.25fr_1fr]">
             <Reveal>
@@ -197,7 +197,7 @@ export default function Landing() {
             <div className="mt-5 panel p-6">
               <p className="text-[14.5px] leading-relaxed text-[#cdd2de]">
                 <span className="font-medium text-up">Ingestion is permissionless.</span>{" "}
-                Anyone may submit a proof for anyone, because the proof validates itself — and
+                Anyone may submit a proof for anyone, because the proof validates itself - and
                 credit accrues to the address decoded out of the proven log, never to the caller.
                 Meritr&apos;s own relayer runs under a key holding{" "}
                 <span className="text-[#eef0f5]">zero roles</span>, which is that claim
@@ -229,7 +229,7 @@ export default function Landing() {
                     One argument. No rate, no amount, no score, no signature over off-chain
                     numbers. The vault re-reads the borrower&apos;s Attestcoin-derived score and
                     recomputes every term itself, so a fully compromised agent key can trigger
-                    restructurings the protocol would already have approved — and{" "}
+                    restructurings the protocol would already have approved - and{" "}
                     <span className="text-[#eef0f5]">nothing else</span>.
                   </p>
                 </div>
@@ -253,7 +253,7 @@ export default function Landing() {
         <Section
           id="evidence"
           eyebrow="does it work?"
-          title="It has already done this on-chain."
+          title="It has already done this onchain."
           lede="Not a description. A transaction a reviewer can open."
         >
           <Reveal>
@@ -329,7 +329,7 @@ export default function Landing() {
               </p>
               <div className="mt-8 flex flex-wrap justify-center gap-3">
                 <Link href="/app" className="btn-primary px-7 py-3.5 text-[14px]">
-                  Launch app →
+                  Launch app
                 </Link>
                 <a
                   href="https://github.com/mrnetwork0001/Meritr"

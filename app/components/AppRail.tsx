@@ -160,7 +160,7 @@ export function AppRail({
             aria-label="Meritr, back to the landing page"
             className="group flex min-w-0 flex-1 items-center gap-2.5"
           >
-            {/* Collapsed, the wordmark would be clipped to nonsense — show the mark alone. */}
+            {/* Collapsed, the wordmark would be clipped to nonsense - show the mark alone. */}
             {collapsed ? (
               <img
                 src="/brand/meritr-mark.png"
@@ -273,12 +273,12 @@ export function AppRail({
                 {account ? (
                   <>
                     <Row k="NETWORK" v={chainName(chainId)} warn={expectedChainId !== null && chainId !== expectedChainId} />
-                    <Row k="RESERVE" v={stats ? compactUsd(stats.reserve) : "—"} />
+                    <Row k="RESERVE" v={stats ? compactUsd(stats.reserve) : "-"} />
                   </>
                 ) : (
                   <>
-                    <Row k="READING" v={health?.network ?? "—"} />
-                    <Row k="RESERVE" v={stats ? compactUsd(stats.reserve) : "—"} />
+                    <Row k="READING" v={health?.network ?? "-"} />
+                    <Row k="RESERVE" v={stats ? compactUsd(stats.reserve) : "-"} />
                   </>
                 )}
               </div>

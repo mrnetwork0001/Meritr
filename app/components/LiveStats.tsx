@@ -11,7 +11,7 @@ import { api, type Attestations } from "../lib/api";
  * visibly grow while someone is looking at them, which is a stronger claim than the numbers
  * themselves.
  *
- * Falls back to the last verified snapshot if the API is unreachable, labelled as such — a
+ * Falls back to the last verified snapshot if the API is unreachable, labelled as such - a
  * hero that collapses on a slow RPC is worse than one that shows a known-good figure.
  */
 
@@ -76,7 +76,7 @@ export function LiveStats() {
             counted live from chain logs · a relayer is still adding to this
           </>
         ) : (
-          "last verified count — start the risk API for the live figure"
+          "last verified count - start the risk API for the live figure"
         )}
       </p>
     </div>

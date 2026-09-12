@@ -30,7 +30,7 @@ const hr = (c = "=") => console.log(c.repeat(78));
 async function hasOpenMint(address) {
   const code = await ethers.provider.getCode(address);
   // mint(address,uint256) => 0x40c10f19. Presence of the selector in the dispatch table is
-  // necessary, not sufficient — but combined with the source in contracts/mocks it is decisive.
+  // necessary, not sufficient - but combined with the source in contracts/mocks it is decisive.
   return code.includes("40c10f19");
 }
 
@@ -42,7 +42,7 @@ async function main() {
   const attestor = await ethers.getContractAt("MeritrAttestor", book.contracts.MeritrAttestor);
 
   hr();
-  console.log("  MERITR — asset provenance audit");
+  console.log("  MERITR - asset provenance audit");
   hr();
   bullet(`Network : ${network.name} (${(await ethers.provider.getNetwork()).chainId})`);
   bullet("Read live from the chain. Nothing below is asserted by hand.");
@@ -67,19 +67,19 @@ async function main() {
     rows.push({ role, addr, name, symbol, decimals, supply, open, priceE8, priceSource });
   }
 
-  console.log("  MARKET ASSETS — who can create units?");
+  console.log("  MARKET ASSETS - who can create units?");
   console.log("");
   for (const r of rows) {
     bullet(`${r.role}: ${r.symbol} ("${r.name}") ${r.addr}`);
     bullet(`  decimals      ${r.decimals}   supply ${Number(ethers.formatUnits(r.supply, r.decimals)).toLocaleString()}`);
-    bullet(`  can mint      ${r.open ? "ANYONE — mint() is ungated" : "restricted"}`);
-    bullet(`  price         $${Number(r.priceE8) / 1e8} — ${r.priceSource}`);
+    bullet(`  can mint      ${r.open ? "ANYONE - mint() is ungated" : "restricted"}`);
+    bullet(`  price         $${Number(r.priceE8) / 1e8} - ${r.priceSource}`);
     bullet(`  verdict       ${r.open ? "SYNTHETIC unit" : "restricted unit"}${r.priceSource.includes("Chainlink") ? ", REAL market price" : ""}`);
     console.log("");
   }
 
   // --- The credit side --------------------------------------------------------
-  console.log("  CREDIT DATA — who can create facts?");
+  console.log("  CREDIT DATA - who can create facts?");
   console.log("");
   const head = await ethers.provider.getBlockNumber();
   let facts = 0;
@@ -98,7 +98,7 @@ async function main() {
     }
   }
   bullet(`Attestor      ${book.contracts.MeritrAttestor}`);
-  bullet(`  can forge     NOBODY — every fact requires a Merkle inclusion + continuity proof`);
+  bullet(`  can forge     NOBODY - every fact requires a Merkle inclusion + continuity proof`);
   bullet(`                accepted by the BlockProver precompile at ${book.attestcoin.blockProverPrecompile}`);
   bullet(`  submission    permissionless, but credit accrues to the address inside the proven log`);
   bullet(`  facts         ${facts} across ${borrowers.size} real Ethereum borrowers`);
@@ -115,7 +115,7 @@ async function main() {
   const refs = (attestorSrc + passportSrc).match(/\bvault\b/gi) || [];
   bullet(`References to the vault in MeritrAttestor.sol + MeritrPassport.sol: ${refs.length}`);
   bullet("The credit layer holds no reference to the market layer. Scores are computed from");
-  bullet("proven source-chain facts alone — the demo tokens cannot influence them, and swapping");
+  bullet("proven source-chain facts alone - the demo tokens cannot influence them, and swapping");
   bullet("the market for real assets would leave every score unchanged.");
   console.log("");
   hr();

@@ -1,7 +1,7 @@
 /**
  * Chain definitions for wallet network switching.
  *
- * Creditcoin is not a network any wallet ships with, so connecting is not enough — the app has
+ * Creditcoin is not a network any wallet ships with, so connecting is not enough - the app has
  * to be able to *add* the chain via `wallet_addEthereumChain` when the switch fails with 4902.
  * That is the difference between a connect button that works for the author and one that works
  * for a judge opening the app for the first time.

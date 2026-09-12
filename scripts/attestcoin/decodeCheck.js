@@ -4,8 +4,8 @@
  *   npx hardhat run scripts/attestcoin/decodeCheck.js
  *
  * The precompile proves a transaction happened; it does not interpret it. Everything after that
- * — chunk decoding, receipt extraction, log matching against the schema registry, borrower and
- * amount extraction — is Meritr's own code, and until now it had only ever seen payloads that
+ * - chunk decoding, receipt extraction, log matching against the schema registry, borrower and
+ * amount extraction - is Meritr's own code, and until now it had only ever seen payloads that
  * Meritr's own test helpers produced.
  *
  * This runs a genuine proof-builder `txBytes` through the deployed contract on a local chain, so

@@ -1,9 +1,9 @@
 ---
 name: meritr-creditcoin
-description: Architecture, invariants and Attestcoin Protocol (0xFD2 precompile) rules for Meritr — the Autonomous DeAI Debt Restructuring & Cross-Chain Credit Risk Memory OS on Creditcoin, built for the BUIDL CTC 2026 Fall Hackathon.
+description: Architecture, invariants and Attestcoin Protocol (0xFD2 precompile) rules for Meritr - the Autonomous DeAI Debt Restructuring & Cross-Chain Credit Risk Memory OS on Creditcoin, built for the BUIDL CTC 2026 Fall Hackathon.
 ---
 
-# Meritr — Creditcoin Attestcoin Development Guide
+# Meritr - Creditcoin Attestcoin Development Guide
 
 Use this whenever working on Meritr. It records the decisions that are easy to break by
 accident.
@@ -17,7 +17,7 @@ accident.
   **102030 = MAINNET** (Meritr's primary target), **102031 = testnet**, **102032 = devnet**.
   Do not assume 102030 is devnet; an earlier revision of the Hardhat config got this wrong.
 - The real packages are **`@gluwa/asc-contracts`** (Solidity source) and
-  **`@gluwa/asc-contracts-abi`**. There is **no `attestcoin-sdk` package on npm** — early specs
+  **`@gluwa/asc-contracts-abi`**. There is **no `attestcoin-sdk` package on npm** - early specs
   referred to it by that name.
 - Readability integrations inherit **`ASCBase`**
   (`@gluwa/asc-contracts/contracts/readability/ASCBase.sol`), which calls the precompile and
@@ -29,11 +29,11 @@ accident.
 - ASC sources pin `pragma ^0.8.28`, so Hardhat must compile at **0.8.28** (Meritr uses
   `viaIR: true`, `evmVersion: paris`).
 
-## Invariants — do not break these
+## Invariants - do not break these
 
 1. **`restructure(address)` takes no economic parameters.** Adding a rate, amount or score
    argument destroys the security model: the agent must be able to choose *whom*, never
-   *how much*. Every term is recomputed on-chain from the attested score.
+   *how much*. Every term is recomputed onchain from the attested score.
 2. **`agents/scoring.py` must match `contracts/libraries/CreditMath.sol` exactly**, integer
    truncation included. After any change to `CreditMath.sol`:
    ```
@@ -43,7 +43,7 @@ accident.
 3. **`Σ loan.interestOwed == totalInterestOwed + pendingReserveInterest`.** Every debt-reducing
    path (`repay`, `liquidate`, reserve refinancing) must go through `_settleDebt`. Crediting
    `reserveBalance` at accrual time instead of booking `pendingReserveInterest` caused a real
-   repayment-underflow bug — do not reintroduce it.
+   repayment-underflow bug - do not reintroduce it.
 4. **`totalAssets()` excludes `reserveBalance`.** The reserve is not lender equity.
 5. **Restructuring is refused below HF 1.00.** Absorbing an underwater position socialises
    crystallised bad debt into the reserve.
@@ -58,7 +58,7 @@ accident.
 deploys `MockNativeQueryVerifier` and `hardhat_setCode`s it to the precompile address.
 
 **`hardhat_setCode` installs bytecode but leaves storage empty**, so the mock's `shouldVerify`
-starts `false` and must be set explicitly — the helper does this.
+starts `false` and must be set explicitly - the helper does this.
 
 Build proof payloads with `encodeProvenTx()` so tests drive the real `EvmV1Decoder` path rather
 than a stub.
@@ -67,7 +67,7 @@ than a stub.
 
 No contract change is required. Add an entry to `scripts/sourceSchemas.js` and call
 `registerSchema(chainKey, emitter, topic0, schema)`. `subjectTopic` must select the account
-whose credit is affected — for Aave `Repay` that is `user` (topic 2), **not** `repayer`.
+whose credit is affected - for Aave `Repay` that is `user` (topic 2), **not** `repayer`.
 
 ## Commands
 
@@ -90,5 +90,5 @@ freely-mintable MockERC20 pair. Do not remove either to make a script run more s
 - `factsCommitment` is a **hash commitment, not a zero-knowledge proof**. It hides values and
   supports selective disclosure; it proves nothing about them on its own. Do not describe it as
   a SNARK.
-- Collateral pricing is governance-fed via `PRICE_ROLE` — the one trusted input in the risk path.
+- Collateral pricing is governance-fed via `PRICE_ROLE` - the one trusted input in the risk path.
 - Wallet maturity is **approximated** from proven block height, clamped to `block.timestamp`.

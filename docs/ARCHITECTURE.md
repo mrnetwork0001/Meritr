@@ -1,4 +1,4 @@
-# Meritr — Technical Architecture
+# Meritr - Technical Architecture
 
 Companion to the [README](../README.md). This document covers the mechanisms in enough detail
 for a security reviewer or an integrator, including the parts that are approximations.
@@ -11,13 +11,13 @@ The question any credit protocol has to answer is: *whose word is each number ta
 
 | Input | Source | Trusted party |
 |---|---|---|
-| Source-chain repayments, supplies, liquidations | Attestcoin precompile `0xFD2` | **none** — the Creditcoin runtime validates the proof |
-| Which contract addresses count as "Aave V3 on Ethereum" | on-chain schema registry | `REGISTRAR_ROLE` |
+| Source-chain repayments, supplies, liquidations | Attestcoin precompile `0xFD2` | **none** - the Creditcoin runtime validates the proof |
+| Which contract addresses count as "Aave V3 on Ethereum" | onchain schema registry | `REGISTRAR_ROLE` |
 | Token decimals and USD price of source reserves | `assetConfigs` | `REGISTRAR_ROLE` |
-| Credit score, APR, max LTV | `CreditMath`, pure function of attested facts | **none** — deterministic |
+| Credit score, APR, max LTV | `CreditMath`, pure function of attested facts | **none** - deterministic |
 | Vault collateral / asset marks | `setPrices` | `PRICE_ROLE` |
 | *Whether* to restructure a given borrower | DeAI agent | `RISK_AGENT_ROLE`, **or anyone** after the grace period |
-| *How much* relief a restructuring grants | `MeritrVault`, recomputed on-chain | **none** — deterministic |
+| *How much* relief a restructuring grants | `MeritrVault`, recomputed onchain | **none** - deterministic |
 
 The two governance roles bound *interpretation* (which logs mean what, what collateral is worth).
 Neither can assert a credit fact. `REGISTRAR_ROLE` cannot credit a borrower who has no proofs;
@@ -36,8 +36,8 @@ price feed behind it. It is called out here rather than buried.
 
 `INativeQueryVerifier` at `0x0000000000000000000000000000000000000FD2` (`0xFD2` = 4050) verifies:
 
-- **Merkle inclusion** — the transaction is in the block's transaction trie under `merkleRoot`.
-- **Continuity** — that block descends from a chain endpoint the runtime already trusts.
+- **Merkle inclusion** - the transaction is in the block's transaction trie under `merkleRoot`.
+- **Continuity** - that block descends from a chain endpoint the runtime already trusts.
 
 It returns the proven transaction bytes; it does not interpret them. Everything downstream is
 Meritr's own decoding, which is why the emitter allowlist matters.
@@ -51,7 +51,7 @@ function _processAndEmitEvent(uint8 action, bytes32 queryId, bytes memory encode
 ```
 
 does not carry `chainKey`. But a credit fact is meaningless without knowing which chain proved
-it — chain diversity is a scored component, and asset configs are per-chain.
+it - chain diversity is a scored component, and asset configs are per-chain.
 
 Meritr does not fork `ASCBase` to fix this. `ingest()` records the chain key in storage, then
 self-calls `this.execute(...)` so the canonical verification and dedupe path runs exactly as
@@ -84,7 +84,7 @@ struct EventSchema {
 }
 ```
 
-Worked example — Aave V3 `Repay`:
+Worked example - Aave V3 `Repay`:
 
 ```
 Repay(address indexed reserve, address indexed user, address indexed repayer,
@@ -96,7 +96,7 @@ topics = [sig, reserve, user, repayer]      data = [amount, useATokens]
             reserveTopic = 1
 ```
 
-`subjectTopic = 2` selects `user` — the borrower whose debt shrank — **not** `repayer`. A third
+`subjectTopic = 2` selects `user` - the borrower whose debt shrank - **not** `repayer`. A third
 party repaying someone's loan credits the borrower, which is the economically correct
 attribution and closes an obvious credit-farming vector.
 
@@ -139,7 +139,7 @@ Score domain 300–900. Weights sum to 10,000 bps; a test asserts it.
 | Cross-chain collateral | 25% | $150k supplied | proven capacity to post assets |
 | Wallet maturity | 15% | 730 days | history length, from the approximation in §2.5 |
 | Chain diversity | 10% | 4 chains | credit proven across many chains is harder to manufacture |
-| Liquidation safety | 15% | — | starts full, each liquidation compounds a 30% cut |
+| Liquidation safety | 15% | - | starts full, each liquidation compounds a 30% cut |
 
 Two deliberate choices:
 
@@ -148,7 +148,7 @@ Two deliberate choices:
   *proven* safety, it has merely produced no evidence. Awarding the safety component by default
   would hand a fresh wallet 90 free points for having done nothing.
 
-Pricing curves are linear and monotone — verified across the full domain in
+Pricing curves are linear and monotone - verified across the full domain in
 [`tests/test_parity.py`](../tests/test_parity.py):
 
 ```
@@ -172,22 +172,22 @@ max LTV  = 30.00% at score 300 → 80.00% at 900  (non-decreasing)
 ```
 
 `restructure` reverts outside `[1.00, 1.15)`. Below 1.00 is deliberate: absorbing an underwater
-position would move a **real, already-crystallised loss** onto the reserve — that is
+position would move a **real, already-crystallised loss** onto the reserve - that is
 socialising bad debt, not preventing it.
 
 ### 4.2 The three levers
 
 ```solidity
-// Lever 1 — rate relief, recomputed from live cross-chain credit
+// Lever 1 - rate relief, recomputed from live cross-chain credit
 uint16  liveScore = ATTESTOR.scoreOf(borrower).score;
 uint256 earned    = CreditMath.aprBps(liveScore);
 uint256 floorRate = max(oldRate - MAX_RATE_RELIEF_BPS, RELIEF_FLOOR_BPS);
 if (max(earned, floorRate) < oldRate) loan.rateBps = max(earned, floorRate);
 
-// Lever 2 — term extension
+// Lever 2 - term extension
 loan.maturity = max(loan.maturity, block.timestamp) + EXTENSION_PERIOD;
 
-// Lever 3 — reserve-funded micro-refinance
+// Lever 3 - reserve-funded micro-refinance
 uint256 sustainable = CreditMath.sustainableDebtE8(collateralE8, LIQ_THRESHOLD, TARGET_HF);
 if (debtE8 > sustainable && reserveBalance > 0) {
     uint256 shortfall = _e8ToAsset(debtE8 - sustainable);
@@ -212,13 +212,13 @@ _accrue:   loan.interestOwed      += interest              // borrower owes all 
 
 An earlier version credited `reserveBalance` directly at accrual. That made
 `loan.interestOwed > totalInterestOwed`, so a full repayment underflowed `totalInterestOwed` and
-reverted — bricking repayment for any loan that had accrued interest.
+reverted - bricking repayment for any loan that had accrued interest.
 
 Two fixes, both structural:
 
 1. The reserve's share is booked as a **claim** (`pendingReserveInterest`), not as cash. The
    reserve may only ever *spend* money a borrower has actually paid in.
-2. Every path that reduces debt — `repay`, `liquidate`, and reserve-funded refinancing — routes
+2. Every path that reduces debt - `repay`, `liquidate`, and reserve-funded refinancing - routes
    through a single `_settleDebt` helper, so the invariant
 
    ```
@@ -247,7 +247,7 @@ earmarked to keep borrowers solvent. A test asserts the vault's real token balan
 
 `flagStress(borrower)` is permissionless and starts the grace clock. After
 `AGENT_GRACE_PERIOD`, `restructure` accepts any caller. A borrower's protection therefore does
-not depend on the agent's uptime — a property worth more than the agent's sophistication.
+not depend on the agent's uptime - a property worth more than the agent's sophistication.
 
 ---
 
@@ -272,16 +272,16 @@ averted     = deadweight × probability        # the ranking signal
 
 `days_to_liquidation` is a **triage heuristic, not a risk model**. It ignores drift, fat tails
 and correlation. Its only job is to answer "which of these borrowers runs out of room first?",
-and for that, monotonicity in the buffer is the property that matters — which is what the tests
+and for that, monotonicity in the buffer is the property that matters - which is what the tests
 pin, rather than any particular numeric output.
 
 The loss estimate is deliberately *not* the whole debt: liquidation recovers most of it by
 seizing collateral. What is actually destroyed is the bonus paid to the liquidator plus the
-borrower's forfeited equity — the part restructuring genuinely saves.
+borrower's forfeited equity - the part restructuring genuinely saves.
 
 ### 5.3 Execution
 
-1. Discover borrowers from `LoanOpened` logs — no external index, so a restarted agent rebuilds
+1. Discover borrowers from `LoanOpened` logs - no external index, so a restarted agent rebuilds
    its complete working set from the chain alone.
 2. Assess and triage.
 3. **Simulate first** via `eth_call`, turning a would-be reverted transaction into a log line.
@@ -299,8 +299,8 @@ pytest tests/test_parity.py
 ```
 
 Vectors are produced by calling the **actual EVM implementation** through
-`CreditMathHarness`, not by a second Python transcription — so the test compares Python against
-real on-chain behaviour. The sweep covers empty history, every saturation boundary, values past
+`CreditMathHarness`, not by a second Python transcription - so the test compares Python against
+real onchain behaviour. The sweep covers empty history, every saturation boundary, values past
 saturation, heavy liquidation counts, future-dated activity, and a seeded pseudo-random spread.
 
 Any change to `CreditMath.sol` requires regenerating the fixture. Treat a divergence as a build
@@ -314,7 +314,7 @@ chain's arithmetic bit for bit.
 Creditcoin implements `0xFD2` in the node runtime, so a local Hardhat chain has no code there.
 Tests deploy `MockNativeQueryVerifier` and `hardhat_setCode` it to `0xFD2`.
 
-This exercises the **real** path — the same external call, struct encoding, `calculateTxIndex`
+This exercises the **real** path - the same external call, struct encoding, `calculateTxIndex`
 dedupe and `EvmV1Decoder` chunk decoding. Only the runtime's cryptography is substituted; none
 of Meritr's own logic is stubbed. `test/helpers.js` builds prover-format `txBytes`
 (`abi.encode(uint8 txType, bytes[] chunks)`) exactly as the block prover emits it.
@@ -339,7 +339,7 @@ the Hardhat config had `102030` mislabelled as devnet:
 |---|---|---|---|
 | **Creditcoin Mainnet** | **102030** | `https://mainnet3.creditcoin.network` | `creditcoin.blockscout.com` |
 | Creditcoin Testnet | 102031 | `https://rpc.cc3-testnet.creditcoin.network` | `creditcoin-testnet.blockscout.com` |
-| Creditcoin Devnet | 102032 | `https://rpc.cc3-devnet.creditcoin.network` | — |
+| Creditcoin Devnet | 102032 | `https://rpc.cc3-devnet.creditcoin.network` | - |
 
 The Attestcoin native query verifier was confirmed live on **mainnet**: an `eth_call` to
 `calculateTxIndex` at `0x…0FD2` on chain 102030 returns a real value rather than the empty `0x`
@@ -353,8 +353,8 @@ check.
 otherwise. Registering Sepolia pools against a mainnet deployment would score borrowers on
 activity that costs nothing to manufacture, so the two are never mixed.
 
-Every mainnet address was verified on-chain — contract code present, and ERC-20 `symbol()` /
-`decimals()` read back — rather than copied from documentation:
+Every mainnet address was verified onchain - contract code present, and ERC-20 `symbol()` /
+`decimals()` read back - rather than copied from documentation:
 
 | Chain | Aave V3 Pool | Reserves registered |
 |---|---|---|
@@ -369,11 +369,11 @@ MERITR_CONFIRM_MAINNET=yes MERITR_ASSET=0x… MERITR_COLLATERAL=0x… \
 ```
 
 Two gates guard mainnet: an explicit confirmation, and a refusal to deploy the freely-mintable
-`MockERC20` demo pair. Both are one environment variable to clear — they exist to make the step
+`MockERC20` demo pair. Both are one environment variable to clear - they exist to make the step
 deliberate, not to obstruct it.
 
 Deploys the four subsystems, grants `RISK_AGENT_ROLE` and `REFRESHER_ROLE`, registers source
-chains, priced assets and Aave V3 schemas, then writes `deployments/<network>.json` — the single
+chains, priced assets and Aave V3 schemas, then writes `deployments/<network>.json` - the single
 address book the agent, API and frontend all read, so a fresh deploy propagates everywhere with
 no hand-edited config.
 
@@ -390,13 +390,13 @@ blocked by default.
 
 1. **Collateral pricing is governance-fed** (§1). The single trusted input in the risk path.
 2. **Source timestamps are approximated** from block height (§2.5).
-3. **`chainKey` is not the EVM chain id** and differs per Creditcoin network — Ethereum is
+3. **`chainKey` is not the EVM chain id** and differs per Creditcoin network - Ethereum is
    `3` on testnet and `1` on mainnet. Read from the ChainInfo precompile and verified at
    deploy time by `scripts/verifyChainKeys.js`.
 4. **Non-stable reserves need a price feed** before registration.
 5. **"ZK-Credit" is a hash commitment, not a SNARK.** `factsCommitment` hides values and enables
    selective disclosure, but proves nothing about them on its own. It is the substitution point
-   for a range proof — future work, not a present claim.
+   for a range proof - future work, not a present claim.
 6. **Single collateral asset per vault.** Multi-collateral is a natural extension; it would
    change the health-factor math from scalar to a weighted basket.
 7. **The contracts are unaudited.** A CertiK audit is a hackathon prize rather than a completed
