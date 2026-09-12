@@ -35,6 +35,8 @@ type Balances = {
   score: number;
   rateBps: number;
   maxLtvBps: number;
+  /** Native CTC, in wei. Gas for every action on this page. */
+  gas: bigint;
 };
 
 function Card({ title, subtitle, children }: { title: string; subtitle?: string; children: React.ReactNode }) {
@@ -67,7 +69,7 @@ export function ActionPanels({ config }: { config: MeritrConfig | null }) {
       const c = erc20(config.contracts.collateral, signer);
       const p = passportAt(config.contracts.MeritrPassport, signer);
 
-      const [assetBal, collBal, shares, debt, aSym, cSym, pid, quote] = await Promise.all([
+      const [assetBal, collBal, shares, debt, aSym, cSym, pid, quote, gas] = await Promise.all([
         a.balanceOf(account),
         c.balanceOf(account),
         v.sharesOf(account),
@@ -76,6 +78,9 @@ export function ActionPanels({ config }: { config: MeritrConfig | null }) {
         c.symbol().catch(() => "COLL"),
         p.passportOf(account).catch(() => 0n),
         v.quote(account),
+        // Native CTC. Every action below needs it for gas, and a wallet holding none is the
+        // most likely state a first-time visitor arrives in.
+        signer.provider.getBalance(account),
       ]);
 
       setBal({
@@ -89,6 +94,7 @@ export function ActionPanels({ config }: { config: MeritrConfig | null }) {
         score: Number(quote[0]),
         rateBps: Number(quote[1]),
         maxLtvBps: Number(quote[2]),
+        gas: gas as bigint,
       });
       setErr(null);
     } catch (e: any) {
@@ -135,6 +141,29 @@ export function ActionPanels({ config }: { config: MeritrConfig | null }) {
       )}
 
       <div className="grid gap-4 md:grid-cols-2">
+        {bal && bal.gas === 0n && (
+          <div className="mb-4 rounded-[var(--radius-panel)] border border-warn/40 bg-warn/10 p-4">
+            <p className="text-[14px] font-semibold text-warn">
+              This wallet holds no CTC, so it cannot pay gas.
+            </p>
+            <p className="mt-1.5 text-[13.5px] leading-relaxed text-[#b8bfcd]">
+              Everything on this console is readable without one - the positions, the proven
+              credit facts and the agent's reasoning are all public. Only signing needs CTC.
+              Creditcoin testnet has no web faucet; tokens come from the{" "}
+              <code className="mono text-[12.5px] text-[#d5d9e2]">#token-faucet</code> channel on
+              the Creditcoin Discord.
+            </p>
+            <a
+              href="https://docs.creditcoin.org/wallets/using-testnet-faucet"
+              target="_blank"
+              rel="noreferrer"
+              className="mt-2.5 inline-block font-mono text-[12px] text-model hover:underline"
+            >
+              How to use the testnet faucet →
+            </a>
+          </div>
+        )}
+
         <FaucetPanel config={config} bal={bal} aDec={aDec} cDec={cDec} onDone={load} />
         <LendPanel config={config} bal={bal} aDec={aDec} onDone={load} />
         <BorrowPanel config={config} bal={bal} aDec={aDec} cDec={cDec} onDone={load} />
