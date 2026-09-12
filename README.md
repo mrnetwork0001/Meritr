@@ -95,7 +95,7 @@ Meritr makes cross-chain credit history **provable** and makes distress **surviv
 
 1. It ingests a borrower's real repayment, collateral and liquidation history from Ethereum through Creditcoin's **Attestcoin native query verifier precompile at `0x0000000000000000000000000000000000000FD2`** - a Merkle-inclusion and continuity proof the Creditcoin runtime itself validates. No oracle operator, no multisig relayer, no trusted price poster sits anywhere in that path.
 2. It scores that proven history into a portable **ZK-Credit score** that sets a borrower's interest rate and borrowing capacity.
-3. When a position enters distress, an autonomous **DeAI risk agent restructures it instead of liquidating** - cutting the rate, extending the term, and retiring debt from a protocol reserve until the position is healthy again. The borrower keeps every unit of their collateral.
+3. When a position enters distress, an autonomous **DeAI risk agent restructures it instead of liquidating** - cutting the rate, extending the term, and retiring debt from a protocol reserve toward a healthy position - bounded at 25% of the reserve per event, and degrading to rate relief plus a term extension when the reserve is empty. The borrower keeps every unit of their collateral.
 
 ```
 Ethereum mainnet              Creditcoin EVM testnet (102031)

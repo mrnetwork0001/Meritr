@@ -91,6 +91,16 @@ const REFUSALS: Record<string, string> = {
     "The agent's grace period has not elapsed, so this intervention is not open to the public yet.",
   PriceNotSet: "No price is configured for that asset.",
   ZeroAmount: "Enter an amount above zero.",
+
+  // Inherited from OpenZeppelin rather than declared in Meritr's contracts, but reachable from
+  // the console all the same.
+  EnforcedPause:
+    "The vault is paused. New deposits, new loans and restructuring are suspended while an admin has the brake on. Repaying, adding collateral and withdrawing shares keep working.",
+  ReentrancyGuardReentrantCall:
+    "That call re-entered the vault before the previous one finished, and the vault refused it.",
+  ERC20InsufficientBalance: "You do not hold enough of that token for this amount.",
+  ERC20InsufficientAllowance:
+    "The vault is not approved to move that much of your token yet. Approving again should clear it.",
 };
 
 /** Pull the most useful sentence out of an ethers/provider error. */

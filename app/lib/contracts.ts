@@ -56,6 +56,20 @@ export const VAULT_ABI = [
   "error RestructureLimitReached()",
   "error NotAuthorizedYet(uint64 openAt)",
   "error PriceNotSet()",
+
+  // Inherited rather than declared here. MeritrVault is Pausable and ReentrancyGuard, and
+  // deposit, openLoan and restructure all carry whenNotPaused - so an admin pause is a refusal
+  // three UI flows can reach.
+  "error EnforcedPause()",
+  "error ReentrancyGuardReentrantCall()",
+
+  // ERC-20 refusals surface at the vault address, not the token's. SafeERC20 bubbles the
+  // token's raw revert data verbatim, so a failing safeTransferFrom inside deposit,
+  // fundReserve, openLoan, addCollateral, repay or liquidate arrives here as an OpenZeppelin
+  // IERC20Errors selector. Without these, "deposit more than you hold" - the easiest mistake
+  // on this page - is the unknown custom error the note above promises never to show.
+  "error ERC20InsufficientBalance(address sender, uint256 balance, uint256 needed)",
+  "error ERC20InsufficientAllowance(address spender, uint256 allowance, uint256 needed)",
 ] as const;
 
 export const PASSPORT_ABI = [
@@ -67,6 +81,7 @@ export const PASSPORT_ABI = [
   "error PassportAlreadyIssued(address holder)",
   "error NoPassport(address holder)",
   "error SoulboundTransferDisabled()",
+  "error EnforcedPause()",
 ] as const;
 
 export const ERC20_ABI = [

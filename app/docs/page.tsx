@@ -334,7 +334,9 @@ Aave V3 liquidation                     ▼  and continuity
             </P>
             <P>
               Restructuring cuts the rate, extends the term and retires debt from a protocol
-              reserve until the position is healthy. It has no code path that moves collateral at
+              reserve toward a health factor of 1.35 - drawing at most 25% of the reserve in one
+              event, and nothing at all when the reserve is empty, in which case it degrades to
+              rate relief and a term extension. It has no code path that moves collateral at
               all; seizure exists only in the separate liquidation backstop, which activates below
               a health factor of 1.
             </P>

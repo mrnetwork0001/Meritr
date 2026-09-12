@@ -172,7 +172,7 @@ export function ActionPanels({ config }: { config: MeritrConfig | null }) {
  * Gasless by necessity rather than preference: a wallet holding zero CTC cannot pay for a
  * transaction, so it cannot ask for one either. The visitor signs a *message* - free, off-chain,
  * moves nothing - and the backend, which holds a key with no roles on any Meritr contract, pays
- * the gas to send 0.1 CTC.
+ * the gas to send 1 CTC.
  *
  * Creditcoin's own testnet faucet is a Discord bot, so without this a reviewer must join a
  * server and talk to a bot before they can sign a single thing here.
@@ -432,7 +432,7 @@ function LendPanel({
     tx.run({
       title: "Withdraw your full position",
       description:
-        "Redeems all your shares for the underlying asset, including accrued interest. Limited by the liquidity currently idle in the pool.",
+        "Redeems all your shares for the underlying asset at the vault's last-booked share price. All-or-nothing: if your position is worth more than the liquidity currently idle in the pool, the transaction reverts and nothing is withdrawn.",
       facts: [["Shares", bal ? fromUnits(bal.shares, aDec, 4) : "-"]],
       steps: [
         {
@@ -537,9 +537,10 @@ function BorrowPanel({
     tx.run({
       title: `Open a credit line for ${draw} ${aSym}`,
       description:
-        "Locks your collateral and draws against it. The rate and the borrowing cap are not set " +
-        "by governance - they are computed onchain from the credit history this address has " +
-        "proven through Attestcoin.",
+        "Locks your collateral and draws against it. Your rate and your LTV cap are computed " +
+        "onchain from the credit history this address has proven through Attestcoin - no " +
+        "governance parameter sets them. How much that cap lets you draw also depends on the " +
+        "collateral mark, which is posted behind PRICE_ROLE.",
       facts: [
         ["Collateral posted", `${coll} ${cSym}`],
         ["Drawing", `${Number(draw).toLocaleString()} ${aSym}`],
@@ -687,7 +688,7 @@ function BorrowPanel({
   return (
     <Card
       title="Borrow"
-      subtitle="Your rate and borrowing capacity come from your Attestcoin-verified credit score - not from a governance parameter."
+      subtitle="Your rate and LTV cap come from your Attestcoin-verified credit score. The collateral mark that turns that cap into a drawable amount is posted behind PRICE_ROLE."
     >
       {bal && (
         <div className="grid grid-cols-3 gap-3 rounded border border-[var(--color-line)] bg-ink-950 px-3 py-2.5">
@@ -765,7 +766,16 @@ function BorrowPanel({
             onChange={setRepayAmt}
             suffix={bal?.assetSymbol}
             max={fromUnits(bal!.debt, aDec, 2)}
-            onMax={() => setRepayAmt(fromUnits(bal!.debt, aDec, 8).replace(/,/g, ""))}
+            onMax={() => {
+              // debtOf is a snapshot and interest keeps accruing until repay() mines, so an
+              // exact figure always lands a little short and leaves the loan open on dust -
+              // which is the one outcome the copy above promises will not happen. repay()
+              // trims anything above the live debt, so a small buffer costs nothing; cap it
+              // at the wallet balance so the transfer itself cannot fail.
+              const buffered = bal!.debt + bal!.debt / 1000n + 1n;
+              const capped = buffered > bal!.asset ? bal!.asset : buffered;
+              setRepayAmt(fromUnits(capped, aDec, aDec).replace(/,/g, ""));
+            }}
           />
           <button
             type="button"
@@ -817,7 +827,7 @@ function KeeperPanel({
       description:
         fn === "flagStress"
           ? "Records that this position has entered the stress band, which starts the six-hour clock after which anyone - not only the agent - may restructure it."
-          : "Cuts the rate toward what this borrower has earned, extends the term, and retires debt from the reserve until the position is healthy. You supply only an address: every amount is recomputed onchain, so you cannot influence the terms.",
+          : "Cuts the rate toward what this borrower has earned, extends the term, and - if the reserve holds anything - retires debt toward a health factor of 1.35, drawing at most 25% of the reserve in one event. With an empty reserve it is rate relief and the extension alone, and a loan may be restructured three times at most, twelve hours apart. You supply only an address: every amount is recomputed onchain, so you cannot influence the terms.",
       facts: [
         ["Borrower", valid ? short(target.trim()) : "-"],
         ["Caller", "you"],
@@ -846,7 +856,7 @@ function KeeperPanel({
     tx.run({
       title: "Liquidate a position",
       description:
-        "Repays part of a borrower's debt and seizes collateral plus a 5% bonus. Only possible below a health factor of 1.00. Any collateral left over after the seizure is returned to the borrower.",
+        "Repays part of a borrower's debt and seizes collateral plus a 5% bonus. Only possible below a health factor of 1.00. If the repayment clears the debt in full the loan closes and any unseized collateral goes back to the borrower; a partial repayment leaves the remainder locked in the still-open loan.",
       facts: [
         ["Borrower", valid ? short(target.trim()) : "-"],
         ["Repaying", `${Number(liqAmt).toLocaleString()}`],
