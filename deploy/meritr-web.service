@@ -6,7 +6,9 @@ Wants=network-online.target
 [Service]
 Type=simple
 User=meritr
+Group=meritr
 WorkingDirectory=/opt/meritr
+EnvironmentFile=-/etc/meritr/web.env
 Environment=NODE_ENV=production
 # Must match the NEXT_DIST_DIR push.sh builds into, or next start finds no build.
 Environment=NEXT_DIST_DIR=.next-deploy
@@ -15,7 +17,7 @@ Environment=NEXT_DIST_DIR=.next-deploy
 # Unusual, overridable port: this box runs other applications and 3000 is the first port
 # any other Node service will have taken.
 Environment=MERITR_WEB_PORT=3611
-ExecStart=/usr/bin/npx next start -H 127.0.0.1 -p ${MERITR_WEB_PORT}
+ExecStart=/usr/bin/node /opt/meritr/node_modules/.bin/next start -H 127.0.0.1 -p ${MERITR_WEB_PORT}
 Restart=always
 RestartSec=10
 StandardOutput=journal
