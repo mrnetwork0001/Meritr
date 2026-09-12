@@ -3,9 +3,10 @@
 # This is NOT a replacement /etc/caddy/Caddyfile. This box runs other applications, and
 # overwriting the main Caddyfile would take them offline. Install it as a drop-in:
 #
-#   sudo install -m 644 meritr.caddy /etc/caddy/Caddyfile.d/meritr.caddy
-#   grep -q 'Caddyfile.d' /etc/caddy/Caddyfile || \
-#     echo 'import /etc/caddy/Caddyfile.d/*.caddy' | sudo tee -a /etc/caddy/Caddyfile
+#   sudo install -m 644 meritr.caddy /etc/caddy/conf.d/meritr.caddy
+#
+# The main Caddyfile already ends with `import /etc/caddy/conf.d/*.caddy`, so it does not need
+# editing at all - which is the point. Do not add a second import.
 #   sudo caddy validate --config /etc/caddy/Caddyfile   # MUST pass before reloading
 #   sudo systemctl reload caddy                          # reload, never restart
 #
@@ -15,13 +16,15 @@
 # If this box runs nginx rather than Caddy, do not install Caddy at all - both want :80 and
 # :443 and the loser fails to start. Use the nginx server block in SETUP.md instead.
 #
-# Replace MERITR_HOSTNAME before building the frontend: NEXT_PUBLIC_MERITR_API is inlined at
+# The hostname is a wildcard-DNS name resolving to this box. The bare
+# 38.49.216.120.sslip.io is already taken by another site here, hence the meritr. prefix.
+# It is inlined into the frontend at build time: NEXT_PUBLIC_MERITR_API is inlined at
 # build time, not read at runtime.
 #
 # Ports match meritr-api.service (8611) and meritr-web.service (3611). Both are loopback-only
 # and chosen to avoid the 3000/8000 range other applications occupy.
 
-MERITR_HOSTNAME {
+meritr.38.49.216.120.sslip.io {
 	encode zstd gzip
 
 	# API surface
