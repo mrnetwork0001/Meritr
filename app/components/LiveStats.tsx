@@ -16,10 +16,10 @@ import { api, type Attestations } from "../lib/api";
  */
 
 const FALLBACK: Attestations = {
-  facts: 154,
-  borrowers: 78,
+  facts: 170,
+  borrowers: 85,
   sourceChains: 1,
-  valueProvenUsd: 15_835_672,
+  valueProvenUsd: 18_116_889,
 };
 
 const compactUsd = (n: number) =>
@@ -53,7 +53,7 @@ export function LiveStats() {
   const cells: Array<[string, string]> = [
     [d.facts.toLocaleString(), "credit facts proven"],
     [d.borrowers.toLocaleString(), "real Ethereum borrowers"],
-    [compactUsd(d.valueProvenUsd), "repayment proven"],
+    [compactUsd(d.valueProvenUsd), "of credit activity proven"],
     ["0", "oracle operators"],
   ];
 

@@ -12,11 +12,12 @@ Built for the [BUIDL CTC 2026 Fall Hackathon](https://dorahacks.io/hackathon/bui
 | MeritrVault | [`0x233D2aE279230fBFFbe61e6dF2A9DC6bF6ff3e84`](https://creditcoin-testnet.blockscout.com/address/0x233D2aE279230fBFFbe61e6dF2A9DC6bF6ff3e84) |
 | MeritrPassport | [`0xAdd2C477A101250C8A3e6Fe26a642143F610A601`](https://creditcoin-testnet.blockscout.com/address/0xAdd2C477A101250C8A3e6Fe26a642143F610A601) |
 
-**150+ real Attestcoin proofs are ingested and still climbing** — a roleless relayer daemon
+**170+ real Attestcoin proofs are ingested and still climbing** — a roleless relayer daemon
 continuously proves fresh Ethereum Aave activity into this deployment. At the time of writing
-that is **79 real Ethereum borrowers** carrying on-chain credit from **$15.8M** of proven
-repayment; the live count is served at `/api/attestations` and rendered on the landing page,
-because any figure written here goes stale within the hour — and the agent has restructured two distressed positions
+that is **85 real Ethereum borrowers** carrying on-chain credit from **$18.1M** of proven Aave
+activity — **$6.2M of it repayment**, the rest collateral and borrow events, each one a distinct
+input to the score. The live count is served at `/api/attestations` and rendered on the landing
+page, because any figure written here goes stale within the hour — and the agent has restructured two distressed positions
 on-chain ([tx](https://creditcoin-testnet.blockscout.com/tx/0x45f9963cd6dc535dfb7fb8670ecc9e5b2b329a6c7edac19df538dddadcb25be6)),
 health factor 1.070 → 1.350, with **no collateral seized**.
 
@@ -121,6 +122,22 @@ The passport publishes a coarse tier plus `factsCommitment`, a keccak256 binding
 > **Scope note, stated plainly:** this is a hash commitment, not a zero-knowledge proof. It hides the values but proves nothing about them on its own. It is the intended substitution point for a SNARK range proof, which is future work and is not claimed as implemented.
 
 ---
+
+## Documentation
+
+The hackathon asks for working Attestcoin integration code **and** technical documentation
+explaining how the build uses it. Both are in this repository.
+
+| Document | What it covers |
+| --- | --- |
+| [docs/ATTESTCOIN_INTEGRATION.md](docs/ATTESTCOIN_INTEGRATION.md) | How Meritr uses Attestcoin readability end to end: the `ASCBase` inheritance, the `0x…0FD2` BlockProver precompile call, the `0x…0FD3` ChainInfo chain-key verification, the on-chain event-schema registry, and the proof-builder REST flow. |
+| [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md) | The four subsystems, the trust boundaries between them, and why the credit layer holds no reference to the market layer. |
+| [deploy/SETUP.md](deploy/SETUP.md) | Reproducing the deployment, including which key may never leave the operator's machine and why. |
+| [LICENSE](LICENSE) | Apache 2.0. |
+
+Attestations ingested by this deployment can be inspected independently of anything in this
+repository, on the Creditcoin Attestcoin dashboard and on Blockscout — the deployed
+`MeritrAttestor` address is in the table at the top of this file.
 
 ## Quickstart
 
