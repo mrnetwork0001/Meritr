@@ -1,7 +1,5 @@
 import Link from "next/link";
 
-const REPO = "https://github.com/mrnetwork0001/Meritr";
-
 const LINKS = [
   ["Problem", "/#problem"],
   ["How it works", "/#how"],
@@ -36,17 +34,14 @@ export default function SiteHeader() {
               {label}
             </a>
           ))}
-          <a href={REPO} target="_blank" rel="noreferrer" className="navlink">
-            GitHub
-          </a>
-          <Link href="/app" className="navlink">
-            App
+          <Link href="/docs" className="navlink">
+            Docs
           </Link>
         </div>
 
-        {/* Below md the links collapse; the hero's Launch app call is immediately below. */}
-        <Link href="/app" className="navlink md:hidden">
-          App
+        {/* Below md the section links collapse; the hero's Launch app call is immediately below. */}
+        <Link href="/docs" className="navlink md:hidden">
+          Docs
         </Link>
       </nav>
     </header>
