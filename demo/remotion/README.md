@@ -79,22 +79,29 @@ Fourteen cuts. The argument runs problem → proof → evidence → mechanism �
 | --- | --- | --- | --- |
 | 1 | Title — the wordmark | 3.7 | v00 |
 | 2 | Amnesiac — history does not travel | 15.1 | v01 |
-| 3 | Brutal — one answer, everywhere | 13.6 | v02 |
-| 4 | Proof pipeline — how a fact gets in | 15 | v03 |
-| 5 | **verify.mp4** — accepted, then refused | 12.5 | v04 |
-| 6 | **landing.mp4** — the page, counting live | 15.3 | v05 |
-| 7 | Score sets the terms — 300 against 774 | 15.8 | v06 |
-| 8 | **wallet.mp4** — a borrower opens a line | 8.5 | v07 |
-| 9 | The signature — one argument | 17.1 | v08 |
-| 10 | Safety — assume the key is stolen | 11.3 | v09 |
-| 11 | **agent.mp4** or the recreated log | 11 | v10 |
-| 12 | **explorer.mp4** or the signed-by graphic | 14.6 | v11 |
-| 13 | **console.mp4** — the public record | 4 | — |
-| 14 | Never seized | 11.8 | v12 |
-| 15 | Close — the wordmark again | 9.7 | v13 |
+| 3 | Proof pipeline — how a fact gets in | 15 | v03 |
+| 4 | **verify.mp4** — accepted, then refused | 12.5 | v04 |
+| 5 | **landing.mp4** — the page, counting live | 15.3 | v05 |
+| 6 | Score sets the terms — 300 against 774 | 15.8 | v06 |
+| 7 | **wallet.mp4** — a borrower opens a line | 20 | v07 |
+| 8 | The signature — one argument | 17.1 | v08 |
+| 9 | Safety — assume the key is stolen | 11.3 | v09 |
+| 10 | **agent.mp4** or the recreated log | 11 | v10 |
+| 11 | **explorer.mp4** — who signed it | 14.6 | v11 |
+| 12 | **console.mp4** — the public record | 4 | — |
+| 13 | Never seized | 11.8 | v12 |
+| 14 | Close — the wordmark again | 9.7 | v13 |
 
-Fifteen cuts, 179.0 seconds. `npm run check` verifies every scene is at least as long as the
+Fourteen cuts, 176.9 seconds. `npm run check` verifies every scene is at least as long as the
 narration it carries and that the total stays under three minutes; it runs before every render.
+
+**The wallet clip plays at 1:1.** It is the one scene showing real transactions being signed, so
+it is never sped up - the "Brutal" scene was cut to buy it the runtime, and its narration (v02)
+is kept in `vo-gen.js` in case the argument wants it back.
+
+**Master at 1080p, not 1440p.** The recordings are native 1920x1080, so mastering above that
+would upscale the footage - softening the one content a reviewer looks hardest at - to sharpen
+graphics that are already crisp. CRF 12. `render:1440` remains if the balance ever changes.
 
 **One thing to know before re-cutting.** Scenes 11 and 12 name the agent address
 `0xC06B6015…` and the two transactions it signed. Those are real and checkable — a judge who

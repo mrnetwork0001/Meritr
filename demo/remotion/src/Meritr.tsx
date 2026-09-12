@@ -648,7 +648,6 @@ const buildCuts = (): Cut[] => {
 
   add(s(3.7), <Title total={s(3.7)} />, 'v00');
   add(s(15.1), <Amnesiac total={s(15.1)} />, 'v01');
-  add(s(13.6), <Brutal total={s(13.6)} />, 'v02');
   add(s(15), <ProofPipeline total={s(15)} />, 'v03');
 
   // YOU RECORD: the terminal running `npm run verify:proof`.
@@ -656,7 +655,7 @@ const buildCuts = (): Cut[] => {
     s(12.5),
     <>
       <Footage
-        src="clips/verify.mp4" total={s(12.5)}
+        src="clips/verify.mp4" total={s(12.5)} playbackRate={0.93}
         label="Terminal: npm run verify:proof"
         note="Run it in the Meritr repo. Capture from the command to the ACCEPTED / REJECTED lines."
       />
@@ -682,10 +681,10 @@ const buildCuts = (): Cut[] => {
 
   // YOU RECORD: connect wallet, claim gas, open a loan.
   add(
-    s(8.5),
+    s(20),
     <>
       <Footage
-        src="clips/wallet.mp4" total={s(8.5)} playbackRate={2.2}
+        src="clips/wallet.mp4" total={s(20)} playbackRate={1}
         label="Wallet: connect → faucet → open a loan"
         note="usemeritr.vercel.app/app — connect MetaMask, request 1 CTC, mint demo tokens, then post 5 mWETH and draw 3,000 mUSD."
       />
@@ -708,7 +707,7 @@ const buildCuts = (): Cut[] => {
   add(
     s(14.6),
     <Footage
-      src="clips/explorer.mp4" total={s(14.6)} playbackRate={1.2}
+      src="clips/explorer.mp4" total={s(14.6)} playbackRate={0.67}
       label="Blockscout: who signed it"
       note="Open tx 0xfc72b344… on creditcoin-testnet.blockscout.com and show the From address 0xC06B6015…. Falls back to the graphic if you skip it."
       fallback={<SignedBy total={s(14.6)} />}
@@ -721,7 +720,7 @@ const buildCuts = (): Cut[] => {
     s(4),
     <>
       <Footage
-        src="clips/console.mp4" total={s(4)} playbackRate={2}
+        src="clips/console.mp4" total={s(4)} playbackRate={1.95}
         label="Console: the agent's record"
         note="usemeritr.vercel.app/app — the Agent view, showing the restructurings and the reasoning."
       />
