@@ -212,14 +212,18 @@ export default function Landing() {
           lede="This is the load-bearing decision in the protocol, and it is one function signature."
         >
           <div className="grid gap-5 lg:grid-cols-[1.1fr_1fr]">
-            <Reveal>
+            {/* min-w-0: a grid child defaults to min-width:auto, so without this it refuses to
+                shrink below the signature's intrinsic width and the page scrolls sideways on a
+                phone instead of the <pre> scrolling inside its own panel. */}
+            <Reveal className="min-w-0">
               <div className="panel overflow-hidden">
                 <div className="border-b border-[var(--color-line)] px-5 py-3">
                   <p className="mono text-[11px] text-[#5d6474]">MeritrVault.sol</p>
                 </div>
                 <pre className="mono scroll-x px-5 py-6 text-[13px] leading-relaxed text-[#cdd2de]">
 {`function `}<span className="text-model">restructure</span>{`(address borrower)
-    external returns (uint256, uint256, uint256);`}
+    external
+    returns (uint256, uint256, uint256);`}
                 </pre>
                 <div className="border-t border-[var(--color-line)] px-5 py-5">
                   <p className="text-[14px] leading-relaxed text-[#8b93a5]">
@@ -233,7 +237,7 @@ export default function Landing() {
               </div>
             </Reveal>
 
-            <Reveal delay={70}>
+            <Reveal delay={70} className="min-w-0">
               <div className="space-y-5">
                 <Frame caption="health bands">
                   <BandsDiagram className="w-full" />
