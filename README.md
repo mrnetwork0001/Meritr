@@ -21,6 +21,33 @@ page, because any figure written here goes stale within the hour - and the agent
 onchain ([tx](https://creditcoin-testnet.blockscout.com/tx/0x45f9963cd6dc535dfb7fb8670ecc9e5b2b329a6c7edac19df538dddadcb25be6)),
 health factor 1.070 → 1.350, with **no collateral seized**.
 
+**Contents** -
+[The problem](#the-problem) ·
+[What Meritr does](#what-meritr-does) ·
+[Attestcoin integration](#the-load-bearing-design-decision) ·
+[Subsystems](#the-four-subsystems) ·
+[Documentation](#documentation) ·
+[Quickstart](#quickstart) ·
+[Tests](#tests) ·
+[What is real and what is not](#asset-provenance---what-is-real-and-what-is-not) ·
+[Honest limitations](#honest-limitations) ·
+[Judging criteria](#how-this-maps-to-the-judging-criteria)
+
+---
+
+## Verify this in 60 seconds, without cloning anything
+
+Every claim below is checkable by a third party against public infrastructure. Nothing here
+depends on trusting this repository.
+
+| Claim | How to check it yourself |
+|---|---|
+| Attestcoin really verified these proofs | Open [MeritrAttestor on Blockscout](https://creditcoin-testnet.blockscout.com/address/0xB462C2772b8003e3c511C373dDC5715642B34D4c) and read the `CreditFactAttested` logs. Each one exists only because the `0x…0FD2` precompile accepted a Merkle-inclusion proof; the contract has no path that writes a fact without one. |
+| The agent restructured instead of liquidating | [Restructuring tx](https://creditcoin-testnet.blockscout.com/tx/0x45f9963cd6dc535dfb7fb8670ecc9e5b2b329a6c7edac19df538dddadcb25be6) - health factor 1.070 → 1.350, `collateralSeized = 0`. |
+| The source data is real Ethereum activity | Take any `queryId` from a `CreditFactAttested` log and find the same Aave V3 event on [Etherscan](https://etherscan.io). The borrower, asset and amount match because they were proven, not copied. |
+| The numbers on the site are live, not written down | `curl` the deployment's `/api/attestations`. It counts from chain logs on every request, so it moves while you watch it. |
+| The precompile rejects bad proofs | `npm run verify:proof` fetches a genuine Aave proof, asks the live precompile to judge it, then flips one byte and asks again. Output: `genuine proof -> ACCEPTED` / `one byte altered -> REJECTED (Merkle proof validation failed)`. It is a view call, so it costs no gas. |
+
 ---
 
 ## The problem
@@ -286,6 +313,21 @@ Stated because a credit protocol that hides its assumptions is not one anyone sh
 - **The contracts are unaudited.** A CertiK audit is a hackathon prize, not a completed step. Treat any mainnet deployment accordingly.
 - **Non-stable reserve assets need a price feed** before being registered; the current catalogue prices stablecoin reserves at $1.00.
 - **"ZK-Credit" is a commitment scheme today, not a SNARK.** See the passport section above.
+
+---
+
+## How this maps to the judging criteria
+
+The CC3 team stated in the season kickoff AMA that the five CEIP pillars are also the criteria
+for this hackathon. Mapped honestly, including where Meritr is thin:
+
+| Pillar | Where Meritr stands |
+|---|---|
+| **Technical alignment** | Attestcoin is not decoration here - it is the only way a credit fact can enter the system. `MeritrAttestor` inherits `ASCBase`, calls the `0x…0FD2` BlockProver precompile, and resolves chain keys from the `0x…0FD3` ChainInfo precompile rather than hardcoding them. Remove Attestcoin and the protocol has no inputs at all. |
+| **Market and technical relevance** | Cross-chain credit portability and restructuring-over-liquidation are both live problems in lending markets today. The source data is real Aave V3 activity on Ethereum mainnet, not a fixture. |
+| **Product vision** | A borrower's credit history should follow them between chains, and distress should be survivable. The passport makes the first portable; the vault makes the second real, with the chain - not the agent - setting every economic term. |
+| **User-base expansion** | Honest status: the proven history belongs to 85 real Ethereum borrowers who have not opted in. That is a genuine distribution channel - each is a real address with real standing - but converting it is future work, not a shipped result. |
+| **Execution capability** | 75+ commits across the hackathon window rather than one drop, 50 Solidity and 39 Python tests, a parity suite asserting the agent's math matches the deployed library to the wei, and a documented limitations section. |
 
 ---
 
