@@ -11,8 +11,8 @@ import { short, usd } from "../lib/format";
  */
 export function AgentFeed({ events }: { events: RestructureEvent[] }) {
   return (
-    <div className="rounded-lg border border-ink-700 bg-ink-900">
-      <div className="flex items-center justify-between border-b border-ink-700 px-5 py-3">
+    <div className="rounded-lg border border-[var(--color-line)] bg-ink-900/88">
+      <div className="flex items-center justify-between border-b border-[var(--color-line)] px-5 py-3">
         <h2 className="text-[13px] font-semibold text-gray-200">Restructuring history</h2>
         <span className="font-mono text-[10.5px] text-gray-600">on-chain audit trail</span>
       </div>
@@ -23,7 +23,7 @@ export function AgentFeed({ events }: { events: RestructureEvent[] }) {
           a health factor of 1.00 and 1.15.
         </p>
       ) : (
-        <ul className="divide-y divide-ink-700/70">
+        <ul className="divide-y divide-[var(--color-line)]">
           {events.map((e) => {
             const cut = e.oldRatePct - e.newRatePct;
             return (

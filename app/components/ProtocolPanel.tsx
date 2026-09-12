@@ -14,12 +14,12 @@ export function ProtocolPanel({ stats, health }: { stats: ProtocolStats | null; 
   ];
 
   return (
-    <div className="rounded-lg border border-ink-700 bg-ink-900">
-      <div className="flex flex-wrap items-center justify-between gap-2 border-b border-ink-700 px-5 py-3">
+    <div className="rounded-lg border border-[var(--color-line)] bg-ink-900/88">
+      <div className="flex flex-wrap items-center justify-between gap-2 border-b border-[var(--color-line)] px-5 py-3">
         <h2 className="text-[13px] font-semibold text-gray-200">Protocol</h2>
         {health?.status === "ok" ? (
           <span className="flex items-center gap-1.5 font-mono text-[10.5px] text-gray-500">
-            <span className="hero-pulse h-1.5 w-1.5 rounded-full bg-up" />
+            <span className="anim-breathe h-1.5 w-1.5 rounded-full bg-up" />
             {health.network} · block {health.blockNumber?.toLocaleString()}
           </span>
         ) : (
@@ -27,7 +27,7 @@ export function ProtocolPanel({ stats, health }: { stats: ProtocolStats | null; 
         )}
       </div>
 
-      <dl className="grid grid-cols-2 divide-x divide-y divide-ink-700 sm:grid-cols-3">
+      <dl className="grid grid-cols-2 divide-x divide-y divide-[var(--color-line)] sm:grid-cols-3">
         {cells.map(([label, value, accent]) => (
           <div key={label} className="px-5 py-3.5">
             <dd className={`mono text-[17px] font-semibold ${accent ? "text-model" : "text-gray-100"}`}>{value}</dd>
@@ -37,7 +37,7 @@ export function ProtocolPanel({ stats, health }: { stats: ProtocolStats | null; 
       </dl>
 
       {health?.status === "ok" && (
-        <div className="flex flex-wrap items-center gap-2 border-t border-ink-700 px-5 py-3 font-mono text-[10.5px]">
+        <div className="flex flex-wrap items-center gap-2 border-t border-[var(--color-line)] px-5 py-3 font-mono text-[10.5px]">
           <span className={health.attestcoinAvailable ? "text-model" : "text-gray-600"}>
             attestcoin {health.attestcoinAvailable ? "online" : "unavailable"}
           </span>

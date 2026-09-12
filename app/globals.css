@@ -1,153 +1,272 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import "tailwindcss";
+
+/* ─────────────────────────────────────────────────────────────────────────
+   Design tokens. Tailwind v4 is CSS-first: @theme generates the utilities,
+   so there is no config file and no second place for these to drift to.
+
+   The palette is deliberately narrow. Surfaces are near-black with hairline
+   borders; colour is reserved for meaning, never decoration:
+     model  — a value Meritr computed
+     up     — solvent, proven, healthy
+     down   — distressed, refused, liquidatable
+   A reader should be able to tell a position's state without reading a number.
+   ───────────────────────────────────────────────────────────────────────── */
+@theme {
+  --color-ink-950: #07090f;
+  --color-ink-900: #0b0f19;
+  --color-ink-850: #101522;
+  --color-ink-800: #131826;
+  --color-ink-700: #1c2233;
+
+  --color-model: #818cf8;
+  --color-up: #34d399;
+  --color-down: #fb7185;
+  --color-warn: #f2c14e;
+
+  --color-line: rgba(255, 255, 255, 0.09);
+  --color-line-strong: rgba(255, 255, 255, 0.16);
+
+  --font-sans: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
+  --font-mono: var(--font-jetbrains), ui-monospace, SFMono-Regular, Menlo, monospace;
+
+  --radius-panel: 14px;
+  --radius-lg: 22px;
+}
 
 :root {
   color-scheme: dark;
 }
 
 html {
-  background: #07090f;
-  color: #e5e7eb;
+  background: var(--color-ink-950);
+  color: #e8eaf0;
+  -webkit-font-smoothing: antialiased;
 }
 
+@media (prefers-reduced-motion: no-preference) {
+  html {
+    scroll-behavior: smooth;
+  }
+}
+
+/* Headings share the body face and lean on weight plus tight tracking for
+   hierarchy rather than a display typeface. This is most of what separates a
+   product from a terminal transcript. */
+h1,
+h2,
+h3 {
+  font-family: var(--font-sans);
+  letter-spacing: -0.03em;
+}
+h1 {
+  letter-spacing: -0.04em;
+}
+
+/* Dot-grid canvas behind every page. Fixed, so it reads as a stable surface
+   the content moves over rather than a texture that scrolls with it. */
+body {
+  background-image: radial-gradient(rgba(255, 255, 255, 0.07) 1.3px, transparent 1.3px);
+  background-size: 46px 46px;
+  background-attachment: fixed;
+}
+
+::selection {
+  background: rgba(129, 140, 248, 0.28);
+}
+
+/* Numbers that must line up column to column. */
+.mono {
+  font-family: var(--font-mono);
+  font-variant-numeric: tabular-nums;
+}
+
+.eyebrow {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--color-model);
+}
+
+/* ── Motion ───────────────────────────────────────────────────────────────
+   Every animation lives inside the no-preference query, so a visitor with
+   Reduce Motion enabled gets the identical static page — the classes simply
+   resolve to nothing rather than being overridden later. */
+@media (prefers-reduced-motion: no-preference) {
+  @keyframes meritr-dash {
+    to {
+      stroke-dashoffset: -160;
+    }
+  }
+  @keyframes meritr-travel {
+    0% { opacity: 0; transform: translateX(0); }
+    12% { opacity: 1; }
+    88% { opacity: 1; }
+    100% { opacity: 0; transform: translateX(var(--travel, 64px)); }
+  }
+  @keyframes meritr-breathe {
+    0%, 100% { opacity: 0.4; }
+    50% { opacity: 1; }
+  }
+  @keyframes meritr-rise {
+    from { opacity: 0; transform: translateY(14px); }
+    to { opacity: 1; transform: none; }
+  }
+
+  .anim-dash { animation: meritr-dash 3.4s linear infinite; }
+  .anim-travel { animation: meritr-travel 3s ease-in-out infinite; }
+  .anim-breathe { animation: meritr-breathe 3.2s ease-in-out infinite; }
+  .anim-rise { animation: meritr-rise 0.8s cubic-bezier(0.2, 0.7, 0.2, 1) both; }
+
+  .reveal {
+    opacity: 0;
+    transform: translateY(16px);
+    transition:
+      opacity 0.6s ease-out,
+      transform 0.7s cubic-bezier(0.2, 0.7, 0.2, 1);
+  }
+  .reveal.in {
+    opacity: 1;
+    transform: none;
+  }
+  .reveal .stagger > * {
+    opacity: 0;
+    transform: translateY(6px);
+    transition:
+      opacity 0.45s ease-out,
+      transform 0.45s ease-out;
+    transition-delay: calc(var(--n, 0) * 45ms + 0.12s);
+  }
+  .reveal.in .stagger > * {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+/* ── Components ───────────────────────────────────────────────────────── */
 @layer components {
-  /* Section kicker. Monospace + wide tracking, always in the accent. */
-  .eyebrow {
-    @apply font-mono text-xs uppercase tracking-[0.18em] text-model;
+  .panel {
+    border-radius: var(--radius-panel);
+    border: 1px solid var(--color-line);
+    background: color-mix(in oklab, var(--color-ink-900) 88%, transparent);
   }
 
-  /* Numbers that must line up column-to-column. */
-  .mono {
-    @apply font-mono tabular-nums;
+  .panel-hover {
+    transition:
+      border-color 0.3s,
+      transform 0.3s;
   }
-
-  /* Inline formulae and contract signatures. `em` highlights the derived term. */
-  .formula {
-    @apply font-mono text-[13px] leading-relaxed text-gray-300;
-  }
-  .formula em {
-    @apply not-italic text-model;
-  }
-
-  /* The single card treatment used everywhere. */
-  .card {
-    @apply rounded-lg border border-ink-700 bg-ink-900 p-5
-           transition-[border-color,transform] duration-300
-           hover:-translate-y-0.5 hover:border-gray-600;
+  .panel-hover:hover {
+    border-color: var(--color-line-strong);
+    transform: translateY(-2px);
   }
 
   .btn-primary {
-    @apply rounded bg-model px-5 py-2.5 font-mono text-sm font-bold text-ink-950
-           transition hover:bg-model/90;
+    border-radius: 10px;
+    background: var(--color-model);
+    padding: 0.6rem 1.15rem;
+    font-family: var(--font-mono);
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--color-ink-950);
+    transition: filter 0.2s;
   }
-  .btn-secondary {
-    @apply rounded border border-ink-700 px-5 py-2.5 font-mono text-sm text-gray-200
-           transition hover:border-gray-600 hover:bg-ink-800;
+  .btn-primary:hover {
+    filter: brightness(1.1);
   }
 
-  .nav-link {
-    @apply rounded px-2 py-1 text-sm text-gray-400 transition hover:bg-ink-800 hover:text-gray-100;
+  .btn-ghost {
+    border-radius: 10px;
+    border: 1px solid var(--color-line);
+    padding: 0.6rem 1.15rem;
+    font-family: var(--font-mono);
+    font-size: 13px;
+    color: #cdd2de;
+    transition:
+      border-color 0.2s,
+      background 0.2s;
+  }
+  .btn-ghost:hover {
+    border-color: var(--color-line-strong);
+    background: var(--color-ink-800);
   }
 
   .chip {
-    @apply inline-flex items-center gap-1.5 rounded border border-ink-700 bg-ink-900
-           px-3 py-1 font-mono text-[11px] text-gray-400;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    border-radius: 999px;
+    border: 1px solid var(--color-line);
+    background: color-mix(in oklab, var(--color-ink-900) 70%, transparent);
+    padding: 0.22rem 0.65rem;
+    font-family: var(--font-mono);
+    font-size: 11px;
+    color: #9aa3b4;
   }
 
-  .section {
-    @apply scroll-mt-20 border-t border-ink-700/70 py-14 sm:py-20;
+  .navlink {
+    border-radius: 8px;
+    padding: 0.3rem 0.55rem;
+    font-size: 13.5px;
+    color: #8b93a5;
+    transition:
+      color 0.2s,
+      background 0.2s;
   }
-
-  .h2 {
-    @apply text-balance text-2xl font-bold tracking-tight text-gray-100 sm:text-3xl;
-  }
-
-  .lede {
-    @apply mt-3 max-w-3xl text-[15px] leading-relaxed text-gray-400;
-  }
-
-  code.inline {
-    @apply rounded bg-ink-800 px-1 py-0.5 font-mono text-[0.92em] text-gray-200;
+  .navlink:hover {
+    color: #eef0f5;
+    background: var(--color-ink-800);
   }
 }
 
-/* ── Scroll reveal ────────────────────────────────────────────────────────
-   Sections fade up once as they enter the viewport. `.in` is applied by an
-   IntersectionObserver, and everything degrades to plain visible content when
-   JavaScript never runs — see Reveal.tsx, which renders `.in` on the server. */
-.reveal {
-  opacity: 0;
-  transform: translateY(16px);
-  transition:
-    opacity 0.6s ease-out,
-    transform 0.7s cubic-bezier(0.2, 0.7, 0.2, 1);
+/* Landing container.
+   The page previously centred content in a 72rem cap, which left generous gutters. This
+   keeps 75% of those gutters: solving (V - W')/2 = 0.75(V - W)/2 for W' gives
+   0.25V + 0.75W, so the ratio holds at every viewport width rather than at one breakpoint.
+   Padding is scaled by the same 0.75 for narrow screens, where the cap no longer binds and
+   the padding *is* the margin. */
+.wrap {
+  margin-inline: auto;
+  width: 100%;
+  max-width: calc(25vw + 54rem);
+  padding-inline: 0.9375rem; /* 1.25rem × 0.75 */
 }
-.reveal.in {
-  opacity: 1;
-  transform: none;
-}
-
-/* Children of a `.stagger` inside a revealed block arrive in sequence. */
-.reveal .stagger > * {
-  opacity: 0;
-  transform: translateY(6px);
-  transition:
-    opacity 0.45s ease-out,
-    transform 0.45s ease-out;
-  transition-delay: calc(var(--n, 0) * 45ms + 0.12s);
-}
-.reveal.in .stagger > * {
-  opacity: 1;
-  transform: none;
-}
-
-/* Horizontal rules that draw themselves in. */
-.reveal .draw-x {
-  transform: scaleX(0);
-  transform-origin: left;
-  transition: transform 0.9s cubic-bezier(0.2, 0.7, 0.2, 1) 0.25s;
-}
-.reveal.in .draw-x {
-  transform: scaleX(1);
-}
-
-/* Hero copy rises on first paint rather than on scroll. */
-@keyframes hero-rise {
-  from { opacity: 0; transform: translateY(14px); }
-  to   { opacity: 1; transform: none; }
-}
-.hero-in {
-  animation: hero-rise 0.8s cubic-bezier(0.2, 0.7, 0.2, 1) both;
-}
-.hero-in:nth-child(2) { animation-delay: 0.06s; }
-.hero-in:nth-child(3) { animation-delay: 0.12s; }
-.hero-in:nth-child(4) { animation-delay: 0.18s; }
-
-@keyframes hero-pulse {
-  0%, 100% { opacity: 1; }
-  50%      { opacity: 0.35; }
-}
-.hero-pulse {
-  animation: hero-pulse 2.4s ease-in-out infinite;
-}
-
-/* Respect a reader who has asked for less motion. */
-@media (prefers-reduced-motion: reduce) {
-  .reveal,
-  .reveal .stagger > *,
-  .reveal .draw-x {
-    opacity: 1;
-    transform: none;
-    transition: none;
+@media (min-width: 640px) {
+  .wrap {
+    padding-inline: 1.5rem; /* 2rem × 0.75 */
   }
-  .hero-in,
-  .hero-pulse {
-    animation: none;
+}
+
+/* Header container. Same solve as .wrap but holding 50% of the original gutters:
+   W' = 0.5V + 0.5W with W = 72rem gives calc(50vw + 36rem). The header spans wider than
+   the content below it on purpose — it reads as chrome framing the page rather than as
+   another column of it. */
+.wrap-header {
+  margin-inline: auto;
+  width: 100%;
+  max-width: calc(50vw + 36rem);
+  padding-inline: 0.625rem; /* 1.25rem × 0.5 */
+}
+@media (min-width: 640px) {
+  .wrap-header {
+    padding-inline: 1rem; /* 2rem × 0.5 */
+  }
+}
+
+/* A narrower variant for centred prose, scaled the same way (48rem base). */
+.wrap-narrow {
+  margin-inline: auto;
+  width: 100%;
+  max-width: calc(16.67vw + 36rem);
+  padding-inline: 0.9375rem;
+}
+@media (min-width: 640px) {
+  .wrap-narrow {
+    padding-inline: 1.5rem;
   }
 }
 
 /* Wide content scrolls inside its own box; the page never scrolls sideways. */
 .scroll-x {
-  @apply overflow-x-auto;
+  overflow-x: auto;
 }

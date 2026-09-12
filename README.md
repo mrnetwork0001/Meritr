@@ -12,8 +12,11 @@ Built for the [BUIDL CTC 2026 Fall Hackathon](https://dorahacks.io/hackathon/bui
 | MeritrVault | [`0x233D2aE279230fBFFbe61e6dF2A9DC6bF6ff3e84`](https://creditcoin-testnet.blockscout.com/address/0x233D2aE279230fBFFbe61e6dF2A9DC6bF6ff3e84) |
 | MeritrPassport | [`0xAdd2C477A101250C8A3e6Fe26a642143F610A601`](https://creditcoin-testnet.blockscout.com/address/0xAdd2C477A101250C8A3e6Fe26a642143F610A601) |
 
-**30 real Attestcoin proofs are ingested**, giving 20 real Ethereum borrowers on-chain credit
-from $2.6M of proven Aave repayment — and the agent has restructured two distressed positions
+**150+ real Attestcoin proofs are ingested and still climbing** — a roleless relayer daemon
+continuously proves fresh Ethereum Aave activity into this deployment. At the time of writing
+that is **79 real Ethereum borrowers** carrying on-chain credit from **$15.8M** of proven
+repayment; the live count is served at `/api/attestations` and rendered on the landing page,
+because any figure written here goes stale within the hour — and the agent has restructured two distressed positions
 on-chain ([tx](https://creditcoin-testnet.blockscout.com/tx/0x45f9963cd6dc535dfb7fb8670ecc9e5b2b329a6c7edac19df538dddadcb25be6)),
 health factor 1.070 → 1.350, with **no collateral seized**.
 

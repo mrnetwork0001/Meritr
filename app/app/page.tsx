@@ -137,7 +137,7 @@ export default function Console() {
           <div className="mb-6 rounded-lg border border-down/30 bg-down/[0.06] p-5">
             <p className="text-[13px] font-semibold text-down">Risk API unavailable</p>
             <p className="mt-1.5 font-mono text-[11.5px] text-gray-400">{apiError}</p>
-            <pre className="scroll-x mt-3 rounded border border-ink-700 bg-ink-950 p-3 font-mono text-[11px] leading-relaxed text-gray-400">
+            <pre className="scroll-x mt-3 rounded border border-[var(--color-line)] bg-ink-950 p-3 font-mono text-[11px] leading-relaxed text-gray-400">
 {`npx hardhat node                                        # terminal 1
 npx hardhat run scripts/deploy.js --network localhost    # terminal 2
 npx hardhat run scripts/seedLocal.js --network localhost
@@ -185,11 +185,11 @@ MERITR_NETWORK=localhost npm run backend                 # terminal 3`}
         {view === "attestations" && (
           <div className="grid gap-4 lg:grid-cols-2">
             <AttestationFlow config={config} />
-            <div className="rounded-lg border border-ink-700 bg-ink-900">
-              <div className="border-b border-ink-700 px-5 py-3">
+            <div className="rounded-lg border border-[var(--color-line)] bg-ink-900/88">
+              <div className="border-b border-[var(--color-line)] px-5 py-3">
                 <h2 className="text-[13px] font-semibold text-gray-200">Deployment</h2>
               </div>
-              <ul className="divide-y divide-ink-700/70 text-[12px]">
+              <ul className="divide-y divide-[var(--color-line)] text-[12px]">
                 {[
                   ["network", config?.network ?? "—"],
                   ["chain id", config ? String(config.chainId) : "—"],
@@ -214,11 +214,11 @@ MERITR_NETWORK=localhost npm run backend                 # terminal 3`}
               <AgentFeed events={events} />
             </div>
             <div className="lg:col-span-5">
-              <div className="rounded-lg border border-ink-700 bg-ink-900">
-                <div className="border-b border-ink-700 px-5 py-3">
+              <div className="rounded-lg border border-[var(--color-line)] bg-ink-900/88">
+                <div className="border-b border-[var(--color-line)] px-5 py-3">
                   <h2 className="text-[13px] font-semibold text-gray-200">Guardrails</h2>
                 </div>
-                <ul className="divide-y divide-ink-700/70 text-[12px]">
+                <ul className="divide-y divide-[var(--color-line)] text-[12px]">
                   {[
                     ["stress band", "1.00 – 1.15", "the only window the agent may act in"],
                     ["target", "1.35", "health restored to here, not to the edge"],
@@ -243,11 +243,11 @@ MERITR_NETWORK=localhost npm run backend                 # terminal 3`}
 
         {view === "model" && (
           <div className="grid gap-4 lg:grid-cols-2">
-            <div className="rounded-lg border border-ink-700 bg-ink-900">
-              <div className="border-b border-ink-700 px-5 py-3">
+            <div className="rounded-lg border border-[var(--color-line)] bg-ink-900/88">
+              <div className="border-b border-[var(--color-line)] px-5 py-3">
                 <h2 className="text-[13px] font-semibold text-gray-200">Score components</h2>
               </div>
-              <ul className="divide-y divide-ink-700/70 text-[12.5px]">
+              <ul className="divide-y divide-[var(--color-line)] text-[12.5px]">
                 {[
                   ["Repayment history", "35%", "$250k / 40 events"],
                   ["Cross-chain collateral", "25%", "$150k supplied"],
@@ -262,17 +262,17 @@ MERITR_NETWORK=localhost npm run backend                 # terminal 3`}
                   </li>
                 ))}
               </ul>
-              <p className="border-t border-ink-700 px-5 py-3 font-mono text-[10.5px] leading-relaxed text-gray-600">
+              <p className="border-t border-[var(--color-line)] px-5 py-3 font-mono text-[10.5px] leading-relaxed text-gray-600">
                 a wallet with zero proofs scores exactly 300 — safety is withheld until something
                 is proven, because no evidence is not proven safety
               </p>
             </div>
 
-            <div className="rounded-lg border border-ink-700 bg-ink-900">
-              <div className="border-b border-ink-700 px-5 py-3">
+            <div className="rounded-lg border border-[var(--color-line)] bg-ink-900/88">
+              <div className="border-b border-[var(--color-line)] px-5 py-3">
                 <h2 className="text-[13px] font-semibold text-gray-200">What a score buys</h2>
               </div>
-              <ul className="divide-y divide-ink-700/70 text-[12.5px]">
+              <ul className="divide-y divide-[var(--color-line)] text-[12.5px]">
                 {[300, 450, 600, 750, 900].map((s) => {
                   const apr = 2400 - ((2400 - 400) * (s - 300)) / 600;
                   const ltv = 3000 + ((8000 - 3000) * (s - 300)) / 600;
@@ -296,7 +296,7 @@ MERITR_NETWORK=localhost npm run backend                 # terminal 3`}
                   );
                 })}
               </ul>
-              <p className="border-t border-ink-700 px-5 py-3 font-mono text-[10.5px] leading-relaxed text-gray-600">
+              <p className="border-t border-[var(--color-line)] px-5 py-3 font-mono text-[10.5px] leading-relaxed text-gray-600">
                 168 vectors generated from the deployed library assert the Python agent reproduces
                 this curve exactly — integer truncation included
               </p>
@@ -304,7 +304,7 @@ MERITR_NETWORK=localhost npm run backend                 # terminal 3`}
           </div>
         )}
 
-        <footer className="mt-10 flex flex-wrap items-center justify-between gap-3 border-t border-ink-700/70 pt-6 font-mono text-[10.5px] text-gray-600">
+        <footer className="mt-10 flex flex-wrap items-center justify-between gap-3 border-t border-[var(--color-line)] pt-6 font-mono text-[10.5px] text-gray-600">
           <p>
             meritr · apache 2.0 · buidl ctc 2026
             {config && <> · {config.network} (chain {config.chainId})</>}

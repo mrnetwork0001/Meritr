@@ -24,7 +24,7 @@ export function ConnectButton({
 
   // Detection has not run yet: render a neutral placeholder rather than a wrong answer.
   if (available === null) {
-    return <span className="btn-secondary cursor-default opacity-40">Wallet…</span>;
+    return <span className="btn-ghost cursor-default opacity-40">Wallet…</span>;
   }
 
   if (!available) {
@@ -33,7 +33,7 @@ export function ConnectButton({
         href="https://metamask.io/download/"
         target="_blank"
         rel="noreferrer"
-        className="btn-secondary"
+        className="btn-ghost"
         title="No injected wallet detected"
       >
         <Wallet size={15} aria-hidden className="mr-1.5 inline" />
@@ -70,7 +70,7 @@ export function ConnectButton({
   }
 
   return (
-    <div className="flex items-center gap-2 rounded border border-ink-700 bg-ink-900 px-3 py-1.5">
+    <div className="flex items-center gap-2 rounded border border-[var(--color-line)] bg-ink-900 px-3 py-1.5">
       <span className="h-1.5 w-1.5 shrink-0 rounded-full bg-up" aria-hidden />
       <span className="mono text-[12px] text-gray-200">{short(account)}</span>
       {!compact && (

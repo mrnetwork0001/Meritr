@@ -17,15 +17,15 @@ export function AttestationFlow({ config }: { config: MeritrConfig | null }) {
   ];
 
   return (
-    <div className="rounded-lg border border-ink-700 bg-ink-900">
-      <div className="flex items-center justify-between border-b border-ink-700 px-5 py-3">
+    <div className="rounded-lg border border-[var(--color-line)] bg-ink-900/88">
+      <div className="flex items-center justify-between border-b border-[var(--color-line)] px-5 py-3">
         <h2 className="text-[13px] font-semibold text-gray-200">Attestcoin data path</h2>
         <span className="rounded border border-model/40 bg-model/[0.08] px-2 py-0.5 font-mono text-[10px] text-model">
           no oracle operator
         </span>
       </div>
 
-      <ul className="divide-y divide-ink-700/70">
+      <ul className="divide-y divide-[var(--color-line)]">
         {stages.map(([n, title, detail]) => (
           <li key={n} className="flex gap-3 px-5 py-3.5">
             <span className="mono shrink-0 text-[11px] text-model">{n}</span>
@@ -38,7 +38,7 @@ export function AttestationFlow({ config }: { config: MeritrConfig | null }) {
       </ul>
 
       {config?.sourceChains?.length ? (
-        <div className="border-t border-ink-700 px-5 py-3.5">
+        <div className="border-t border-[var(--color-line)] px-5 py-3.5">
           <p className="font-mono text-[9.5px] uppercase tracking-wider text-gray-600">registered sources</p>
           <div className="mt-2 flex flex-wrap gap-2">
             {config.sourceChains.map((c) => (

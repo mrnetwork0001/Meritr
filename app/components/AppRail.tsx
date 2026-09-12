@@ -107,11 +107,14 @@ export function AppRail({
 
   return (
     <div
-      className="min-h-screen bg-ink-950"
+      // Transparent on purpose: the dot-grid lives on <body> and this is the only thing
+      // between it and the reader. An opaque surface here hid the texture on every console
+      // view while the landing page kept it, which made the two halves look unrelated.
+      className="min-h-screen"
       style={{ ["--rail" as string]: `${collapsed ? RAIL_COLLAPSED : RAIL_OPEN}px` }}
     >
       {/* Mobile header */}
-      <div className="sticky top-0 z-30 flex h-14 items-center gap-3 border-b border-ink-700/70 bg-ink-950/95 px-4 backdrop-blur md:hidden">
+      <div className="sticky top-0 z-30 flex h-14 items-center gap-3 border-b border-[var(--color-line)] bg-ink-950/95 px-4 backdrop-blur md:hidden">
         <Link href="/" className="flex items-center" aria-label="Meritr, back to the overview">
           <img
             src="/brand/meritr-header.png"
@@ -127,7 +130,7 @@ export function AppRail({
           aria-label="Open the menu"
           aria-expanded={drawer}
           aria-controls="app-rail"
-          className="ml-auto rounded border border-ink-700 p-2 text-gray-400 transition hover:bg-ink-800 hover:text-gray-100"
+          className="ml-auto rounded border border-[var(--color-line)] p-2 text-gray-400 transition hover:bg-ink-800 hover:text-gray-100"
         >
           <Menu size={18} aria-hidden />
         </button>
@@ -146,7 +149,7 @@ export function AppRail({
       <aside
         id="app-rail"
         aria-label="Sections"
-        className={`fixed inset-y-0 left-0 z-50 flex w-[268px] flex-col overflow-y-auto border-r border-ink-700/70 bg-ink-950 transition-transform duration-200 md:z-30 md:w-[var(--rail)] md:translate-x-0 md:transition-[width] ${
+        className={`fixed inset-y-0 left-0 z-50 flex w-[268px] flex-col overflow-y-auto border-r border-[var(--color-line)] bg-ink-950/85 backdrop-blur transition-transform duration-200 md:z-30 md:w-[var(--rail)] md:translate-x-0 md:transition-[width] ${
           drawer ? "translate-x-0" : "-translate-x-full"
         }`}
       >
@@ -237,11 +240,11 @@ export function AppRail({
             there is not. It never invents a balance: an unconnected reader is told plainly that
             the view is read-only rather than shown a placeholder they could mistake for real. */}
         <div className="px-2.5 pb-4 md:pb-3">
-          <div className="rounded-lg border border-ink-700">
+          <div className="rounded-lg border border-[var(--color-line)]">
             <div className="flex items-center gap-2 px-3 py-2.5">
               <span
                 className={`h-1.5 w-1.5 shrink-0 rounded-full ${
-                  account ? "bg-up" : online ? "hero-pulse bg-model" : "bg-gray-700"
+                  account ? "bg-up" : online ? "anim-breathe bg-model" : "bg-gray-700"
                 }`}
                 aria-hidden
               />
@@ -266,7 +269,7 @@ export function AppRail({
             </div>
 
             {!collapsed && (
-              <div className="border-t border-ink-700 px-3 py-2">
+              <div className="border-t border-[var(--color-line)] px-3 py-2">
                 {account ? (
                   <>
                     <Row k="NETWORK" v={chainName(chainId)} warn={expectedChainId !== null && chainId !== expectedChainId} />
@@ -282,7 +285,7 @@ export function AppRail({
             )}
 
             {!collapsed && !account && (
-              <div className="border-t border-ink-700 px-3 py-2.5">
+              <div className="border-t border-[var(--color-line)] px-3 py-2.5">
                 <button
                   type="button"
                   onClick={connect}

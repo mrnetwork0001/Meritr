@@ -148,11 +148,11 @@ export function TxProvider({ children }: { children: React.ReactNode }) {
           onClick={close}
         >
           <div
-            className="w-full max-w-lg overflow-hidden rounded-lg border border-ink-700 bg-ink-900 shadow-2xl"
+            className="w-full max-w-lg overflow-hidden rounded-lg border border-[var(--color-line)] bg-ink-900/88 shadow-2xl"
             onClick={(e) => e.stopPropagation()}
           >
             {/* Header */}
-            <div className="flex items-start justify-between gap-3 border-b border-ink-700 px-5 py-4">
+            <div className="flex items-start justify-between gap-3 border-b border-[var(--color-line)] px-5 py-4">
               <div className="min-w-0">
                 <h2 id="tx-modal-title" className="text-[14px] font-semibold text-gray-100">
                   {req.title}
@@ -174,7 +174,7 @@ export function TxProvider({ children }: { children: React.ReactNode }) {
 
             {/* Facts */}
             {req.facts && req.facts.length > 0 && (
-              <ul className="divide-y divide-ink-700/70 border-b border-ink-700 text-[12.5px]">
+              <ul className="divide-y divide-[var(--color-line)] border-b border-[var(--color-line)] text-[12.5px]">
                 {req.facts.map(([k, v]) => (
                   <li key={k} className="flex items-baseline justify-between gap-3 px-5 py-2">
                     <span className="text-gray-500">{k}</span>
@@ -185,7 +185,7 @@ export function TxProvider({ children }: { children: React.ReactNode }) {
             )}
 
             {/* Steps */}
-            <ol className="divide-y divide-ink-700/70">
+            <ol className="divide-y divide-[var(--color-line)]">
               {steps.map((s, i) => {
                 const link = s.hash ? txUrl(chainId, s.hash) : null;
                 return (
@@ -198,7 +198,7 @@ export function TxProvider({ children }: { children: React.ReactNode }) {
                         <Loader2 size={16} className="animate-spin text-model" aria-hidden />
                       )}
                       {s.status === "waiting" && (
-                        <span className="block h-4 w-4 rounded-full border border-ink-700" aria-hidden />
+                        <span className="block h-4 w-4 rounded-full border border-[var(--color-line)]" aria-hidden />
                       )}
                     </span>
 
@@ -252,7 +252,7 @@ export function TxProvider({ children }: { children: React.ReactNode }) {
             </ol>
 
             {/* Footer */}
-            <div className="flex items-center justify-between gap-3 border-t border-ink-700 px-5 py-3.5">
+            <div className="flex items-center justify-between gap-3 border-t border-[var(--color-line)] px-5 py-3.5">
               <span className="font-mono text-[11px]">
                 {busy && <span className="text-model">in progress — do not close</span>}
                 {finished === "ok" && <span className="text-up">confirmed on-chain</span>}
@@ -265,7 +265,7 @@ export function TxProvider({ children }: { children: React.ReactNode }) {
                   const last = [...steps].reverse().find((s) => s.hash);
                   const link = last?.hash ? txUrl(chainId, last.hash) : null;
                   return link ? (
-                    <a href={link} target="_blank" rel="noreferrer" className="btn-secondary">
+                    <a href={link} target="_blank" rel="noreferrer" className="btn-ghost">
                       View on explorer ↗
                     </a>
                   ) : null;

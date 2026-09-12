@@ -37,7 +37,7 @@ export function AmountField({
           </button>
         )}
       </span>
-      <span className="mt-1 flex items-center rounded border border-ink-700 bg-ink-950 px-3 focus-within:border-gray-600">
+      <span className="mt-1 flex items-center rounded border border-[var(--color-line)] bg-ink-950 px-3 focus-within:border-gray-600">
         <input
           inputMode="decimal"
           value={value}

@@ -31,7 +31,7 @@ export function BorrowerPanel({ address }: { address: string | null }) {
 
   if (!address) {
     return (
-      <div className="flex min-h-[240px] items-center justify-center rounded-lg border border-ink-700 bg-ink-900">
+      <div className="flex min-h-[240px] items-center justify-center rounded-lg border border-[var(--color-line)] bg-ink-900/88">
         <p className="font-mono text-[11px] text-gray-600">select a borrower</p>
       </div>
     );
@@ -45,7 +45,7 @@ export function BorrowerPanel({ address }: { address: string | null }) {
     );
   }
   if (loading || !data) {
-    return <div className="hero-pulse min-h-[240px] rounded-lg border border-ink-700 bg-ink-900" />;
+    return <div className="anim-breathe min-h-[240px] rounded-lg border border-[var(--color-line)] bg-ink-900/88" />;
   }
 
   const { credit, position, assessment } = data;
@@ -53,8 +53,8 @@ export function BorrowerPanel({ address }: { address: string | null }) {
 
   return (
     <div className="space-y-4">
-      <div className="rounded-lg border border-ink-700 bg-ink-900">
-        <div className="flex flex-wrap items-baseline justify-between gap-2 border-b border-ink-700 px-5 py-3">
+      <div className="rounded-lg border border-[var(--color-line)] bg-ink-900/88">
+        <div className="flex flex-wrap items-baseline justify-between gap-2 border-b border-[var(--color-line)] px-5 py-3">
           <h2 className="text-[13px] font-semibold text-gray-200">Credit passport</h2>
           <span className="mono text-[10.5px] text-gray-600">{address}</span>
         </div>
@@ -68,7 +68,7 @@ export function BorrowerPanel({ address }: { address: string | null }) {
           </div>
         </div>
 
-        <div className="grid grid-cols-2 divide-x divide-y divide-ink-700 border-t border-ink-700 sm:grid-cols-4">
+        <div className="grid grid-cols-2 divide-x divide-y divide-[var(--color-line)] border-t border-[var(--color-line)] sm:grid-cols-4">
           {[
             ["earned apr", pct(credit.aprBps), "text-up"],
             ["max ltv", pct(credit.maxLtvBps), "text-gray-100"],
@@ -82,7 +82,7 @@ export function BorrowerPanel({ address }: { address: string | null }) {
           ))}
         </div>
 
-        <ul className="divide-y divide-ink-700/70 border-t border-ink-700 text-[12px]">
+        <ul className="divide-y divide-[var(--color-line)] border-t border-[var(--color-line)] text-[12px]">
           {[
             ["lifetime repaid", usd(f.totalRepaidUsd)],
             ["collateral attested", usd(f.totalCollateralUsd)],
@@ -96,14 +96,14 @@ export function BorrowerPanel({ address }: { address: string | null }) {
           ))}
         </ul>
 
-        <p className="border-t border-ink-700 px-5 py-3 font-mono text-[10px] leading-relaxed text-gray-600">
+        <p className="border-t border-[var(--color-line)] px-5 py-3 font-mono text-[10px] leading-relaxed text-gray-600">
           every figure above originates from a transaction verified by the Attestcoin precompile —
           none of it is self-reported
         </p>
       </div>
 
-      <div className="rounded-lg border border-ink-700 bg-ink-900">
-        <div className="border-b border-ink-700 px-5 py-3">
+      <div className="rounded-lg border border-[var(--color-line)] bg-ink-900/88">
+        <div className="border-b border-[var(--color-line)] px-5 py-3">
           <h2 className="text-[13px] font-semibold text-gray-200">Position</h2>
         </div>
 
@@ -115,7 +115,7 @@ export function BorrowerPanel({ address }: { address: string | null }) {
               <HealthBar hf={position.healthFactor} />
             </div>
 
-            <div className="grid grid-cols-2 divide-x divide-y divide-ink-700 border-t border-ink-700 sm:grid-cols-4">
+            <div className="grid grid-cols-2 divide-x divide-y divide-[var(--color-line)] border-t border-[var(--color-line)] sm:grid-cols-4">
               {[
                 ["debt", usd(position.debtValueUsd, 2)],
                 ["collateral", usd(position.collateralValueUsd, 2)],
@@ -129,7 +129,7 @@ export function BorrowerPanel({ address }: { address: string | null }) {
               ))}
             </div>
 
-            <div className="border-t border-ink-700 px-5 py-4">
+            <div className="border-t border-[var(--color-line)] px-5 py-4">
               <p className="font-mono text-[9.5px] uppercase tracking-[0.18em] text-model">agent assessment</p>
               <p className="mt-2 text-[12.5px] leading-relaxed text-gray-400">{assessment.rationale}</p>
               {assessment.shouldRestructure && (

@@ -340,6 +340,46 @@ def portfolio() -> dict:
     }
 
 
+#: Scanning the attestor's whole log range costs seconds, and the relayer only adds a fact
+#: every few minutes, so a short TTL keeps the endpoint instant without ever being misleading.
+_ATTEST_CACHE: dict[str, Any] = {"at": 0.0, "value": None}
+_ATTEST_TTL = 90.0
+
+
+@api.get("/attestations", tags=["protocol"])
+def attestations() -> dict:
+    """Everything Attestcoin has proven into this deployment, counted from chain logs.
+
+    Read live rather than recorded, because a relayer is continuously adding to it — a figure
+    hardcoded into the site would be stale within the hour and wrong by the time anyone read it.
+    """
+    import time
+
+    now = time.monotonic()
+    if _ATTEST_CACHE["value"] is not None and now - _ATTEST_CACHE["at"] < _ATTEST_TTL:
+        return _ATTEST_CACHE["value"]
+
+    c = client()
+    logs = c._scan_logs(c.attestor.events.CreditFactAttested)
+    borrowers: set[str] = set()
+    chains: set[int] = set()
+    total_e8 = 0
+    for entry in logs:
+        a = entry["args"]
+        borrowers.add(a["borrower"])
+        chains.add(int(a["chainKey"]))
+        total_e8 += int(a["usdE8"])
+
+    value = {
+        "facts": len(logs),
+        "borrowers": len(borrowers),
+        "sourceChains": len(chains),
+        "valueProvenUsd": total_e8 / scoring.E8,
+    }
+    _ATTEST_CACHE.update({"at": now, "value": value})
+    return value
+
+
 @api.get("/restructurings", tags=["protocol"])
 def restructurings(limit: int = 50) -> dict:
     """The protocol's public record of every autonomous intervention."""

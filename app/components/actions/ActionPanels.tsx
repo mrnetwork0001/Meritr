@@ -39,8 +39,8 @@ type Balances = {
 
 function Card({ title, subtitle, children }: { title: string; subtitle?: string; children: React.ReactNode }) {
   return (
-    <div className="rounded-lg border border-ink-700 bg-ink-900">
-      <div className="border-b border-ink-700 px-5 py-3">
+    <div className="rounded-lg border border-[var(--color-line)] bg-ink-900/88">
+      <div className="border-b border-[var(--color-line)] px-5 py-3">
         <h3 className="text-[13px] font-semibold text-gray-200">{title}</h3>
         {subtitle && <p className="mt-1 text-[11.5px] leading-relaxed text-gray-500">{subtitle}</p>}
       </div>
@@ -102,7 +102,7 @@ export function ActionPanels({ config }: { config: MeritrConfig | null }) {
 
   if (!config) {
     return (
-      <div className="rounded-lg border border-ink-700 bg-ink-900 px-5 py-10 text-center">
+      <div className="rounded-lg border border-[var(--color-line)] bg-ink-900/88 px-5 py-10 text-center">
         <p className="font-mono text-[11px] text-gray-600">waiting for deployment config…</p>
       </div>
     );
@@ -193,7 +193,7 @@ function FaucetPanel({
       title="Demo tokens"
       subtitle="The vault's asset and collateral are demo ERC-20s with an open mint, so anyone can try the flows without asking for tokens."
     >
-      <div className="grid grid-cols-2 gap-3 rounded border border-ink-700 bg-ink-950 px-3 py-2.5">
+      <div className="grid grid-cols-2 gap-3 rounded border border-[var(--color-line)] bg-ink-950 px-3 py-2.5">
         <div>
           <p className="mono text-[14px] text-gray-100">
             {bal ? fromUnits(bal.asset, aDec, 2) : "—"}
@@ -215,14 +215,14 @@ function FaucetPanel({
       <div className="grid grid-cols-2 gap-3">
         <button
           type="button"
-          className="btn-secondary w-full"
+          className="btn-ghost w-full"
           onClick={() => mint("asset", config.contracts.asset, aDec, "50000", bal?.assetSymbol ?? "")}
         >
           + 50,000 {bal?.assetSymbol ?? ""}
         </button>
         <button
           type="button"
-          className="btn-secondary w-full"
+          className="btn-ghost w-full"
           onClick={() =>
             mint("collateral", config.contracts.collateral, cDec, "25", bal?.collateralSymbol ?? "")
           }
@@ -336,7 +336,7 @@ function LendPanel({
         Deposit
       </button>
 
-      <div className="!mt-4 border-t border-ink-700 pt-3">
+      <div className="!mt-4 border-t border-[var(--color-line)] pt-3">
         <AmountField
           label="fund the restructuring reserve"
           value={reserve}
@@ -346,7 +346,7 @@ function LendPanel({
         />
         <button
           type="button"
-          className="btn-secondary mt-2 w-full disabled:cursor-not-allowed disabled:opacity-40"
+          className="btn-ghost mt-2 w-full disabled:cursor-not-allowed disabled:opacity-40"
           disabled={!reserve}
           onClick={() => supplyFlow("fundReserve", reserve)}
         >
@@ -355,11 +355,11 @@ function LendPanel({
       </div>
 
       {bal && bal.shares > 0n && (
-        <div className="!mt-4 border-t border-ink-700 pt-3">
+        <div className="!mt-4 border-t border-[var(--color-line)] pt-3">
           <p className="mb-2 font-mono text-[10px] uppercase tracking-wider text-gray-600">
             your position — {fromUnits(bal.shares, aDec, 4)} shares
           </p>
-          <button type="button" className="btn-secondary w-full" onClick={withdrawAll}>
+          <button type="button" className="btn-ghost w-full" onClick={withdrawAll}>
             Withdraw all
           </button>
         </div>
@@ -498,7 +498,7 @@ function BorrowPanel({
       subtitle="Your rate and borrowing capacity come from your Attestcoin-verified credit score — not from a governance parameter."
     >
       {bal && (
-        <div className="grid grid-cols-3 gap-3 rounded border border-ink-700 bg-ink-950 px-3 py-2.5">
+        <div className="grid grid-cols-3 gap-3 rounded border border-[var(--color-line)] bg-ink-950 px-3 py-2.5">
           <div>
             <p className="mono text-[14px] text-gray-100">{bal.score}</p>
             <p className="font-mono text-[10px] uppercase tracking-wider text-gray-600">score</p>
@@ -542,7 +542,7 @@ function BorrowPanel({
         </>
       ) : (
         <>
-          <div className="rounded border border-ink-700 bg-ink-950 px-3 py-2.5">
+          <div className="rounded border border-[var(--color-line)] bg-ink-950 px-3 py-2.5">
             <p className="mono text-[15px] text-gray-100">
               {fromUnits(bal!.debt, aDec, 2)} {bal?.assetSymbol}
             </p>
@@ -570,11 +570,11 @@ function BorrowPanel({
       )}
 
       {bal && !bal.hasPassport && (
-        <div className="!mt-4 border-t border-ink-700 pt-3">
+        <div className="!mt-4 border-t border-[var(--color-line)] pt-3">
           <p className="mb-2 font-mono text-[10px] leading-relaxed text-gray-600">
             a soulbound passport requires at least one Attestcoin-verified proof for this address
           </p>
-          <button type="button" className="btn-secondary w-full" onClick={mintPassport}>
+          <button type="button" className="btn-ghost w-full" onClick={mintPassport}>
             Mint credit passport
           </button>
         </div>
@@ -671,14 +671,14 @@ function KeeperPanel({
           value={target}
           onChange={(e) => setTarget(e.target.value)}
           placeholder="0x…"
-          className="mono mt-1 w-full rounded border border-ink-700 bg-ink-950 px-3 py-2 text-[12.5px] text-gray-100 outline-none placeholder:text-gray-700 focus:border-gray-600"
+          className="mono mt-1 w-full rounded border border-[var(--color-line)] bg-ink-950 px-3 py-2 text-[12.5px] text-gray-100 outline-none placeholder:text-gray-700 focus:border-gray-600"
         />
       </label>
 
       <div className="grid grid-cols-2 gap-3">
         <button
           type="button"
-          className="btn-secondary w-full disabled:cursor-not-allowed disabled:opacity-40"
+          className="btn-ghost w-full disabled:cursor-not-allowed disabled:opacity-40"
           disabled={!valid}
           onClick={() => call("flagStress")}
         >
@@ -694,7 +694,7 @@ function KeeperPanel({
         </button>
       </div>
 
-      <div className="!mt-4 border-t border-ink-700 pt-3">
+      <div className="!mt-4 border-t border-[var(--color-line)] pt-3">
         <AmountField
           label="liquidate — repay amount"
           value={liqAmt}

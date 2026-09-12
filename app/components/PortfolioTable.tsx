@@ -30,8 +30,8 @@ export function PortfolioTable({
   const lead = sorted.find((p) => p.borrower === actionQueue[0]);
 
   return (
-    <div className="rounded-lg border border-ink-700 bg-ink-900">
-      <div className="flex flex-wrap items-center justify-between gap-2 border-b border-ink-700 px-5 py-3">
+    <div className="rounded-lg border border-[var(--color-line)] bg-ink-900/88">
+      <div className="flex flex-wrap items-center justify-between gap-2 border-b border-[var(--color-line)] px-5 py-3">
         <h2 className="text-[13px] font-semibold text-gray-200">Risk book</h2>
         <span className="font-mono text-[10.5px] text-gray-600">
           {positions.length} position{positions.length === 1 ? "" : "s"} · {actionQueue.length} queued
@@ -43,7 +43,7 @@ export function PortfolioTable({
           no loans opened yet
         </p>
       ) : (
-        <ul className="divide-y divide-ink-700/70">
+        <ul className="divide-y divide-[var(--color-line)]">
           {sorted.map((p) => {
             const b = band(p.healthFactor);
             const color = bandColor[b];
@@ -86,7 +86,7 @@ export function PortfolioTable({
       )}
 
       {lead && (
-        <div className="border-t border-ink-700 bg-model/[0.06] px-5 py-4">
+        <div className="border-t border-[var(--color-line)] bg-model/[0.06] px-5 py-4">
           <p className="font-mono text-[10px] uppercase tracking-[0.18em] text-model">agent decision</p>
           <p className="mt-2 text-[12.5px] leading-relaxed text-gray-400">{lead.rationale}</p>
         </div>

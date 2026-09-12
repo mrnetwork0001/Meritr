@@ -76,6 +76,13 @@ export type Assessment = {
   rationale: string;
 };
 
+export type Attestations = {
+  facts: number;
+  borrowers: number;
+  sourceChains: number;
+  valueProvenUsd: number;
+};
+
 export type Portfolio = {
   count: number;
   positions: Assessment[];
@@ -126,6 +133,7 @@ export const api = {
   config: () => get<MeritrConfig>("/api/config"),
   protocol: () => get<ProtocolStats>("/api/protocol"),
   portfolio: () => get<Portfolio>("/api/portfolio"),
+  attestations: () => get<Attestations>("/api/attestations"),
   restructurings: () => get<{ count: number; events: RestructureEvent[] }>("/api/restructurings"),
   borrower: (addr: string) =>
     get<{ credit: CreditProfile; position: any; assessment: Assessment }>(`/api/borrower/${addr}`),

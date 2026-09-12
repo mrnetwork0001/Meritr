@@ -56,10 +56,10 @@ export function HeroPanel() {
     state === "live" ? "bg-up" : state === "offline" ? "bg-gray-700" : "bg-gray-600";
 
   return (
-    <div className="rounded-lg border border-ink-700 bg-ink-900/90">
-      <div className="flex items-center justify-between border-b border-ink-700 px-4 py-2.5">
+    <div className="rounded-lg border border-[var(--color-line)] bg-ink-900/90">
+      <div className="flex items-center justify-between border-b border-[var(--color-line)] px-4 py-2.5">
         <div className="flex items-center gap-2">
-          <span className={`hero-pulse h-1.5 w-1.5 rounded-full ${dotClass}`} />
+          <span className={`anim-breathe h-1.5 w-1.5 rounded-full ${dotClass}`} />
           <span className="font-mono text-[11px] text-gray-400">
             meritr · {state === "live" ? "live risk book" : state === "offline" ? "offline" : "connecting"}
           </span>
@@ -75,7 +75,7 @@ export function HeroPanel() {
         </div>
       ) : (
         <>
-          <div className="grid grid-cols-3 divide-x divide-ink-700 border-b border-ink-700">
+          <div className="grid grid-cols-3 divide-x divide-[var(--color-line)] border-b border-[var(--color-line)]">
             {[
               ["supplied", compact(stats?.totalSupplied ?? 0)],
               ["reserve", compact(stats?.reserve ?? 0)],
@@ -90,7 +90,7 @@ export function HeroPanel() {
             ))}
           </div>
 
-          <ul className="divide-y divide-ink-700/70">
+          <ul className="divide-y divide-[var(--color-line)]">
             {(book?.positions ?? []).slice(0, 4).map((p) => {
               const hf = p.healthFactor;
               const distressed = hf !== null && hf < 1.15;
@@ -123,7 +123,7 @@ export function HeroPanel() {
         </>
       )}
 
-      <p className="border-t border-ink-700 px-4 py-2.5 text-center font-mono text-[10px] text-gray-600">
+      <p className="border-t border-[var(--color-line)] px-4 py-2.5 text-center font-mono text-[10px] text-gray-600">
         {state === "live" && health?.network
           ? `live from ${health.network} · block ${health.blockNumber?.toLocaleString()} · refreshed every 12s`
           : "start the risk api to see live positions"}
