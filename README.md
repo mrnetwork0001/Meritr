@@ -358,4 +358,4 @@ Stated because a credit protocol that hides its assumptions is not one anyone sh
 
 Apache 2.0 - see [LICENSE](LICENSE).
 
-**Author:** Ifeanyichukwu Onwo (`mrnetwork`)
+**Author:** Ifeanyichukwu Emmanuel Onwo (`mrnetwork`)
