@@ -1,0 +1,13 @@
+# The demo video is a separate project with its own toolchain and its own package.json.
+# Vercel builds the Next.js console only; shipping the composition to it achieved nothing
+# except a failed typecheck, because remotion is not among the console's dependencies.
+demo/
+
+# Neither of these is needed to build the frontend.
+contracts/
+scripts/
+test/
+tests/
+agents/
+backend/
+deploy/
