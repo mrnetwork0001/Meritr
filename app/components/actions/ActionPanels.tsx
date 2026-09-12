@@ -520,6 +520,7 @@ function BorrowPanel({
   const [coll, setColl] = useState("");
   const [draw, setDraw] = useState("");
   const [repayAmt, setRepayAmt] = useState("");
+  const [topUp, setTopUp] = useState("");
   const aSym = bal?.assetSymbol ?? "";
   const cSym = bal?.collateralSymbol ?? "";
 
@@ -561,6 +562,47 @@ function BorrowPanel({
         if (ok) { setColl(""); setDraw(""); }
         onDone();
       },
+    });
+  };
+
+  /**
+   * Post more collateral against an open loan.
+   *
+   * The other half of surviving distress. A borrower watching their health factor fall has two
+   * honest options - reduce the debt or increase the backing - and the contract has supported
+   * both since it was written. Only repay had a control, which left the strictly cheaper remedy
+   * reachable only by calling the contract directly.
+   */
+  const addCollateral = () => {
+    const amt = toUnits(topUp, cDec);
+    if (amt === 0n) return;
+    tx.run({
+      title: `Add ${topUp} ${cSym} of collateral`,
+      description:
+        "Raises the backing behind an open loan without changing the debt, so the health factor " +
+        "improves immediately. Cheaper than repaying, and it is what a borrower would reach for " +
+        "first when a position drifts toward distress.",
+      facts: [
+        ["Adding", `${Number(topUp).toLocaleString()} ${cSym}`],
+        ["Outstanding debt", bal ? `${fromUnits(bal.debt, aDec, 2)} ${aSym}` : "-"],
+      ],
+      steps: [
+        {
+          label: `Approve ${cSym} for the vault`,
+          run: async () =>
+            ensureAllowance(config.contracts.collateral, config.contracts.MeritrVault, amt, await getSigner()),
+        },
+        {
+          label: "Post collateral",
+          run: async () => {
+            const v = vaultAt(config.contracts.MeritrVault, await getSigner());
+            const sent = await v.addCollateral(amt);
+            await sent.wait();
+            return sent.hash as string;
+          },
+        },
+      ],
+      onSettled: (ok) => { if (ok) setTopUp(""); onDone(); },
     });
   };
 
@@ -682,6 +724,23 @@ function BorrowPanel({
               outstanding debt
             </p>
           </div>
+          <AmountField
+            label="add collateral"
+            value={topUp}
+            onChange={setTopUp}
+            suffix={bal?.collateralSymbol}
+            max={bal ? fromUnits(bal.collateral, cDec, 4) : undefined}
+            onMax={() => bal && setTopUp(fromUnits(bal.collateral, cDec, 8).replace(/,/g, ""))}
+          />
+          <button
+            type="button"
+            className="btn-ghost w-full disabled:cursor-not-allowed disabled:opacity-40"
+            disabled={!topUp}
+            onClick={addCollateral}
+          >
+            Add collateral
+          </button>
+
           <AmountField
             label="repay"
             value={repayAmt}
