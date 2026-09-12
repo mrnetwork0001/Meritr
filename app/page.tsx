@@ -112,9 +112,13 @@ export default function Landing() {
               <h1
                 className="anim-rise max-w-2xl text-[40px] font-semibold leading-[1.04] text-balance text-[#f7f8fb] sm:text-[58px]"
               >
-                Prove the history.
+                {/* The two nouns are the two halves of the thesis, so they take the two
+                    meanings the palette already carries: history is what Meritr derives,
+                    collateral is what stays solvent. Colour here is the argument, not
+                    decoration. */}
+                Prove the <span className="text-model">history</span>.
                 <br />
-                Keep the collateral.
+                Keep the <span className="text-up">collateral</span>.
               </h1>
 
               <p
