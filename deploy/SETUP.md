@@ -101,7 +101,7 @@ sudo systemctl enable --now meritr-api meritr-web meritr-agent meritr-relayer
 Confirm Meritr took the ports it expected and nothing else moved:
 
 ```bash
-ss -tlnp | grep -E '127.0.0.1:(8787|3787)'
+ss -tlnp | grep -E '127.0.0.1:(8611|3611)'
 ```
 
 Both are loopback-only. If either port is already in use by a neighbour, override it in
@@ -132,10 +132,10 @@ sudo systemctl reload caddy                           # reload, never restart
 # /etc/nginx/sites-available/meritr  -> symlink into sites-enabled
 server {
     server_name MERITR_HOSTNAME;
-    location /api/   { proxy_pass http://127.0.0.1:8787; }
-    location /health { proxy_pass http://127.0.0.1:8787; }
+    location /api/   { proxy_pass http://127.0.0.1:8611; }
+    location /health { proxy_pass http://127.0.0.1:8611; }
     location / {
-        proxy_pass http://127.0.0.1:3787;
+        proxy_pass http://127.0.0.1:3611;
         proxy_set_header Host $host;
         proxy_set_header X-Forwarded-Proto $scheme;
     }

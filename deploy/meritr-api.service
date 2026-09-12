@@ -13,7 +13,7 @@ EnvironmentFile=/etc/meritr/api.env
 #
 # The port is deliberately unusual and overridable from /etc/meritr/api.env, because this box
 # runs other applications and 8000 is the first port anything else will have taken.
-Environment=MERITR_API_PORT=8787
+Environment=MERITR_API_PORT=8611
 ExecStart=/opt/meritr/.venv/bin/uvicorn backend.main:app --host 127.0.0.1 --port ${MERITR_API_PORT}
 Restart=always
 RestartSec=10

@@ -18,7 +18,7 @@
 # Replace MERITR_HOSTNAME before building the frontend: NEXT_PUBLIC_MERITR_API is inlined at
 # build time, not read at runtime.
 #
-# Ports match meritr-api.service (8787) and meritr-web.service (3787). Both are loopback-only
+# Ports match meritr-api.service (8611) and meritr-web.service (3611). Both are loopback-only
 # and chosen to avoid the 3000/8000 range other applications occupy.
 
 MERITR_HOSTNAME {
@@ -26,14 +26,14 @@ MERITR_HOSTNAME {
 
 	# API surface
 	handle /api/* {
-		reverse_proxy 127.0.0.1:8787
+		reverse_proxy 127.0.0.1:8611
 	}
 	handle /health {
-		reverse_proxy 127.0.0.1:8787
+		reverse_proxy 127.0.0.1:8611
 	}
 	# Everything else is the Next.js console, /docs included.
 	handle {
-		reverse_proxy 127.0.0.1:3787
+		reverse_proxy 127.0.0.1:3611
 	}
 
 	header {

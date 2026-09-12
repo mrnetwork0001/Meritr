@@ -14,7 +14,7 @@ Environment=NEXT_DIST_DIR=.next-deploy
 # build toolchain, and a small VPS will OOM on `next build` anyway.
 # Unusual, overridable port: this box runs other applications and 3000 is the first port
 # any other Node service will have taken.
-Environment=MERITR_WEB_PORT=3787
+Environment=MERITR_WEB_PORT=3611
 ExecStart=/usr/bin/npx next start -H 127.0.0.1 -p ${MERITR_WEB_PORT}
 Restart=always
 RestartSec=10
