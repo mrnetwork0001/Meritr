@@ -145,6 +145,14 @@ Ingestion is **permissionless** - the proof is self-validating, so anyone may su
 
 Rather than hard-coding Aave's ABI, Meritr keeps an onchain **event schema registry**: `(chainKey, emitter, topic0) → {action, subjectTopic, amountWord, …}`. Supporting Compound, Morpho or a new Aave market is a registry write, not a redeploy. An unregistered emitter is ignored, so a proof of a log from an attacker's own contract contributes nothing.
 
+**Chain keys are the easiest thing to get wrong.** `chainKey` is not the EVM chain id, and its
+value differs per Creditcoin network: on **testnet** Ethereum is `chainKey 3` and Sepolia is
+`chainKey 1`; on **mainnet** Ethereum is `chainKey 1`. Nothing else is registered - Attestcoin
+cannot prove Base or Solana at all. A wrong key fails silently, because proofs simply never
+match a schema and the credit history stays empty forever, so Meritr does not trust its own
+table: [`scripts/verifyChainKeys.js`](scripts/verifyChainKeys.js) reads the ChainInfo precompile
+at `0x…0FD3` and `deploy.js` aborts on a mismatch.
+
 ### 2. DeAI risk agent - [`agents/`](agents/)
 
 - [`scoring.py`](agents/scoring.py) - the verified mirror of onchain `CreditMath`.
@@ -337,28 +345,12 @@ Stated because a credit protocol that hides its assumptions is not one anyone sh
 
 - **Collateral pricing is governance-fed.** `setPrices` behind `PRICE_ROLE` is the single trusted input in the risk path; every other term derives from proof-verified data. Production needs a real price feed.
 - **Source-block timestamps are approximated.** The prover exposes a verified *height*, not a verified timestamp, so wallet maturity is derived from `genesis + height × blockTime`, clamped to `block.timestamp` so no height can manufacture future history.
-- **`chainKey` is not the EVM chain id, and differs per Creditcoin network.** Read from the ChainInfo precompile at `0x…0FD3`: on Creditcoin **testnet** Ethereum is `chainKey 3` and Sepolia is `chainKey 1`; on **mainnet** Ethereum is `chainKey 1`. `scripts/verifyChainKeys.js` checks the catalogue against the live registry and `deploy.js` aborts on a mismatch, because a wrong key fails silently - proofs simply never match a schema.
 - **The market's demo tokens are freely mintable.** See the provenance table above. The vault's
   `ASSET` and `COLLATERAL` are `immutable`, so swapping them needs a new vault - which would
   reset the live positions and restructuring history. Disclosed rather than papered over.
 - **The contracts are unaudited.** A CertiK audit is a hackathon prize, not a completed step. Treat any mainnet deployment accordingly.
 - **Non-stable reserve assets need a price feed** before being registered; the current catalogue prices stablecoin reserves at $1.00.
 - **"ZK-Credit" is a commitment scheme today, not a SNARK.** See the passport section above.
-
----
-
-## How this maps to the judging criteria
-
-The CC3 team stated in the season kickoff AMA that the five CEIP pillars are also the criteria
-for this hackathon. Mapped honestly, including where Meritr is thin:
-
-| Pillar | Where Meritr stands |
-|---|---|
-| **Technical alignment** | Attestcoin is not decoration here - it is the only way a credit fact can enter the system. `MeritrAttestor` inherits `ASCBase`, calls the `0x…0FD2` BlockProver precompile, and resolves chain keys from the `0x…0FD3` ChainInfo precompile rather than hardcoding them. Remove Attestcoin and the protocol has no inputs at all. |
-| **Market and technical relevance** | Cross-chain credit portability and restructuring-over-liquidation are both live problems in lending markets today. The source data is real Aave V3 activity on Ethereum mainnet, not a fixture. |
-| **Product vision** | A borrower's credit history should follow them between chains, and distress should be survivable. The passport makes the first portable; the vault makes the second real, with the chain - not the agent - setting every economic term. |
-| **User-base expansion** | Honest status: the proven history belongs to 85 real Ethereum borrowers who have not opted in. That is a genuine distribution channel - each is a real address with real standing - but converting it is future work, not a shipped result. |
-| **Execution capability** | 75+ commits across the hackathon window rather than one drop, 50 Solidity and 39 Python tests, a parity suite asserting the agent's math matches the deployed library to the wei, and a documented limitations section. |
 
 ---
 
