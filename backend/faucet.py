@@ -10,7 +10,7 @@ for a transaction, so it cannot ask for one either. Instead the visitor signs a 
 costs nothing and never touches the chain, and this process pays the gas to send them 1 CTC.
 
 Deliberately narrow:
-  * only wallets at or below 1 CTC qualify - this refills the empty, it does not top up
+  * only wallets below 0.1 CTC qualify, though the grant itself is 1 CTC - this refills the empty, it does not top up
   * one claim per address per 24 hours, recorded on disk so a restart does not reset it
   * the signed message names this faucet, the recipient and a timestamp, and is accepted for
     five minutes, so a signature captured elsewhere cannot be replayed here
@@ -30,8 +30,10 @@ from eth_account.messages import encode_defunct
 from web3 import Web3
 
 CLAIM_WEI = Web3.to_wei(1, "ether")
-#: A wallet already holding this much does not need a faucet.
-ELIGIBILITY_CEILING_WEI = Web3.to_wei(1, "ether")
+#: A wallet holding this much can already transact, so it does not need a faucet. Deliberately
+#: far below CLAIM_WEI: the grant is generous enough to be useful, but only the nearly-empty
+#: qualify. Matching the two would let a wallet that spent 0.01 CTC immediately top back up.
+ELIGIBILITY_CEILING_WEI = Web3.to_wei(0.1, "ether")
 COOLDOWN_SECONDS = 24 * 60 * 60
 SIGNATURE_TTL_SECONDS = 300
 #: Leave enough behind to notice the faucet is nearly dry before it starts failing mid-demo.
@@ -88,7 +90,7 @@ def status(w3: Web3, faucet_address: str | None, address: str | None = None) -> 
         "claimWei": str(CLAIM_WEI),
         "claimCtc": 1.0,
         "cooldownSeconds": COOLDOWN_SECONDS,
-        "eligibilityCeilingCtc": 1.0,
+        "eligibilityCeilingCtc": 0.1,
     }
     if not faucet_address:
         out["reason"] = "No faucet key is configured on this deployment."
@@ -106,10 +108,10 @@ def status(w3: Web3, faucet_address: str | None, address: str | None = None) -> 
         waited = time.time() - last
         out["yourBalanceCtc"] = float(Web3.from_wei(bal, "ether"))
         out["eligible"] = (
-            bal <= ELIGIBILITY_CEILING_WEI and waited >= COOLDOWN_SECONDS and not out["dry"]
+            bal < ELIGIBILITY_CEILING_WEI and waited >= COOLDOWN_SECONDS and not out["dry"]
         )
-        if bal > ELIGIBILITY_CEILING_WEI:
-            out["reason"] = "This wallet already holds more than 1 CTC."
+        if bal >= ELIGIBILITY_CEILING_WEI:
+            out["reason"] = "This wallet already holds more than 0.1 CTC, so it can pay for its own gas."
         elif waited < COOLDOWN_SECONDS:
             out["retryInSeconds"] = int(COOLDOWN_SECONDS - waited)
             out["reason"] = "This address has claimed within the last 24 hours."
@@ -149,9 +151,9 @@ def claim(w3: Web3, faucet_key: str | None, address: str, issued_at: int, signat
     if recovered is None:
         raise FaucetError("That signature was not produced by this address.")
 
-    if w3.eth.get_balance(addr) > ELIGIBILITY_CEILING_WEI:
+    if w3.eth.get_balance(addr) >= ELIGIBILITY_CEILING_WEI:
         raise FaucetError(
-            "This wallet already holds more than 1 CTC, so the faucet has nothing to add."
+            "This wallet already holds more than 0.1 CTC, so it can pay for its own gas."
         )
 
     account = Account.from_key(faucet_key)

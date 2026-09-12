@@ -19,6 +19,12 @@ import { pct } from "../../lib/format";
 const EXPLORER = "https://creditcoin-testnet.blockscout.com";
 
 /**
+ * Below this the console offers gas. Matches ELIGIBILITY_CEILING_WEI in backend/faucet.py:
+ * offering a claim the API would refuse is worse than not offering one.
+ */
+const GAS_FLOOR = 100000000000000000n; // 0.1 CTC
+
+/**
  * Wallet-driven actions against the deployed contracts.
  *
  * Everything here is a write path. Reads still come from the risk API, which is the single
@@ -143,7 +149,7 @@ export function ActionPanels({ config }: { config: MeritrConfig | null }) {
       )}
 
       <div className="grid gap-4 md:grid-cols-2">
-        {bal && bal.gas === 0n && <GasFaucet onDone={load} />}
+        {bal && bal.gas < GAS_FLOOR && <GasFaucet onDone={load} />}
 
         <FaucetPanel config={config} bal={bal} aDec={aDec} cDec={cDec} onDone={load} />
         <LendPanel config={config} bal={bal} aDec={aDec} onDone={load} />
@@ -235,7 +241,7 @@ function GasFaucet({ onDone }: { onDone: () => void }) {
   return (
     <div className="mb-4 rounded-[var(--radius-panel)] border border-warn/40 bg-warn/10 p-4">
       <p className="text-[14px] font-semibold text-warn">
-        This wallet holds no CTC, so it cannot pay gas.
+        This wallet has almost no CTC, so it cannot pay gas.
       </p>
       <p className="mt-1.5 text-[13.5px] leading-relaxed text-[#b8bfcd]">
         Everything on this console is readable without gas - the positions, the proven credit
@@ -264,7 +270,7 @@ function GasFaucet({ onDone }: { onDone: () => void }) {
 
       <p className="mt-2 font-mono text-[10.5px] leading-relaxed text-[#8b93a5]">
         You sign a message, not a transaction - it costs nothing. One claim per address every 24
-        hours, for wallets holding under 1 CTC.
+        hours, for wallets holding under 0.1 CTC.
       </p>
     </div>
   );
