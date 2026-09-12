@@ -5,7 +5,7 @@
  *   npx hardhat run scripts/deploy.js --network creditcoinTestnet   # chain 102031
  *
  * Deploys all four subsystems, wires their roles, and registers the source-chain event schemas
- * that teach MeritrAttestor how to read Aave V3 logs on Ethereum and Base. The resulting
+ * that teach MeritrAttestor how to read Aave V3 logs on its registered source chains. The resulting
  * address book is written to `deployments/<network>.json`, which the FastAPI backend, the DeAI
  * agent and the Next.js frontend all read — so a fresh deploy propagates everywhere with no
  * hand-edited config.

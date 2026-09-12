@@ -6,7 +6,7 @@
  * Runs the complete Meritr story against a live chain state, in order:
  *
  *   Act I   — an anonymous wallet is quoted the protocol's worst terms.
- *   Act II  — Attestcoin proofs of its Ethereum and Base history are ingested through the
+ *   Act II  — Attestcoin proofs of its Ethereum and Sepolia history are ingested through the
  *             native query verifier precompile, and the terms improve on their own.
  *   Act III — a soulbound credit passport is minted, and refuses to be transferred.
  *   Act IV  — a loan is opened at the earned rate.
