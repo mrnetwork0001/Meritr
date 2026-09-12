@@ -4,6 +4,36 @@
 
 Built for the [BUIDL CTC 2026 Fall Hackathon](https://dorahacks.io/hackathon/buidl-ctc-2026-fall/detail) · Creditcoin & Credit Labs · Track: `AI` / `RWA` · Apache 2.0
 
+### Try it without installing anything
+
+| | |
+|---|---|
+| **Console** | **https://usemeritr.vercel.app** |
+| Documentation | https://usemeritr.vercel.app/docs |
+| Risk API | https://meritr.38.49.216.120.sslip.io/api/attestations |
+| Swagger | https://meritr.38.49.216.120.sslip.io/api/docs |
+
+The console is static and served from Vercel's CDN. Everything it displays comes from the API
+origin above, which is a VPS running the parts of Meritr that cannot be serverless - because
+**the interesting half of this project is the half that never stops running**:
+
+```
+meritr-relayer   proves fresh Aave V3 activity into MeritrAttestor   every 240s
+meritr-agent     re-reads every position and triages the worst       every 300s
+meritr-api       serves chain state; holds no key and no role          -
+meritr-web       the console                                           -
+```
+
+Both daemons run under systemd on a box that also hosts unrelated applications, so they are
+confined to loopback ports, a dedicated service account and their own directory. The deployer
+key is not on that machine and never has been: the relayer key holds **no roles at all**, and
+the agent key holds `RISK_AGENT_ROLE` and nothing else. `deploy/SETUP.md` is the whole recipe,
+and `deploy/push.sh` refuses to sync to any path that is not Meritr's.
+
+That matters more than a URL. "Autonomous" is cheap to claim in a demo video; it is harder to
+claim against a public ledger that keeps gaining entries while nobody is watching. The fact
+count below moves on its own - reload it.
+
 **Live on Creditcoin CC3 Testnet (chain 102031).** Credit history is read from Aave V3 on **Ethereum mainnet** via Attestcoin `chainKey 3`.
 
 | Contract | Address |
@@ -12,10 +42,10 @@ Built for the [BUIDL CTC 2026 Fall Hackathon](https://dorahacks.io/hackathon/bui
 | MeritrVault | [`0x233D2aE279230fBFFbe61e6dF2A9DC6bF6ff3e84`](https://creditcoin-testnet.blockscout.com/address/0x233D2aE279230fBFFbe61e6dF2A9DC6bF6ff3e84) |
 | MeritrPassport | [`0xAdd2C477A101250C8A3e6Fe26a642143F610A601`](https://creditcoin-testnet.blockscout.com/address/0xAdd2C477A101250C8A3e6Fe26a642143F610A601) |
 
-**170+ real Attestcoin proofs are ingested and still climbing** - a roleless relayer daemon
+**210+ real Attestcoin proofs are ingested and still climbing** - a roleless relayer daemon
 continuously proves fresh Ethereum Aave activity into this deployment. At the time of writing
-that is **85 real Ethereum borrowers** carrying onchain credit from **$18.1M** of proven Aave
-activity - **$6.2M of it repayment**, the rest collateral and borrow events, each one a distinct
+that is **100 real Ethereum borrowers** carrying onchain credit from **$23.1M** of proven Aave
+activity, roughly a third of it repayment, the rest collateral and borrow events, each one a distinct
 input to the score. The live count is served at `/api/attestations` and rendered on the landing
 page, because any figure written here goes stale within the hour - and the agent has restructured two distressed positions
 onchain ([tx](https://creditcoin-testnet.blockscout.com/tx/0x45f9963cd6dc535dfb7fb8670ecc9e5b2b329a6c7edac19df538dddadcb25be6)),
@@ -45,7 +75,8 @@ depends on trusting this repository.
 | Attestcoin really verified these proofs | Open [MeritrAttestor on Blockscout](https://creditcoin-testnet.blockscout.com/address/0xB462C2772b8003e3c511C373dDC5715642B34D4c) and read the `CreditFactAttested` logs. Each one exists only because the `0x…0FD2` precompile accepted a Merkle-inclusion proof; the contract has no path that writes a fact without one. |
 | The agent restructured instead of liquidating | [Restructuring tx](https://creditcoin-testnet.blockscout.com/tx/0x45f9963cd6dc535dfb7fb8670ecc9e5b2b329a6c7edac19df538dddadcb25be6) - health factor 1.070 → 1.350, `collateralSeized = 0`. |
 | The source data is real Ethereum activity | Take any `queryId` from a `CreditFactAttested` log and find the same Aave V3 event on [Etherscan](https://etherscan.io). The borrower, asset and amount match because they were proven, not copied. |
-| The numbers on the site are live, not written down | `curl` the deployment's `/api/attestations`. It counts from chain logs on every request, so it moves while you watch it. |
+| The numbers on the site are live, not written down | `curl https://meritr.38.49.216.120.sslip.io/api/attestations` - it counts from chain logs on every request, so it moves while you watch it. |
+| The agent is genuinely running, not demoed once | The fact count above climbs on its own, because a relayer daemon adds to it every 240 seconds whether or not anyone is looking. |
 | The precompile rejects bad proofs | `npm run verify:proof` fetches a genuine Aave proof, asks the live precompile to judge it, then flips one byte and asks again. Output: `genuine proof -> ACCEPTED` / `one byte altered -> REJECTED (Merkle proof validation failed)`. It is a view call, so it costs no gas. |
 
 ---
