@@ -8,7 +8,7 @@ const nextConfig = {
   distDir: process.env.NEXT_DIST_DIR || ".next",
   env: {
     // The Meritr risk API. Override with NEXT_PUBLIC_MERITR_API when the backend is not local.
-    NEXT_PUBLIC_MERITR_API: process.env.NEXT_PUBLIC_MERITR_API || "http://localhost:8000",
+    NEXT_PUBLIC_MERITR_API: process.env.NEXT_PUBLIC_MERITR_API || "http://localhost:8010",
   },
 };
 

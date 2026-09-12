@@ -22,3 +22,7 @@ coverage.json
 deployments/simulation.json
 tsconfig.tsbuildinfo
 .next-build
+
+# Local probe/scratch artifacts
+.next-probe*
+*_tmp.js

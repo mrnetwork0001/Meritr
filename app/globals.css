@@ -29,6 +29,8 @@
   --font-sans: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
   --font-mono: var(--font-jetbrains), ui-monospace, SFMono-Regular, Menlo, monospace;
 
+  --container-app: 1400px;
+
   --radius-panel: 14px;
   --radius-lg: 22px;
 }
