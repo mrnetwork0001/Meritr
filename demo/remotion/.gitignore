@@ -1,0 +1,8 @@
+out/
+public/clips/
+public/vo/
+clips/
+vo/
+node_modules/
+src/clips.ts
+src/stats.ts
