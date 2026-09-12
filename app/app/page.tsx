@@ -307,7 +307,7 @@ MERITR_NETWORK=localhost npm run backend                 # terminal 3`}
             {config && <> · {config.network} (chain {config.chainId})</>}
           </p>
           <Link href="/" className="transition hover:text-model">
-            ← back to meritr.xyz
+            ← Return to Meritr
           </Link>
         </footer>
       </main>
