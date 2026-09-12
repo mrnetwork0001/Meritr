@@ -7,10 +7,10 @@ faucet, so the one button that looks like the way in is itself unreachable.
 
 The claim is **gasless by necessity**, not by preference: a wallet holding zero CTC cannot pay
 for a transaction, so it cannot ask for one either. Instead the visitor signs a *message*, which
-costs nothing and never touches the chain, and this process pays the gas to send them 0.1 CTC.
+costs nothing and never touches the chain, and this process pays the gas to send them 1 CTC.
 
 Deliberately narrow:
-  * only wallets at or below 0.1 CTC qualify - this refills the empty, it does not top up
+  * only wallets at or below 1 CTC qualify - this refills the empty, it does not top up
   * one claim per address per 24 hours, recorded on disk so a restart does not reset it
   * the signed message names this faucet, the recipient and a timestamp, and is accepted for
     five minutes, so a signature captured elsewhere cannot be replayed here
@@ -29,13 +29,13 @@ from eth_account import Account
 from eth_account.messages import encode_defunct
 from web3 import Web3
 
-CLAIM_WEI = Web3.to_wei(0.1, "ether")
+CLAIM_WEI = Web3.to_wei(1, "ether")
 #: A wallet already holding this much does not need a faucet.
-ELIGIBILITY_CEILING_WEI = Web3.to_wei(0.1, "ether")
+ELIGIBILITY_CEILING_WEI = Web3.to_wei(1, "ether")
 COOLDOWN_SECONDS = 24 * 60 * 60
 SIGNATURE_TTL_SECONDS = 300
 #: Leave enough behind to notice the faucet is nearly dry before it starts failing mid-demo.
-RESERVE_WEI = Web3.to_wei(1, "ether")
+RESERVE_WEI = Web3.to_wei(5, "ether")
 
 STATE = Path(os.getenv("MERITR_FAUCET_STATE", "var/faucet.json"))
 _LOCK = threading.Lock()
@@ -75,9 +75,9 @@ def status(w3: Web3, faucet_address: str | None, address: str | None = None) -> 
     out: dict = {
         "available": bool(faucet_address),
         "claimWei": str(CLAIM_WEI),
-        "claimCtc": 0.1,
+        "claimCtc": 1.0,
         "cooldownSeconds": COOLDOWN_SECONDS,
-        "eligibilityCeilingCtc": 0.1,
+        "eligibilityCeilingCtc": 1.0,
     }
     if not faucet_address:
         out["reason"] = "No faucet key is configured on this deployment."
@@ -98,7 +98,7 @@ def status(w3: Web3, faucet_address: str | None, address: str | None = None) -> 
             bal <= ELIGIBILITY_CEILING_WEI and waited >= COOLDOWN_SECONDS and not out["dry"]
         )
         if bal > ELIGIBILITY_CEILING_WEI:
-            out["reason"] = "This wallet already holds more than 0.1 CTC."
+            out["reason"] = "This wallet already holds more than 1 CTC."
         elif waited < COOLDOWN_SECONDS:
             out["retryInSeconds"] = int(COOLDOWN_SECONDS - waited)
             out["reason"] = "This address has claimed within the last 24 hours."
@@ -128,7 +128,7 @@ def claim(w3: Web3, faucet_key: str | None, address: str, issued_at: int, signat
 
     if w3.eth.get_balance(addr) > ELIGIBILITY_CEILING_WEI:
         raise FaucetError(
-            "This wallet already holds more than 0.1 CTC, so the faucet has nothing to add."
+            "This wallet already holds more than 1 CTC, so the faucet has nothing to add."
         )
 
     account = Account.from_key(faucet_key)
@@ -152,13 +152,25 @@ def claim(w3: Web3, faucet_key: str | None, address: str, issued_at: int, signat
             "gasPrice": w3.eth.gas_price,
             "chainId": w3.eth.chain_id,
         }
-        signed = account.sign_transaction(tx)
-        raw = getattr(signed, "raw_transaction", None) or signed.rawTransaction
-        tx_hash = w3.eth.send_raw_transaction(raw)
-
-        # Recorded before the receipt: a claim that is mined but unrecorded would let the same
-        # address claim again, which is the failure that actually drains a faucet.
+        # The slot is taken BEFORE the transfer, not after. Recording afterwards means any
+        # failure between sending and writing - a crashed process, a read-only mount - leaves
+        # an address funded and uncooled, free to claim again without limit. That is the
+        # failure that actually drains a faucet, and it is not hypothetical: it happened here,
+        # because systemd's ProtectSystem=strict made var/ read-only and the write threw after
+        # the CTC had already gone out.
+        #
+        # Reserving first inverts the risk: the worst case becomes one address losing a single
+        # day's claim, which costs nobody anything.
         book[addr.lower()] = now
         _save(book)
 
-    return {"txHash": Web3.to_hex(tx_hash), "amountCtc": 0.1, "to": addr}
+        try:
+            signed = account.sign_transaction(tx)
+            raw = getattr(signed, "raw_transaction", None) or signed.rawTransaction
+            tx_hash = w3.eth.send_raw_transaction(raw)
+        except Exception:
+            book.pop(addr.lower(), None)   # nothing was sent, so release the slot
+            _save(book)
+            raise
+
+    return {"txHash": Web3.to_hex(tx_hash), "amountCtc": 1.0, "to": addr}

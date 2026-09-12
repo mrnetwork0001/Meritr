@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { api, type FaucetStatus, type MeritrConfig } from "../../lib/api";
 import { useWallet } from "../../lib/wallet";
 import {
@@ -170,10 +170,8 @@ export function ActionPanels({ config }: { config: MeritrConfig | null }) {
  */
 function GasFaucet({ onDone }: { onDone: () => void }) {
   const { account, getSigner } = useWallet();
+  const tx = useTx();
   const [state, setState] = useState<FaucetStatus | null>(null);
-  const [busy, setBusy] = useState(false);
-  const [msg, setMsg] = useState<string | null>(null);
-  const [hash, setHash] = useState<string | null>(null);
 
   useEffect(() => {
     if (!account) return;
@@ -182,31 +180,56 @@ function GasFaucet({ onDone }: { onDone: () => void }) {
     return () => { dead = true; };
   }, [account]);
 
-  const claim = async () => {
-    if (!account) return;
-    setBusy(true); setMsg(null); setHash(null);
-    try {
-      const signer = await getSigner();
-      const issuedAt = Math.floor(Date.now() / 1000);
-      // Must match backend/faucet.py:message_for byte for byte.
-      const text =
-        `Meritr testnet faucet\n` +
-        `Address: ${account}\n` +
-        `Issued: ${issuedAt}\n\n` +
-        `Signing this proves you control this address. It is not a transaction, ` +
-        `costs no gas, and moves nothing.`;
-      const signature = await signer.signMessage(text);
-      const res = await api.faucetClaim({ address: account, issuedAt, signature });
-      setHash(res.txHash);
-      setMsg(`Sent ${res.amountCtc} CTC. It may take a few seconds to appear.`);
-      setTimeout(onDone, 4000);
-    } catch (e: any) {
-      setMsg(e?.shortMessage ?? e?.message ?? "The faucet could not serve that request.");
-    } finally {
-      setBusy(false);
-    }
-  };
+  const claim = () =>
+    tx.run({
+      title: "Request 1 CTC for gas",
+      description:
+        "Creditcoin testnet has no web faucet, so an empty wallet cannot sign anything here. " +
+        "You sign a message rather than a transaction - it costs no gas and moves nothing - " +
+        "and Meritr's faucet sends the CTC for you. One claim per address every 24 hours, for " +
+        "wallets holding under 0.1 CTC.",
+      facts: [
+        ["To", account ? `${account.slice(0, 10)}…${account.slice(-4)}` : "-"],
+        ["Amount", "1 CTC"],
+        ["Faucet", state?.faucetAddress ? `${state.faucetAddress.slice(0, 12)}…` : "-"],
+      ],
+      steps: [
+        {
+          label: "Sign the request (free, not a transaction)",
+          offchain: true,
+          run: async () => {
+            const signer = await getSigner();
+            const issuedAt = Math.floor(Date.now() / 1000);
+            // Must match backend/faucet.py:message_for byte for byte.
+            const text =
+              `Meritr testnet faucet\n` +
+              `Address: ${account}\n` +
+              `Issued: ${issuedAt}\n\n` +
+              `Signing this proves you control this address. It is not a transaction, ` +
+              `costs no gas, and moves nothing.`;
+            const signature = await signer.signMessage(text);
+            sigRef.current = { issuedAt, signature };
+            return null; // nothing onchain happened here, so there is no hash to show
+          },
+        },
+        {
+          label: "Faucet sends 1 CTC",
+          run: async () => {
+            const held = sigRef.current;
+            if (!account || !held) throw new Error("The signature was lost. Try again.");
+            const res = await api.faucetClaim({
+              address: account,
+              issuedAt: held.issuedAt,
+              signature: held.signature,
+            });
+            return res.txHash;
+          },
+        },
+      ],
+      onSettled: () => onDone(),
+    });
 
+  const sigRef = useRef<{ issuedAt: number; signature: string } | null>(null);
   const blocked = state && state.available === false;
 
   return (
@@ -220,34 +243,15 @@ function GasFaucet({ onDone }: { onDone: () => void }) {
         Creditcoin testnet has no web faucet of its own.
       </p>
 
-      {!blocked && (
+      {!blocked ? (
         <button
           type="button"
           onClick={claim}
-          disabled={busy}
-          className="mt-3 rounded bg-warn px-3.5 py-2 font-mono text-[12px] font-bold text-ink-950 transition hover:bg-warn/90 disabled:cursor-not-allowed disabled:opacity-50"
+          className="mt-3 rounded bg-warn px-3.5 py-2 font-mono text-[12px] font-bold text-ink-950 transition hover:bg-warn/90"
         >
-          {busy ? "Sending…" : "Request 0.1 CTC"}
+          Request 1 CTC
         </button>
-      )}
-
-      <p className="mt-2 font-mono text-[10.5px] leading-relaxed text-[#8b93a5]">
-        You sign a message, not a transaction - it costs nothing. One claim per address every 24
-        hours, for wallets holding under 0.1 CTC.
-      </p>
-
-      {msg && <p className="mt-2 text-[12.5px] text-[#d5d9e2]">{msg}</p>}
-      {hash && (
-        <a
-          href={`${EXPLORER}/tx/${hash}`}
-          target="_blank"
-          rel="noreferrer"
-          className="mono mt-1 block text-[11px] text-model hover:underline"
-        >
-          {hash.slice(0, 22)}… ↗
-        </a>
-      )}
-      {blocked && (
+      ) : (
         <a
           href="https://docs.creditcoin.org/wallets/using-testnet-faucet"
           target="_blank"
@@ -257,6 +261,11 @@ function GasFaucet({ onDone }: { onDone: () => void }) {
           Get CTC from the Creditcoin Discord faucet →
         </a>
       )}
+
+      <p className="mt-2 font-mono text-[10.5px] leading-relaxed text-[#8b93a5]">
+        You sign a message, not a transaction - it costs nothing. One claim per address every 24
+        hours, for wallets holding under 1 CTC.
+      </p>
     </div>
   );
 }

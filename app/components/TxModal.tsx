@@ -25,6 +25,12 @@ export type TxStep = {
   run: () => Promise<string | null>;
   /** Shown under the label while the step is pending. */
   detail?: string;
+  /**
+   * A step that completes without producing a transaction - signing a message, say.
+   * Without this it returns null and is reported as "skipped", which tells the user the
+   * opposite of what happened: they signed, and the modal claims nothing occurred.
+   */
+  offchain?: boolean;
 };
 
 export type TxRequest = {
@@ -139,7 +145,7 @@ export function TxProvider({ children }: { children: React.ReactNode }) {
         try {
           const hash = await request.steps[i].run();
           if (hash === null) {
-            patch(i, { status: "skipped" });
+            patch(i, { status: request.steps[i].offchain ? "done" : "skipped" });
             continue;
           }
           patch(i, { status: "done", hash });

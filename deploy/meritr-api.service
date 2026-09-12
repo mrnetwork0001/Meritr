@@ -22,6 +22,9 @@ StandardError=journal
 NoNewPrivileges=true
 PrivateTmp=true
 ProtectSystem=strict
+# The faucet records its cooldown book here. Without this the write throws
+# EROFS *after* the CTC has already been sent.
+ReadWritePaths=/opt/meritr/var
 ProtectHome=true
 
 [Install]
