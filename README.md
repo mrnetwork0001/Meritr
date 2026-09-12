@@ -4,6 +4,17 @@
 
 Built for the [BUIDL CTC 2026 Fall Hackathon](https://dorahacks.io/hackathon/buidl-ctc-2026-fall/detail) · Creditcoin & Credit Labs · Track: `AI` / `RWA` · Apache 2.0
 
+> **Attestcoin Protocol Integration Summary** →
+> **[docs/ATTESTCOIN_INTEGRATION.md](docs/ATTESTCOIN_INTEGRATION.md)**
+>
+> The hackathon asks for working integration code *and* documentation explaining how the build
+> uses it. That document is the second half, and it opens with the short version: Attestcoin is
+> not a feature bolted onto Meritr, it is the only way any credit fact enters the system.
+> Remove it and there is nothing to score. The first half is
+> [`contracts/MeritrAttestor.sol`](contracts/MeritrAttestor.sol), and
+> `npm run verify:proof` makes the live precompile accept a real proof and refuse a forged one
+> in front of you.
+
 ### Try it without installing anything
 
 | | |
