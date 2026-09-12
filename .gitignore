@@ -34,3 +34,6 @@ var/*.json
 
 # Deck: the PDF ships, the intermediate HTML does not.
 deck/deck.html
+
+# Submission scratch: holds personal contact details, not part of the software.
+submission/
