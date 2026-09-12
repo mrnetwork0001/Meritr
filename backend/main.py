@@ -76,10 +76,23 @@ app = FastAPI(
 _explicit_origins = [
     o.strip() for o in os.getenv("MERITR_CORS_ORIGINS", "").split(",") if o.strip()
 ]
+
+# Loopback stays allowed even once explicit origins are pinned. Starlette checks the list and
+# the regex independently, so naming a production origin used to switch the regex off and break
+# every developer's `npm run dev` at the same moment the site went live.
+_LOOPBACK = r"http://(localhost|127\.0\.0\.1):\d+"
+
+# Vercel issues a new hostname per preview deployment, so previews cannot be enumerated ahead of
+# time. Set MERITR_CORS_ORIGIN_REGEX to something like
+#   https://[a-z0-9-]+\.vercel\.app
+# to admit them; the production alias belongs in MERITR_CORS_ORIGINS as an exact string.
+_extra_regex = os.getenv("MERITR_CORS_ORIGIN_REGEX", "").strip()
+_origin_regex = f"({_LOOPBACK})|({_extra_regex})" if _extra_regex else _LOOPBACK
+
 app.add_middleware(
     CORSMiddleware,
     allow_origins=_explicit_origins,
-    allow_origin_regex=None if _explicit_origins else r"http://(localhost|127\.0\.0\.1):\d+",
+    allow_origin_regex=_origin_regex,
     allow_credentials=False,
     allow_methods=["GET", "POST", "OPTIONS"],
     allow_headers=["*"],
