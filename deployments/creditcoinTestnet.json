@@ -109,7 +109,7 @@
       "tx": "0x48a4e760b25de14b577bc57bfd8aea6addf8f2b33daef84798dc8db200cbaf5d"
     }
   ],
-  "note": "Restructurings were produced by agents/underwriter.py acting autonomously. The collateral mark-down that created the distress was an admin action through PRICE_ROLE \u2014 a documented governance input \u2014 not a market event. Everything downstream of it is genuine onchain state.",
+  "note": "Four restructurings are recorded. The first two (0x45f9963c, 0x48a4e760) were broadcast by the deployer key during the initial walkthrough - the mechanism is genuine but the caller held admin roles, so they do not by themselves evidence autonomy. The later two (0xfc72b344, 0x75bc20b2) were broadcast unattended by the DeAI agent at 0xC06B60156473A15ED4505691403eEF1F7650a2A5, a key holding RISK_AGENT_ROLE and nothing else: it detected the distress on its own polling cycle, ranked both positions by expected loss averted, and acted on the larger first. Check triggeredBy on any of the four to tell them apart. In every case the collateral mark-down that created the distress was an admin action through PRICE_ROLE - a documented governance input, not a market event - and no collateral was seized in any of them; the vault has never emitted a Liquidated event.",
   "relayer": "0x3110C60D98d17cA8dCf4dDf6C2D4Bb2f9262c4E3",
   "roles": {
     "deployer": {

@@ -47,9 +47,16 @@ continuously proves fresh Ethereum Aave activity into this deployment. At the ti
 that is **100 real Ethereum borrowers** carrying onchain credit from **$23.1M** of proven Aave
 activity, roughly a third of it repayment, the rest collateral and borrow events, each one a distinct
 input to the score. The live count is served at `/api/attestations` and rendered on the landing
-page, because any figure written here goes stale within the hour - and the agent has restructured two distressed positions
-onchain ([tx](https://creditcoin-testnet.blockscout.com/tx/0x45f9963cd6dc535dfb7fb8670ecc9e5b2b329a6c7edac19df538dddadcb25be6)),
-health factor 1.070 → 1.350, with **no collateral seized**.
+page, because any figure written here goes stale within the hour.
+
+**The agent has restructured distressed positions unattended.** Two of the four recorded
+restructurings were broadcast by the DeAI agent itself
+([tx](https://creditcoin-testnet.blockscout.com/tx/0xfc72b3449fd384a331bf6e689bf8eca13abeedd2e9d224919bca8f5f8a8a0858)),
+from `0xC06B6015…` - a key holding `RISK_AGENT_ROLE` and nothing else. It found the distress on
+its own polling cycle, ranked two equally stressed positions by expected loss averted, and took
+the larger one first. Health factor 1.079 → 1.350 on both, **no collateral seized**. The vault
+has never emitted a `Liquidated` event. The earlier two were broadcast by the deployer during
+the first walkthrough; `triggeredBy` tells them apart.
 
 **Contents** -
 [The problem](#the-problem) ·
@@ -73,7 +80,8 @@ depends on trusting this repository.
 | Claim | How to check it yourself |
 |---|---|
 | Attestcoin really verified these proofs | Open [MeritrAttestor on Blockscout](https://creditcoin-testnet.blockscout.com/address/0xB462C2772b8003e3c511C373dDC5715642B34D4c) and read the `CreditFactAttested` logs. Each one exists only because the `0x…0FD2` precompile accepted a Merkle-inclusion proof; the contract has no path that writes a fact without one. |
-| The agent restructured instead of liquidating | [Restructuring tx](https://creditcoin-testnet.blockscout.com/tx/0x45f9963cd6dc535dfb7fb8670ecc9e5b2b329a6c7edac19df538dddadcb25be6) - health factor 1.070 → 1.350, `collateralSeized = 0`. |
+| The **agent itself** restructured, unattended | [Restructuring tx](https://creditcoin-testnet.blockscout.com/tx/0xfc72b3449fd384a331bf6e689bf8eca13abeedd2e9d224919bca8f5f8a8a0858) - `triggeredBy` is `0xC06B6015…`, which holds `RISK_AGENT_ROLE` and no other role. Health factor 1.079 → 1.350. |
+| Nothing was seized doing it | The vault has never emitted a `Liquidated` event. Check the logs on [MeritrVault](https://creditcoin-testnet.blockscout.com/address/0x233D2aE279230fBFFbe61e6dF2A9DC6bF6ff3e84). |
 | The source data is real Ethereum activity | Take any `queryId` from a `CreditFactAttested` log and find the same Aave V3 event on [Etherscan](https://etherscan.io). The borrower, asset and amount match because they were proven, not copied. |
 | The numbers on the site are live, not written down | `curl https://meritr.38.49.216.120.sslip.io/api/attestations` - it counts from chain logs on every request, so it moves while you watch it. |
 | The agent is genuinely running, not demoed once | The fact count above climbs on its own, because a relayer daemon adds to it every 240 seconds whether or not anyone is looking. |
