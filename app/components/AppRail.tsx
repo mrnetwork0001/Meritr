@@ -16,8 +16,7 @@ import {
 } from "lucide-react";
 import { useWallet } from "../lib/wallet";
 import { chainName } from "../lib/chains";
-import type { Health, ProtocolStats } from "../lib/api";
-import { compactUsd } from "../lib/format";
+import type { Health } from "../lib/api";
 
 export type ViewId =
   | "overview"
@@ -59,14 +58,12 @@ export function AppRail({
   view,
   onView,
   health,
-  stats,
   expectedChainId,
   children,
 }: {
   view: ViewId;
   onView: (v: ViewId) => void;
   health: Health | null;
-  stats: ProtocolStats | null;
   expectedChainId: number | null;
   children: React.ReactNode;
 }) {
@@ -271,15 +268,13 @@ export function AppRail({
             {!collapsed && (
               <div className="border-t border-[var(--color-line)] px-3 py-2">
                 {account ? (
-                  <>
-                    <Row k="NETWORK" v={chainName(chainId)} warn={expectedChainId !== null && chainId !== expectedChainId} />
-                    <Row k="RESERVE" v={stats ? compactUsd(stats.reserve) : "-"} />
-                  </>
+                  <Row
+                    k="NETWORK"
+                    v={chainName(chainId)}
+                    warn={expectedChainId !== null && chainId !== expectedChainId}
+                  />
                 ) : (
-                  <>
-                    <Row k="READING" v={health?.network ?? "-"} />
-                    <Row k="RESERVE" v={stats ? compactUsd(stats.reserve) : "-"} />
-                  </>
+                  <Row k="READING" v={health?.network ?? "-"} />
                 )}
               </div>
             )}

@@ -103,7 +103,6 @@ export default function Console() {
       view={view}
       onView={setView}
       health={health}
-      stats={stats}
       expectedChainId={config?.chainId ?? null}
     >
       <main id="main" className="mx-auto max-w-app px-4 py-8 sm:px-6">
